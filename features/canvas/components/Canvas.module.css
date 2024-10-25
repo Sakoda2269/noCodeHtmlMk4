@@ -1,0 +1,28 @@
+.all {
+    height: 100%;
+}
+
+.canvasContaienr {
+    height: 90%;
+    background-color: gray;
+    padding: 40px;
+    overflow: auto;
+    display: flex;
+    justify-content: center; /* 水平方向に中央揃え */
+    align-items: center;
+}
+
+.canvas {
+    height: 90%;
+    aspect-ratio: 16/ 9;
+    background-color: white;
+    position: relative;
+    transform-origin: top left;
+    overflow: hidden;
+}
+
+.footer {
+    height: 10%;
+    background-color: white;
+    border-top: 2px solid black;
+}

@@ -4,9 +4,7 @@ import styles from "./Sidebar.module.css"
 
 
 export function Sidebar({ children }) {
-    const [openNum, selectNumber, center, right, sideIcons, sideBodies, loading] = useSidebar(children);
-
-    if(loading) return <p>loading...</p>
+    const [openNum, selectNumber, center, right, sideIcons, sideBodies] = useSidebar(children);
 
     return (
         <div>
