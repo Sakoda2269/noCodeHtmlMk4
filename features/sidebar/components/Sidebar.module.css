@@ -1,0 +1,64 @@
+.header {
+    height: 7vh;
+    background-color: darkgray;
+    display: flex;
+}
+
+
+.all {
+    display: flex;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.container {
+    transition: width 0.3s ease;
+    overflow: hidden;
+}
+
+.leftIcons {
+    background-color: aquamarine;
+    display: flex;
+    width: 50px;
+    padding-top: 5px;
+    gap: 10px;
+    flex-direction: column;
+    align-items: center; /* 水平方向の中央配置 */
+    justify-content: flex-start;
+}
+
+.left {
+    background-color: aqua;
+    width: 15%;
+}
+
+.leftContainer {
+    display: flex;
+    align-items: center; /* 水平方向の中央配置 */
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-top: 10px;
+    gap: 10px;
+}
+
+.leftClose {
+    background-color: aqua;
+    width: 0;
+    display: flex;
+    align-items: center; /* 水平方向の中央配置 */
+    justify-content: flex-start;
+    flex-direction: column;
+    padding-top: 10px;
+    gap: 10px;
+}
+
+.center {
+    flex-grow: 1;
+    height: 100%;
+    border: 1px solid black;
+}
+
+.right {
+    width: 300px;
+    height: 100%;
+}
