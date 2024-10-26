@@ -6,14 +6,14 @@ import styles from "./Canvas.module.css"
 
 export default function Canvas() {
 
-    const [project, currentScreenId] = useCanvas();
+    const [project, currentScreenId, resetSelecting] = useCanvas();
 
     return(
         <div className={styles.all}>
             <div className={styles.canvasContaienr}>
-                <div className={styles.canvas}>
-                    {Object.entries(project.screens[currentScreenId].components).map(([key, value]) => (
-                        <Wrapper element={value} layout="absolute" key={key}/>
+                <div className={styles.canvas} onClick={resetSelecting}>
+                    {project.screens[currentScreenId].components.map((value, index) => (
+                        <Wrapper element={value} layout="absolute" key={index} path={`${index}`}/>
                     ))}
                 </div>
             </div>

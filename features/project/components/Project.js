@@ -5,10 +5,11 @@ import Canvas from "../../canvas/components/Canvas";
 import useProject from "../hooks";
 import { ProjectContext, SetProjectContext } from "../contexts/projectContext";
 import { ScreenContext, SetScreenContext } from "../contexts/screenContext";
+import { SelectingContext, SetSelectingContext } from "../contexts/selectingContext";
 
 export default function Project() {
 
-    const [project, setProject, currentScreenId, setCurrentScreenId] = useProject();
+    const [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting] = useProject();
 
 
     return (
@@ -17,6 +18,8 @@ export default function Project() {
             <SetProjectContext.Provider value={setProject}>
             <ScreenContext.Provider value={currentScreenId}>
             <SetScreenContext.Provider value={setCurrentScreenId}>
+            <SelectingContext.Provider value={selecting}>
+            <SetSelectingContext.Provider value={setSelecting}>
             <Sidebar>
 
                 <SideItem>
@@ -51,10 +54,12 @@ export default function Project() {
                 </CenterBody>
 
                 <RightBody>
-                    fuga
+                    {selecting}
                 </RightBody>
 
             </Sidebar>
+            </SetSelectingContext.Provider>
+            </SelectingContext.Provider>
             </SetScreenContext.Provider>
             </ScreenContext.Provider>
             </SetProjectContext.Provider>

@@ -17,7 +17,7 @@ export default function useProject() {
                                 left: "10px",
                                 top: "10px",
                                 width: "100px",
-                                height: "100px"
+                                height: "40px"
                             }
                         }
                     },
@@ -28,13 +28,13 @@ export default function useProject() {
                                 left: "150px",
                                 top: "30px",
                                 width: "100px",
-                                height: "300px"
+                                height: "300px",
                             }
                             
                         },
                         children: [
                             {
-                                type: "label",
+                                type: "button",
                                 data: {
                                     text: "good",
                                     styles: {
@@ -55,5 +55,7 @@ export default function useProject() {
 
     const [currentScreenId, setCurrentScreenId] = useState(0);
 
-    return [project, setProject, currentScreenId, setCurrentScreenId];
+    const [selecting, setSelecting] = useState("");
+
+    return [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting];
 }

@@ -1,8 +1,12 @@
+"use client"
+import useWrapper from "../hooks/useWrapper"
 import AbsoluteContainer from "./AbsoluteContainer"
 import Button from "./Button"
 
 
-export default function Wrapper({ element, layout }) {
+export default function Wrapper({ element, layout, path }) {
+
+    const [styles, select, isSelecting, position, size] = useWrapper(element, path);
 
     const Elements = {
         button: Button,
@@ -16,7 +20,6 @@ export default function Wrapper({ element, layout }) {
         ...Elements, ...Containers
     }[element.type]
 
-    const styles = {...element.data.styles};
     switch(layout) {
         case "absolute":
             styles["position"] = "absolute";
@@ -25,8 +28,22 @@ export default function Wrapper({ element, layout }) {
 
 
     return(
-        <div style={{...styles}}>
-            <Element element={element}/>
+        <div style={{...styles}} onClick={select}>
+            <Element element={element} path={path}/>
+            {isSelecting && (
+                <div style={{
+                    left: "-2px",
+                    top: "-2px",
+                    width: size.w + 1 + "px",
+                    height: size.h + 1 + "px",
+                    position: "absolute",
+                    border: "3px solid black"
+                }}
+                >
+                </div>
+            )
+            }
+            
         </div>
     )
 
