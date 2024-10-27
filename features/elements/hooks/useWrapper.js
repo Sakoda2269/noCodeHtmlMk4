@@ -1,7 +1,7 @@
 "use client"
 import { SelectingContext, SetSelectingContext } from "@/features/project/contexts/selectingContext";
 import getNum from "@/utils/getNum";
-import { useContext, useEffect, useState } from "react";
+import { useCallback, useContext, useEffect, useState } from "react";
 
 
 export default function useWrapper(element, path) {
@@ -20,27 +20,35 @@ export default function useWrapper(element, path) {
     const [styles, setStyles] = useState({ ...element.data.styles });
     const [isSelecting, setIsSelecting] = useState(false);
 
-    useEffect(() => {
-        if(selecting === path) {
-            addStyle("border", "1px solid black");
-            setIsSelecting(true);
-        } else {
-            removeStyle("border");
-            setIsSelecting(false);
-        }
-    }, [selecting])
-
-    const addStyle = (key, value) => {
-        setStyles({
-            ...styles,
+    const setStyle = useCallback((key, value) => {
+        setStyles((prevStyle) => ({
+            ...prevStyle,
             [key]: value
-        });
-    }
+        }));
+    }, [])
 
-    const removeStyle = (key) => {
+    const removeStyle = useCallback((key) => {
         const { [key]: value, ...other } = styles;
         setStyles(other)
-    }
+    }, [styles])
+
+    useEffect(() => {
+        if(selecting === path) {
+            setIsSelecting(true);
+        } else {
+            setIsSelecting(false);
+        }
+    }, [selecting, path]);
+
+    useEffect(() => {
+        setStyle("width", size.w + "px");
+        setStyle("height", size.h + "px");
+    }, [size, setStyle]);
+
+    useEffect(() => {
+        setStyle("top", position.y + "px");
+        setStyle("left", position.x + "px");
+    }, [position, setStyle])
 
     const select = (e) => {
         e.stopPropagation();
@@ -48,6 +56,6 @@ export default function useWrapper(element, path) {
     }
 
 
-    return [styles, select, isSelecting, position, size];
+    return [styles, select, isSelecting, position, setPosiont, size, setSize];
 
 }

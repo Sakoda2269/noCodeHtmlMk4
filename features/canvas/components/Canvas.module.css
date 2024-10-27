@@ -19,6 +19,8 @@
     position: relative;
     transform-origin: top left;
     overflow: hidden;
+    z-index: 1;
+    
 }
 
 .footer {
