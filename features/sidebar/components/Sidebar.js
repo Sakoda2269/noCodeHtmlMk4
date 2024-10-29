@@ -49,15 +49,15 @@ export function SideIcon({children}) {
 }
 
 export function SideBody({children}) {
-    return <>{children}</>
+    return <div style={{height: "100%", width: "100%"}}>{children}</div>
 }
 
 export function CenterBody({children}) {
-    return <>{children}</>
+    return <div style={{height: "100%", width: "100%"}}>{children}</div>
 }
 
 export function RightBody({children}) {
-    return<>{children}</>
+    return <div style={{height: "100%", width: "100%"}}>{children}</div>
 }
 
 function findElem(children, type) {

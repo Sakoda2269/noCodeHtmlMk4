@@ -1,0 +1,25 @@
+.selectButton {
+    width: 80%;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    gap: 10px;
+}
+
+.collapseContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    width: 80%;
+    gap: 10px;
+    margin: 10px;
+}
+
+.elementButton {
+    width: 80%;
+}

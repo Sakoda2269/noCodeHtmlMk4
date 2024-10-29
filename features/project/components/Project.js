@@ -6,6 +6,7 @@ import useProject from "../hooks";
 import { ProjectContext, SetProjectContext } from "../contexts/projectContext";
 import { ScreenContext, SetScreenContext } from "../contexts/screenContext";
 import { SelectingContext, SetSelectingContext } from "../contexts/selectingContext";
+import ElementsList from "@/features/elementsList/components/ElementsList";
 
 export default function Project() {
 
@@ -36,7 +37,7 @@ export default function Project() {
                         <FaPlus />
                     </SideIcon>
                     <SideBody>
-                        hello
+                        <ElementsList />
                     </SideBody>
                 </SideItem>
 

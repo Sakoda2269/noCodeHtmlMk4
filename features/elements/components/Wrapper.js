@@ -5,20 +5,20 @@ import useWrapper from "../hooks/useWrapper"
 import AbsoluteContainer from "./AbsoluteContainer"
 import Button from "./Button"
 
+export const Elements = {
+    button: Button,
+}
+
+export const Containers = {
+    absoluteContainer: AbsoluteContainer
+}
+
 
 export default function Wrapper({ element, layout, path }) {
 
     const [styles, select, isSelecting, position, setPosiont, size, setSize] = useWrapper(element, path);
     const [squares, squaresMoveStart, squaresMoves] = useSquare(position, setPosiont, size, setSize);
     const [moveStart, move] = useMove(position, setPosiont);
-
-    const Elements = {
-        button: Button,
-    }
-
-    const Containers = {
-        absoluteContainer: AbsoluteContainer
-    }
 
     const Element = {
         ...Elements, ...Containers
