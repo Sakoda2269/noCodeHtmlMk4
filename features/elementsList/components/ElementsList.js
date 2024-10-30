@@ -3,12 +3,15 @@ import { Collapse } from "react-bootstrap";
 
 import styles from "./ElementsList.module.css"
 import { Containers, Elements } from "@/features/elements/components/Wrapper";
+import useAddComponent from "../hooks/useAddComponent";
 
 
 export default function ElementsList() {
     
     const [elementsOpen, setElementsOpen] = useState(false);
     const [containersOpen, setContainersOpen] = useState(false);
+
+    const [addComponent] = useAddComponent();
     
     return (
         <div className={styles.container}>
@@ -21,7 +24,9 @@ export default function ElementsList() {
             <Collapse in={elementsOpen}>
                 <div id="elements" className={styles.collapseContainer}>
                     {Object.entries(Elements).map(([key, value]) => (
-                        <button key={key} className={styles.elementButton}>{key}</button>
+                        <button key={key} className={styles.elementButton}
+                            onClick={() => {addComponent(key)}}
+                        >{key}</button>
                     ))}
                 </div>
             </Collapse>
@@ -35,7 +40,9 @@ export default function ElementsList() {
             <Collapse in={containersOpen}>
                 <div id="container" className={styles.collapseContainer}>
                     {Object.entries(Containers).map(([key, value]) => (
-                        <button key={key} className={styles.elementButton}>{key}</button>
+                        <button key={key} className={styles.elementButton}
+                            onClick={() => {addComponent(key)}}
+                        >{key}</button>
                     ))}
                 </div>
             </Collapse>

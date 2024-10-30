@@ -2,12 +2,15 @@
 import { SelectingContext, SetSelectingContext } from "@/features/project/contexts/selectingContext";
 import getNum from "@/utils/getNum";
 import { useCallback, useContext, useEffect, useState } from "react";
+import { Containers } from "../components/Wrapper";
+import { SetSelectingContainerContext } from "@/features/project/contexts/selectingContainerContext";
 
 
 export default function useWrapper(element, path) {
 
     const selecting = useContext(SelectingContext);
     const setSelecting = useContext(SetSelectingContext);
+    const setSelectingContainer = useContext(SetSelectingContainerContext);
 
     const [position, setPosiont] = useState({
         x: getNum(element.data.styles.left),
@@ -53,6 +56,9 @@ export default function useWrapper(element, path) {
     const select = (e) => {
         e.stopPropagation();
         setSelecting(path);
+        if(Containers.hasOwnProperty(element.type)) {
+            setSelectingContainer(path);
+        }
     }
 
 

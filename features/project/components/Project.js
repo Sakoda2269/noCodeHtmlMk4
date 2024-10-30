@@ -7,10 +7,13 @@ import { ProjectContext, SetProjectContext } from "../contexts/projectContext";
 import { ScreenContext, SetScreenContext } from "../contexts/screenContext";
 import { SelectingContext, SetSelectingContext } from "../contexts/selectingContext";
 import ElementsList from "@/features/elementsList/components/ElementsList";
+import { SelectingContainerContext, SetSelectingContainerContext } from "../contexts/selectingContainerContext";
 
 export default function Project() {
 
-    const [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting] = useProject();
+    const [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting,
+        selectingContainer, setSelectingContainer
+    ] = useProject();
 
 
     return (
@@ -21,6 +24,8 @@ export default function Project() {
             <SetScreenContext.Provider value={setCurrentScreenId}>
             <SelectingContext.Provider value={selecting}>
             <SetSelectingContext.Provider value={setSelecting}>
+            <SelectingContainerContext.Provider value={selectingContainer}>
+            <SetSelectingContainerContext.Provider value={setSelectingContainer}>
             <Sidebar>
 
                 <SideItem>
@@ -56,9 +61,13 @@ export default function Project() {
 
                 <RightBody>
                     {selecting}
+                    <br />
+                    {selectingContainer}
                 </RightBody>
 
             </Sidebar>
+            </SetSelectingContainerContext.Provider>
+            </SelectingContainerContext.Provider>
             </SetSelectingContext.Provider>
             </SelectingContext.Provider>
             </SetScreenContext.Provider>
