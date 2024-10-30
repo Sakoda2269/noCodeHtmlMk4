@@ -8,6 +8,7 @@ import { ScreenContext, SetScreenContext } from "../contexts/screenContext";
 import { SelectingContext, SetSelectingContext } from "../contexts/selectingContext";
 import ElementsList from "@/features/elementsList/components/ElementsList";
 import { SelectingContainerContext, SetSelectingContainerContext } from "../contexts/selectingContainerContext";
+import Layer from "@/features/layer/components/Layer";
 
 export default function Project() {
 
@@ -33,7 +34,7 @@ export default function Project() {
                         <FaLayerGroup />
                     </SideIcon>
                     <SideBody>
-                        bad
+                        <Layer />
                     </SideBody>
                 </SideItem>
 
