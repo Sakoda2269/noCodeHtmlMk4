@@ -12,12 +12,30 @@ export default function useProject() {
                     {
                         type: "button",
                         data: {
-                            text: "hello",
+                            text: {
+                                type: "string",
+                                value: "hello"
+                            },
                             styles: {
-                                left: "10px",
-                                top: "10px",
-                                width: "100px",
-                                height: "40px"
+                                type: "object",
+                                value: {
+                                    left: {
+                                        type: "string",
+                                        value: "30px"
+                                    },
+                                    top: {
+                                        type: "string",
+                                        value: "30px"
+                                    },
+                                    width: {
+                                        type: "string",
+                                        value: "100px"
+                                    },
+                                    height: {
+                                        type: "string",
+                                        value: "40px"
+                                    }
+                                }
                             }
                         }
                     },
@@ -25,10 +43,25 @@ export default function useProject() {
                         type: "absoluteContainer",
                         data: {
                             styles: {
-                                left: "150px",
-                                top: "30px",
-                                width: "100px",
-                                height: "300px",
+                                type: "object",
+                                value: {
+                                    left: {
+                                        type: "string",
+                                        value: "150px"
+                                    },
+                                    top: {
+                                        type: "string",
+                                        value: "30px"
+                                    },
+                                    width: {
+                                        type: "string",
+                                        value: "100px"
+                                    },
+                                    height: {
+                                        type: "string",
+                                        value: "300px"
+                                    }
+                                }
                             }
                             
                         },
@@ -36,12 +69,30 @@ export default function useProject() {
                             {
                                 type: "button",
                                 data: {
-                                    text: "good",
+                                    text: {
+                                        type: "string",
+                                        value: "good"
+                                    },
                                     styles: {
-                                        left: "30px",
-                                        top: "210px",
-                                        width: "80px",
-                                        height: "100px"
+                                        type: "object",
+                                        value: {
+                                            left: {
+                                                type: "string",
+                                                value: "30px"
+                                            },
+                                            top: {
+                                                type: "string",
+                                                value: "210px"
+                                            },
+                                            width: {
+                                                type: "string",
+                                                value: "80px"
+                                            },
+                                            height: {
+                                                type: "string",
+                                                value: "100px"
+                                            }
+                                        }
                                     }
                                 }
                             }

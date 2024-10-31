@@ -13,14 +13,20 @@ export default function useWrapper(element, path) {
     const setSelectingContainer = useContext(SetSelectingContainerContext);
 
     const [position, setPosiont] = useState({
-        x: getNum(element.data.styles.left),
-        y: getNum(element.data.styles.top)
+        x: getNum(element.data.styles.value.left.value),
+        y: getNum(element.data.styles.value.top.value)
     });
     const [size, setSize] = useState({
-        w: getNum(element.data.styles.width),
-        h: getNum(element.data.styles.height)
+        w: getNum(element.data.styles.value.width.value),
+        h: getNum(element.data.styles.value.height.value)
     });
-    const [styles, setStyles] = useState({ ...element.data.styles });
+    const [styles, setStyles] = useState(() => {
+        const res = {};
+        Object.entries(element.data.styles.value).map(([key, value]) => {
+            res[key] = value.value;
+        });
+        return res;
+    });
     const [isSelecting, setIsSelecting] = useState(false);
 
     const setStyle = useCallback((key, value) => {
