@@ -25,17 +25,35 @@ export default function useAddComponent() {
             type: type,
             data: {
                 styles: {
-                    left: "10px",
-                    top: "10px",
-                    width: "100px",
-                    height: "40px"
+                    type: "object",
+                    value: {
+                        left: {
+                            type: "string",
+                            value: "10px"
+                        },
+                        top: {
+                            type: "string",
+                            value: "10px"
+                        },
+                        width: {
+                            type: "string",
+                            value: "100px"
+                        },
+                        height: {
+                            type: "string",
+                            value: "40px"
+                        }
+                    }
                 }
             }
         };
         if (Containers.hasOwnProperty(type)) {
             data["children"] = [];
         } else {
-            data.data["text"] = type;
+            data.data["text"] = {
+                type: "string",
+                value: type
+            };
         }
         container.push(data);
         setProject((prevProject) => ({
