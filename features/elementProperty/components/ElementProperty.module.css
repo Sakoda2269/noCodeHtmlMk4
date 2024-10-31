@@ -1,0 +1,28 @@
+
+
+.all {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    margin: 5px;
+    padding-right: 10px;
+}
+
+
+.propertyContainer {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 100%;
+}
+
+.propertyName {
+    width: 100%;
+}
+
+.groupButton {
+    width: 100%;
+    border-radius: 5px;
+    border: 2px solid black;
+}

@@ -9,6 +9,7 @@ import { SelectingContext, SetSelectingContext } from "../contexts/selectingCont
 import ElementsList from "@/features/elementsList/components/ElementsList";
 import { SelectingContainerContext, SetSelectingContainerContext } from "../contexts/selectingContainerContext";
 import Layer from "@/features/layer/components/Layer";
+import ElementProperty from "@/features/elementProperty/components/ElementProperty";
 
 export default function Project() {
 
@@ -61,9 +62,7 @@ export default function Project() {
                 </CenterBody>
 
                 <RightBody>
-                    {selecting}
-                    <br />
-                    {selectingContainer}
+                    <ElementProperty />
                 </RightBody>
 
             </Sidebar>

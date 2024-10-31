@@ -4,12 +4,17 @@ import getNum from "@/utils/getNum";
 import { useCallback, useContext, useEffect, useState } from "react";
 import { Containers } from "../components/Wrapper";
 import { SetSelectingContainerContext } from "@/features/project/contexts/selectingContainerContext";
+import { ProjectContext, SetProjectContext } from "@/features/project/contexts/projectContext";
+import { ScreenContext } from "@/features/project/contexts/screenContext";
 
 
 export default function useWrapper(element, path) {
 
     const selecting = useContext(SelectingContext);
     const setSelecting = useContext(SetSelectingContext);
+    const project = useContext(ProjectContext);
+    const setProject = useContext(SetProjectContext);
+    const screen = useContext(ScreenContext);
     const setSelectingContainer = useContext(SetSelectingContainerContext);
 
     const [position, setPosiont] = useState({
@@ -34,6 +39,28 @@ export default function useWrapper(element, path) {
             ...prevStyle,
             [key]: value
         }));
+        
+        const prevProject = project;
+        const paths = path.split("/");
+        let component = prevProject.screens[screen].components;
+        for(let i = 0; i < paths.length; i++) {
+            if(paths[i] == "") {
+                break;
+            }
+            component = component[paths[i]];
+            if(i != paths.length - 1) {
+                component = component.children;
+            }
+        }
+        component.data.styles.value = {
+            ...component.data.styles.value,
+            [key]: {
+                type: "string",
+                value: value
+            }
+        }
+        setProject({...prevProject});
+        
     }, [])
 
     const removeStyle = useCallback((key) => {
@@ -58,6 +85,15 @@ export default function useWrapper(element, path) {
         setStyle("top", position.y + "px");
         setStyle("left", position.x + "px");
     }, [position, setStyle])
+    
+    useEffect(() => {
+        const res = {};
+        Object.entries(element.data.styles.value).map(([key, value]) => {
+            res[key] = value.value;
+        });
+        setStyles(res)
+    }, [project])
+    
 
     const select = (e) => {
         e.stopPropagation();
