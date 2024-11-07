@@ -40,7 +40,6 @@ export default function useProperties() {
             for(let i = 1; i < paths.length - 1; i++){
                 newComps = newComps.children[paths[i]];
             }
-            console.log(newComps)
             newComps.children.splice(paths[paths.length - 1], 1);
         }
         setProject(newProject);

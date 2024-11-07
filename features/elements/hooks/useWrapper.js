@@ -17,7 +17,7 @@ export default function useWrapper(element, path) {
     const screen = useContext(ScreenContext);
     const setSelectingContainer = useContext(SetSelectingContainerContext);
 
-    const [position, setPosiont] = useState({
+    const [position, setPosition] = useState({
         x: getNum(element.data.styles.value.left.value),
         y: getNum(element.data.styles.value.top.value)
     });
@@ -71,7 +71,7 @@ export default function useWrapper(element, path) {
     useEffect(() => {
         if(selecting === path) {
             setIsSelecting(true);
-            setPosiont({
+            setPosition({
                 x: getNum(element.data.styles.value.left.value),
                 y: getNum(element.data.styles.value.top.value)
             })
@@ -112,6 +112,6 @@ export default function useWrapper(element, path) {
     }
 
 
-    return [styles, select, isSelecting, position, setPosiont, size, setSize];
+    return [styles, select, isSelecting, position, setPosition, size, setSize];
 
 }
