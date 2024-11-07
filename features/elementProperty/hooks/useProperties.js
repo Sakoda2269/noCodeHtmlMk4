@@ -1,12 +1,16 @@
-import { ProjectContext } from "@/features/project/contexts/projectContext";
+import { ProjectContext, SetProjectContext } from "@/features/project/contexts/projectContext";
 import { ScreenContext } from "@/features/project/contexts/screenContext";
-import { SelectingContext } from "@/features/project/contexts/selectingContext";
+import { SetSelectingContainerContext } from "@/features/project/contexts/selectingContainerContext";
+import { SelectingContext, SetSelectingContext } from "@/features/project/contexts/selectingContext";
 import { useContext, useEffect, useState } from "react";
 
 
 export default function useProperties() {
     const selecting = useContext(SelectingContext);
+    const setSelecting = useContext(SetSelectingContext);
+    const setSelectingContainer = useContext(SetSelectingContainerContext);
     const project = useContext(ProjectContext);
+    const setProject = useContext(SetProjectContext);
     const screen = useContext(ScreenContext);
     const [properties, setProperties] = useState({});
     
@@ -26,6 +30,24 @@ export default function useProperties() {
         setProperties(component.data)
     }, [project, selecting])
     
-    return [properties];
+    const deleteComponent = () => {
+        const newProject = {...project};
+        const paths = selecting.split("/");
+        if(paths.length == 1) {
+          newProject.screens[screen].components.splice(selecting, 1);
+        } else {
+            let newComps = newProject.screens[screen].components[paths[0]];
+            for(let i = 1; i < paths.length - 1; i++){
+                newComps = newComps.children[paths[i]];
+            }
+            console.log(newComps)
+            newComps.children.splice(paths[paths.length - 1], 1);
+        }
+        setProject(newProject);
+        setSelecting("");
+        setSelectingContainer("");
+    }
+    
+    return [properties, selecting, deleteComponent];
     
 }

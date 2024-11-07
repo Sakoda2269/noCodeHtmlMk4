@@ -7,13 +7,21 @@ import useProperty from "../hooks/useProperty";
 
 export default function ElementProperty() {
     
-    const [properties] = useProperties();
+    const [properties, selecting, deleteComponent] = useProperties();
     
     return (
-        <div className={styles.all}>
-            {Object.entries(properties).map(([key, value]) => (
-                <Property key={key} property={value} name={key} path={key}/>
-            ))}
+        <div style={{width: "100%", height: "100%"}}>
+            {selecting && <div className={styles.all}>
+                {Object.entries(properties).map(([key, value]) => (
+                    <Property key={key} property={value} name={key} path={key}/>
+                ))}
+                <button 
+                    className={`btn btn-danger ${styles.deleteButton}`}
+                    onClick={deleteComponent}
+                >
+                    delete
+                </button>
+            </div>}
         </div>
     )
 }
