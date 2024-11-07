@@ -71,6 +71,14 @@ export default function useWrapper(element, path) {
     useEffect(() => {
         if(selecting === path) {
             setIsSelecting(true);
+            setPosiont({
+                x: getNum(element.data.styles.value.left.value),
+                y: getNum(element.data.styles.value.top.value)
+            })
+            setSize({
+                w: getNum(element.data.styles.value.width.value),
+                h: getNum(element.data.styles.value.height.value)
+            })
         } else {
             setIsSelecting(false);
         }

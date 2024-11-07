@@ -16,8 +16,10 @@ export const Containers = {
 
 export default function Wrapper({ element, layout, path }) {
 
-    const [styles, select, isSelecting, position, setPosiont, size, setSize] = useWrapper(element, path);
-    const [squares, squaresMoveStart, squaresMoves] = useSquare(position, setPosiont, size, setSize);
+    const [styles, select, isSelecting, position, setPosiont, size, setSize] = 
+        useWrapper(element, path);
+    const [squares, squaresMoveStart, squaresMoves] = 
+        useSquare(position, setPosiont, size, setSize);
     const [moveStart, move] = useMove(position, setPosiont);
 
     const Element = {
@@ -29,7 +31,6 @@ export default function Wrapper({ element, layout, path }) {
             styles["position"] = "absolute";
             break;
     }
-
 
     return(
         <div style={{...styles, zIndex: "100"}} onClick={select}>
