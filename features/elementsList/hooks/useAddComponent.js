@@ -21,9 +21,14 @@ export default function useAddComponent() {
             }
             container = container[path].children;
         }
+        const id = self.crypto.randomUUID();
         const data = {
             type: type,
             data: {
+                id: {
+                    type: "string",
+                    value: id
+                },
                 styles: {
                     type: "object",
                     value: {

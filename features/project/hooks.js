@@ -12,6 +12,10 @@ export default function useProject() {
                     {
                         type: "button",
                         data: {
+                            id: {
+                                type: "string",
+                                value: "btn1"
+                            },
                             text: {
                                 type: "string",
                                 value: "hello"
@@ -42,6 +46,10 @@ export default function useProject() {
                     {
                         type: "absoluteContainer",
                         data: {
+                            id: {
+                                type: "string",
+                                value: "abCon1"
+                            },
                             styles: {
                                 type: "object",
                                 value: {
@@ -69,6 +77,10 @@ export default function useProject() {
                             {
                                 type: "button",
                                 data: {
+                                    id: {
+                                        type: "string",
+                                        value: "btn2"
+                                    },
                                     text: {
                                         type: "string",
                                         value: "good"

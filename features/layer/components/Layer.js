@@ -55,7 +55,7 @@ function Component({component, depth, inIndex, path}) {
                             aria-controls="children"
                             aria-expanded={isOpen}
                         >
-                            {component.type}{inIndex}
+                            {component.data.id.value}
                         </button>
                     )}
                     {children && <Collapse in={isOpen}>

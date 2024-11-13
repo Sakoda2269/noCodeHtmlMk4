@@ -55,36 +55,55 @@ export function useComponent(path, isContainer) {
             container = container.children;
             // container.children.splice(draggingPaths[draggingPaths.length - 1], 1);
         }
-        console.log(component);
-        console.log(dragging, path);
-        console.log(path.split("/"), uOrD);
         const containerPaths = path.split("/");
         let container2 = project.screens[screen].components;
-        if(uOrD == "d") {
-            if(containerPaths.length == 1 && containerPaths[0] === "") {
-                container2.push(component);
-            } else {
-                console.log(container2);
-                container2 = container2[containerPaths[0]];
-                for(let i = 1; i < containerPaths.length; i++) {
-                    container2 = container2.children[containerPaths[i]];
-                }
-                console.log(container2);
-                container2.children.push(component);
-            }
+        let insertId = "";
+        let containerId = "";
+        if(containerPaths.length == 1) {
+
         } else {
-            if(containerPaths.length == 1) {
-                container2.splice(Number(containerPaths[0]), 0, component);
-            } else{
-                console.log(container2);
-                container2 = container2[containerPaths[0]];
-                for(let i = 1; i < containerPaths.length - 1; i++) {
-                    container2 = container2.children[containerPaths[i]];
-                }
-                container2.children.splice(Number(containerPaths[containerPaths.length - 1]), 0, component);
+            container2 = container2[containerPaths[0]];
+            for(let i = 1; i < containerPaths.length - 1; i++) {
+                container2 = container2.children[containerPaths[i]];
+            }
+            containerId = container2.data.id.value;
+            container2 = container2.children;
+        }
+        
+        if(uOrD == "u") {
+            insertId = container2[containerPaths[containerPaths.length - 1]].data.id.value;
+        } else {
+            if(containerPaths[0] != ""){
+                containerId = container2[containerPaths[containerPaths.length - 1]].data.id.value;
+                container2 = container2[containerPaths[containerPaths.length - 1]].children;
             }
         }
-        container.splice(draggingPaths[draggingPaths.length - 1], 1);
+
+        const id = component.data.id.value;
+        if(id === containerId) {
+            return;
+        }
+        if(id === insertId) {
+            return;
+        }
+        let delNum = 0;
+        for(let i = 0; i < container.length; i++) {
+            if(container[i].data.id.value == id) {
+                delNum = i;
+                break;
+            }
+        }
+        container.splice(delNum, 1);
+        if (uOrD == "u") {
+            for(let i = 0; i < container2.length; i++) {
+                if(container2[i].data.id.value == insertId) {
+                    container2.splice(i, 0, component);
+                    break;
+                }
+            }
+        } else {
+            container2.push(component);
+        }
         setProject({...project});
         setSelecting("");
         setSelectingContainer("");
