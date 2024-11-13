@@ -45,18 +45,49 @@ export function useComponent(path, isContainer) {
         let component = {}
         if(draggingPaths.length == 1) {
             component = container[draggingPaths[0]];
+            // container.splice(draggingPaths[0], 1);
         } else if(draggingPaths.length = 2) {
             container = container[draggingPaths[0]];
             for(let i = 1; i < draggingPaths.length - 1; i++) {
                 container = container.children[draggingPaths[i]];
             }
             component = container.children[draggingPaths[draggingPaths.length - 1]];
+            container = container.children;
+            // container.children.splice(draggingPaths[draggingPaths.length - 1], 1);
         }
         console.log(component);
         console.log(dragging, path);
-        console.log(path.split("/"), uOrD)
-        
-        
+        console.log(path.split("/"), uOrD);
+        const containerPaths = path.split("/");
+        let container2 = project.screens[screen].components;
+        if(uOrD == "d") {
+            if(containerPaths.length == 1 && containerPaths[0] === "") {
+                container2.push(component);
+            } else {
+                console.log(container2);
+                container2 = container2[containerPaths[0]];
+                for(let i = 1; i < containerPaths.length; i++) {
+                    container2 = container2.children[containerPaths[i]];
+                }
+                console.log(container2);
+                container2.children.push(component);
+            }
+        } else {
+            if(containerPaths.length == 1) {
+                container2.splice(Number(containerPaths[0]), 0, component);
+            } else{
+                console.log(container2);
+                container2 = container2[containerPaths[0]];
+                for(let i = 1; i < containerPaths.length - 1; i++) {
+                    container2 = container2.children[containerPaths[i]];
+                }
+                container2.children.splice(Number(containerPaths[containerPaths.length - 1]), 0, component);
+            }
+        }
+        container.splice(draggingPaths[draggingPaths.length - 1], 1);
+        setProject({...project});
+        setSelecting("");
+        setSelectingContainer("");
     }
     
     const dragOver = (e) => {
