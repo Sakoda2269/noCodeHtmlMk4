@@ -25,6 +25,8 @@ export function useComponent(path, isContainer) {
     const setProject = useContext(SetProjectContext);
     const screen = useContext(ScreenContext);
     
+    const [dragOn, setDragOn] = useState(false);
+    const [buttomDragOn, setButtomDragOn] = useState(false);
     
     const select = () => {
         setSelecting(path);
@@ -40,6 +42,8 @@ export function useComponent(path, isContainer) {
     
     const drop = (e, uOrD) => {
         e.preventDefault();
+        setDragOn(false);
+        setButtomDragOn(false);
         let container = project.screens[screen].components;
         const draggingPaths = dragging.split("/");
         let component = {}
@@ -113,5 +117,21 @@ export function useComponent(path, isContainer) {
         e.preventDefault();
     }
     
-    return [select, dragStart, drop, dragOver]
+    const dragEnter = (e) => {
+        setDragOn(true);
+    }
+    
+    const dragLeave = (e) => {
+        setDragOn(false);
+    }
+    
+    const buttomDragEnter = (e) => {
+        setButtomDragOn(true);
+    }
+    
+    const buttomDragLeave = (e) => {
+        setButtomDragOn(false);
+    }
+    
+    return [select, dragStart, drop, dragOver, dragOn, dragEnter, dragLeave, buttomDragOn, buttomDragEnter, buttomDragLeave];
 }

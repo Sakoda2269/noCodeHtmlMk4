@@ -29,13 +29,16 @@ function Component({component, depth, inIndex, path}) {
 
     const children = depth == 0 ? component.components : component.children;
     
-    const [select, dragStart, drop, dragOver] = useComponent(path, children);
+    const [select, dragStart, drop, dragOver, dragOn, dragEnter, dragLeave, buttomDragOn, buttomDragEnter, buttomDragLeave] = useComponent(path, children);
     
     return (
         <div className={styles.component}>
                 {depth != 0 &&
-                    <div style={{width: "100%", height: "15px"}} 
+                    <div style={{width: "100%", height: "15px"}}
+                        className={`${dragOn ? styles.dragOn : ""}`} 
                         onDragOver={dragOver}
+                        onDragEnter={dragEnter}
+                        onDragLeave={dragLeave}
                         onDrop={(e) => drop(e, "u")}>
                     </div>}
                 <div draggable="true" onDragStart={dragStart}>
@@ -71,8 +74,11 @@ function Component({component, depth, inIndex, path}) {
                                     }/>
                                     
                             ))}
-                            <div style={{width: "90%", height: "15px", backgroundColor: "red"}} 
+                            <div style={{width: "90%", height: "15px"}}
+                                className={`${buttomDragOn ? styles.dragOn : ""}`}
                                 onDragOver={dragOver}
+                                onDragEnter={buttomDragEnter}
+                                onDragLeave={buttomDragLeave}
                                 onDrop={(e) => drop(e, "d")}>
                             </div>
                         </div>
