@@ -11,7 +11,7 @@ export default function Layer() {
     return (
         <LayerDragginContext.Provider value={dragging}>
             <SetLayerDraggingContext.Provider value={setDragging}>
-                <div style={{widht: "100%", height: "100%", padding: "10px"}}>
+                <div style={{widht: "100%", height: "100%", padding: "10px", overflowY: "auto"}}>
                     <div className={styles.container}>
                         {project.screens.map((screen, index) => (
                             <Component key={index} component={screen} depth={0} inIndex={index} path=""/>
@@ -25,7 +25,7 @@ export default function Layer() {
 
 function Component({component, depth, inIndex, path}) {
 
-    const [isOpen, setOpen] = useState(false);
+    const [isOpen, setOpen] = useState(true);
 
     const children = depth == 0 ? component.components : component.children;
     

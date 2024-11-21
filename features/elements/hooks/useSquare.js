@@ -9,19 +9,19 @@ export default function useSquare(position, setPosition, size, setSize) {
             [
                 {
                     x: -8,
-                    y: -8
+                    y: -2*size.h - 16
                 },
                 {
                     x: size.w - 2,
-                    y: -8
+                    y: -2*size.h - 26
                 },
                 {
                     x: -8,
-                    y: size.h - 2
+                    y: -size.h - 28
                 },
                 {
                     x: size.w - 2,
-                    y: size.h - 2
+                    y: -size.h - 36
                 }
             ]
         )
