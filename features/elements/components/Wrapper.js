@@ -18,7 +18,7 @@ export const Elements = {
 export const Containers = {
     absoluteContainer: AbsoluteContainer,
     horizontalContainer: HorizontalContainer,
-    VerticalContainer: VerticalContainer
+    verticalContainer: VerticalContainer
 }
 
 

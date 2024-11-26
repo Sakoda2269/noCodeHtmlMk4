@@ -4,6 +4,7 @@ import useProperties from "../hooks/useProperties"
 import styles from "./ElementProperty.module.css"
 import { Collapse } from "react-bootstrap";
 import useProperty from "../hooks/useProperty";
+import useScreenProperty from "../hooks/useScreenProperty";
 
 export default function ElementProperty() {
     
@@ -12,6 +13,7 @@ export default function ElementProperty() {
     return (
         <div style={{width: "100%", height: "100%"}}>
             {selecting && <div className={styles.all}>
+                <h3>Component</h3>
                 {Object.entries(properties).map(([key, value]) => (
                     <Property key={key} property={value} name={key} path={key}/>
                 ))}
@@ -22,8 +24,30 @@ export default function ElementProperty() {
                     delete
                 </button>
             </div>}
+            {!selecting && <div className={styles.all}>
+                <h3>Screen</h3>
+                <ScreenProperty property={"title"}/>
+            </div>
+            }
         </div>
     )
+}
+
+function ScreenProperty({property}) {
+    
+    const [propData, onChange] = useScreenProperty(property)
+    
+    return (
+        <div className={styles.propertyContainer}>
+            <div className={styles.propertyName}>
+                <label className="form-label">{property}</label>
+            </div>
+            <div>
+                <input type="text" value={propData} onChange={onChange} className="form-control"/>
+            </div>
+        </div>
+    )
+    
 }
 
 function Property({name, property, path}) {
