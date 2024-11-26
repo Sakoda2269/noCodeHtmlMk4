@@ -1,20 +1,37 @@
 import { ProjectContext, SetProjectContext } from "@/features/project/contexts/projectContext";
-import { ScreenContext } from "@/features/project/contexts/screenContext";
+import { ScreenContext, SetScreenContext } from "@/features/project/contexts/screenContext";
 import { SelectingContainerContext, SetSelectingContainerContext } from "@/features/project/contexts/selectingContainerContext";
 import { SelectingContext, SetSelectingContext } from "@/features/project/contexts/selectingContext";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { LayerDragginContext, SetLayerDraggingContext } from "../contexts/layerDragginContext";
 
 
 export default function useLayer() {
     const project = useContext(ProjectContext);
+    const setProject = useContext(SetProjectContext);
+    
     const [dragging, setDraggging] = useState("");
+    
+    
+    const addScreen = () => {
+        const name = "screen" + (project.screens.length + 1);
+        setProject({
+            ...project, 
+            ["screens"]: [
+                ...project.screens,
+                {
+                    title: name,
+                    components: []
+                }
+            ]
+        })
+    }
 
-    return [project, dragging, setDraggging];
+    return [project, dragging, setDraggging, addScreen];
 
 }
 
-export function useComponent(path, isContainer) {
+export function useComponent(path, isContainer, screenIndex) {
     const selecting = useContext(SelectingContext);
     const setSelecting = useContext(SetSelectingContext);
     const selectingContainer = useContext(SelectingContainerContext);
@@ -24,17 +41,24 @@ export function useComponent(path, isContainer) {
     const project = useContext(ProjectContext);
     const setProject = useContext(SetProjectContext);
     const screen = useContext(ScreenContext);
+    const setScreen = useContext(SetScreenContext);
     
     const [dragOn, setDragOn] = useState(false);
     const [buttomDragOn, setButtomDragOn] = useState(false);
+    const [isSelecting, setIsSelecting] = useState(false);
     
     const select = () => {
         setSelecting(path);
+        setScreen(screenIndex)
         if(isContainer) {
             setSelectingContainer(path);
         }
     }
-
+    
+    useEffect(() => {
+        setIsSelecting(selecting == path && screenIndex == screen);
+    }, [selecting, screen])
+    
     const dragStart = (e) => {
         e.stopPropagation();
         setDragging(path);
@@ -133,5 +157,5 @@ export function useComponent(path, isContainer) {
         setButtomDragOn(false);
     }
     
-    return [select, dragStart, drop, dragOver, dragOn, dragEnter, dragLeave, buttomDragOn, buttomDragEnter, buttomDragLeave];
+    return [select, dragStart, drop, dragOver, dragOn, dragEnter, dragLeave, buttomDragOn, buttomDragEnter, buttomDragLeave, isSelecting];
 }
