@@ -58,7 +58,7 @@ function Component({component, depth, inIndex, path, screenIndex}) {
                         onDragLeave={dragLeave}
                         onDrop={(e) => drop(e, "u")}>
                     </div>}
-                <div draggable="true" onDragStart={dragStart}>
+                <div draggable="true" onDragStart={dragStart} style={{paddingBottom: "5px"}}>
                     {depth == 0 ? (
                         <button 
                             className={styles.layerButton}

@@ -1,6 +1,7 @@
 "use client"
 import { CenterBody, RightBody, Sidebar, SideBody, SideIcon, SideItem } from "../../sidebar/components/Sidebar";
 import { FaPlus, FaDatabase, FaLayerGroup, FaGear } from "react-icons/fa6";
+import { AiOutlineFunction } from "react-icons/ai";
 import Canvas from "../../canvas/components/Canvas";
 import useProject from "../hooks";
 import { ProjectContext, SetProjectContext } from "../contexts/projectContext";
@@ -54,6 +55,15 @@ export default function Project() {
                     </SideIcon>
                     <SideBody>
                         ok
+                    </SideBody>
+                </SideItem>
+                
+                <SideItem>
+                    <SideIcon>
+                        <AiOutlineFunction />
+                    </SideIcon>
+                    <SideBody>
+                        good
                     </SideBody>
                 </SideItem>
 
