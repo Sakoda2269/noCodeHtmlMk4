@@ -10,7 +10,17 @@ export default function useProject() {
                 title: "screen1",
                 components:[]
             }
-        ]
+        ],
+        variables: [
+        ],
+        databases: {
+            "accounts": {
+                url: "",
+                user: "",
+                password: "",
+                columns: [],
+            }
+        }
     });
 
     const [currentScreenId, setCurrentScreenId] = useState(0);

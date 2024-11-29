@@ -11,6 +11,8 @@ import ElementsList from "@/features/elementsList/components/ElementsList";
 import { SelectingContainerContext, SetSelectingContainerContext } from "../contexts/selectingContainerContext";
 import Layer from "@/features/layer/components/Layer";
 import ElementProperty from "@/features/elementProperty/components/ElementProperty";
+import Variables from "@/features/variables/components/Variables";
+import Databases from "@/features/databases/components/Databases";
 
 export default function Project() {
 
@@ -54,7 +56,7 @@ export default function Project() {
                         <FaDatabase />
                     </SideIcon>
                     <SideBody>
-                        ok
+                        <Databases />
                     </SideBody>
                 </SideItem>
                 
@@ -63,7 +65,7 @@ export default function Project() {
                         <AiOutlineFunction />
                     </SideIcon>
                     <SideBody>
-                        good
+                        <Variables />
                     </SideBody>
                 </SideItem>
 
