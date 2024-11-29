@@ -36,11 +36,10 @@ function Component({component, depth, inIndex, path, screenIndex}) {
     const [
             select, dragStart, drop, dragOver, 
             dragOn, dragEnter, dragLeave, buttomDragOn, 
-            buttomDragEnter, buttomDragLeave, isSelecting
+            buttomDragEnter, buttomDragLeave, isSelecting, buttonBorder
         ] = useComponent(path, children, screenIndex);
         
     const collapseOpen = () => {
-        console.log(isSelecting)
         if(isOpen && isSelecting) {
             setOpen(false);
         } else {
@@ -62,6 +61,7 @@ function Component({component, depth, inIndex, path, screenIndex}) {
                     {depth == 0 ? (
                         <button 
                             className={styles.layerButton}
+                            style={{border: buttonBorder}}
                             onClick={() => {
                                 collapseOpen();
                                 select();
@@ -74,6 +74,7 @@ function Component({component, depth, inIndex, path, screenIndex}) {
                     ) : (
                         <button 
                             className={styles.layerButton}
+                            style={{border: buttonBorder}}
                             onClick={() => {
                                 collapseOpen();
                                 select();

@@ -46,6 +46,7 @@ export function useComponent(path, isContainer, screenIndex) {
     const [dragOn, setDragOn] = useState(false);
     const [buttomDragOn, setButtomDragOn] = useState(false);
     const [isSelecting, setIsSelecting] = useState(false);
+    const [buttonBorder, setButtomBorder] = useState("1px solid black");
     
     const select = () => {
         setSelecting(path);
@@ -57,6 +58,11 @@ export function useComponent(path, isContainer, screenIndex) {
     
     useEffect(() => {
         setIsSelecting(selecting == path && screenIndex == screen);
+        if(selecting == path && screenIndex == screen) {
+            setButtomBorder("3px solid red");
+        } else {
+            setButtomBorder("1px solid black");
+        }
     }, [selecting, screen])
     
     const dragStart = (e) => {
@@ -157,5 +163,9 @@ export function useComponent(path, isContainer, screenIndex) {
         setButtomDragOn(false);
     }
     
-    return [select, dragStart, drop, dragOver, dragOn, dragEnter, dragLeave, buttomDragOn, buttomDragEnter, buttomDragLeave, isSelecting];
+    return [
+            select, dragStart, drop, dragOver, 
+            dragOn, dragEnter, dragLeave, buttomDragOn, 
+            buttomDragEnter, buttomDragLeave, isSelecting, buttonBorder
+        ];
 }
