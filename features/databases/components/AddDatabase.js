@@ -2,13 +2,13 @@ import useAddDatabase from "../hooks/useAddDatabase"
 import styles from "./AddDatabase.module.css"
 import EditColumn from "./EditColumn";
 
-export default function AddDatabas({ close }) {
+export default function AddDatabas({ close, edit, name }) {
 
     const [
         pageNum, nextPage, prevPage, setPageNum,
         url, changeURL, user, changeUser, password, changePassword, useDatabase, changeDatabase, tableName, changeTableName,
-        columns, setColumns, primaryKeys, changePrimaryKey, foreignKeys, setForeingKeys, confirm
-    ] = useAddDatabase();
+        columns, setColumns, primaryKeys, changePrimaryKey, confirm, deleteColumn
+    ] = useAddDatabase(edit, name);
 
     return (
         <div >
@@ -129,6 +129,16 @@ export default function AddDatabas({ close }) {
                                         </td>
                                     ))}
                                 </tr>
+                                <tr>
+                                    <td style={{ borderRight: "3px solid black" }}>
+                                        delete
+                                    </td>
+                                    {columns.map((value, index) => (
+                                        <td key={index} style={{ borderRight: "1px solid black" }}>
+                                            <button className="btn btn-danger" onClick={() => deleteColumn(index)}>削除</button>
+                                        </td>
+                                    ))}
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -143,8 +153,7 @@ export default function AddDatabas({ close }) {
                         setCols={setColumns}
                         colNum={-1}
                         close={() => setPageNum(1)}
-                        foreignKey={foreignKeys}
-                        setForeignKey={setForeingKeys}
+                        name={name}
                     />
                 </div>
 

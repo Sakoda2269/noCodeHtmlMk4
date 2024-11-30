@@ -1,17 +1,16 @@
 import { SetProjectContext } from "@/features/project/contexts/projectContext";
 import { useContext, useState } from "react";
 
-export default function useAddDatabase() {
+export default function useAddDatabase(edit, name) {
     const setProject = useContext(SetProjectContext)
     const [pageNum, setPageNum] = useState(0);
-    const [url, setUrl] = useState("");
-    const [user, setUser] = useState("");
-    const [password, setPassword] = useState("")
-    const [useDatabase, setUseDatabase] = useState("");
-    const [tableName, setTableName] = useState("");
-    const [columns, setColumns] = useState([]);
-    const [primaryKeys, setPrimaryKeys] = useState(["tweetId"]);
-    const [foreignKeys, setForeignKeys] = useState([["accountId", "accounts.id"]]);
+    const [url, setUrl] = useState(edit ? edit.url : "");
+    const [user, setUser] = useState(edit ? edit.user : "");
+    const [password, setPassword] = useState(edit ? edit.password : "")
+    const [useDatabase, setUseDatabase] = useState(edit ? edit.database : "");
+    const [tableName, setTableName] = useState(name ? name : "");
+    const [columns, setColumns] = useState(edit ? edit.columns : []);
+    const [primaryKeys, setPrimaryKeys] = useState(edit ? edit.primaryKey : []);
 
     const nextPage = () => {
         setPageNum(pageNum + 1);
@@ -62,6 +61,33 @@ export default function useAddDatabase() {
         })
     }
 
+    const deleteColumn = (index) => {
+        let colName = "";
+        setColumns((prev) => {
+            const res = [];
+            for(let i = 0; i < prev.length; i++) {
+                if(i != index) {
+                    res.push(prev[i]);
+                } else {
+                    colName = prev[i].name;
+                    console.log(prev[i].name)
+                }
+            }
+            if(primaryKeys.includes(colName)) {
+                setPrimaryKeys((prev) => {
+                    const res = [];
+                    for(let name of prev) {
+                        if(name != colName) {
+                            res.push(name);
+                        }
+                    }
+                    return res;
+                });
+            }
+            return res;
+        });
+    }
+
     const confirm = (close) => {
         if(columns.length == 0) {
             alert("列が一つ以上必要です");
@@ -71,28 +97,47 @@ export default function useAddDatabase() {
             alert("テーブル名を入力してください");
             return;
         }
-        setProject((prev) => (
-            {
-                ...prev,
-                ["databases"]: {
-                    ...prev["databases"],
-                    [tableName]: {
-                        url: url,
-                        user: user,
-                        password: password,
-                        database: useDatabase,
-                        columns: columns,
-                        primaryKey: primaryKeys
+        setProject((prev) => {
+            if(!edit) {
+                return {
+                    ...prev,
+                    ["databases"]: {
+                        ...prev["databases"],
+                        [tableName]: {
+                            url: url,
+                            user: user,
+                            password: password,
+                            database: useDatabase,
+                            columns: columns,
+                            primaryKey: primaryKeys
+                        }
+                    }
+                }
+            } else {
+                const {[name]: rect , ...others} = prev.databases;
+                return {
+                    ...prev,
+                    ["databases"]: {
+                        ...others,
+                        [tableName]: {
+                            url: url,
+                            user: user,
+                            password: password,
+                            database: useDatabase,
+                            columns: columns,
+                            primaryKey: primaryKeys
+                        }
                     }
                 }
             }
-        ));
+            
+        });
         close();
     }
 
     return [
         pageNum, nextPage, prevPage, setPageNum,
         url, changeURL, user, changeUser, password, changePassword, useDatabase, changeDatabase, tableName, changeTableName,
-        columns, setColumns, primaryKeys, changePrimaryKey, foreignKeys, setForeignKeys, confirm
+        columns, setColumns, primaryKeys, changePrimaryKey, confirm, deleteColumn
     ]
 }

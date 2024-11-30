@@ -36,15 +36,7 @@ export default function Databases() {
             {editDB != "" && 
                 (
                     <div>
-                        <h3>
-                            {editDB}
-                        </h3>
-                        <EditDatabase database={databases[editDB]} />
-                        <button
-                            className="btn btn-secondary"
-                            style={{marginTop: "20px"}}
-                            onClick={() => {setIsEditDBOpen(false)}}
-                        >閉じる</button>
+                        <AddDatabas close={() => {setIsEditDBOpen(false)}} edit={databases[editDB]} name={editDB}/>
                     </div>
                 )
             }

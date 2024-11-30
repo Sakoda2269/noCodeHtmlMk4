@@ -2,7 +2,7 @@ import { useContext } from "react";
 import useEditColumns from "../hooks/useEditColumsn"
 import styles from "./EditColumn.module.css"
 import { ProjectContext } from "@/features/project/contexts/projectContext";
-export default function EditColumn({ col, setCols, colNum, close}) {
+export default function EditColumn({ col, setCols, colNum, close, name}) {
 
     const [
         colData, setName, setType, setDefault, setConstraint, foreignTable, changeForeignTable, foreignColName, changeForeignColName, confirm
@@ -58,9 +58,12 @@ export default function EditColumn({ col, setCols, colNum, close}) {
                     <label className="form-label">Relation</label><br />
                     <select value={foreignTable} className="btn border-secondary dropdown-toggle" onChange={changeForeignTable}>
                         <option value={""}>選択しない</option>
-                        {Object.entries(project.databases).map(([key, value]) => (
-                            <option value={key} key={key}>{key}</option>
-                        ))}
+                        {Object.entries(project.databases).map(([key, value]) => {
+                            if(name != key) {
+                                return <option value={key} key={key}>{key}</option>
+                            }
+                        }
+                        )}
                     </select>
                     {foreignTable != "" &&
                         <select value={foreignColName} className="btn border-secondary dropdown-toggle" onChange={changeForeignColName}>

@@ -79,7 +79,6 @@ export default function useEditColumns(col, setCols, colNum) {
             return;
         }
         if(colData["name"] != "" && colData["type"] != "") {
-            console.log(colData)
             if(colNum == -1) {
                 setCols((prev) => (
                     [
