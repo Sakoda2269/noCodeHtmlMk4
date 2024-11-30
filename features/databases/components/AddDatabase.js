@@ -1,22 +1,14 @@
 import useAddDatabase from "../hooks/useAddDatabase"
 import styles from "./AddDatabase.module.css"
+import EditColumn from "./EditColumn";
 
-export default function AddDatabas() {
+export default function AddDatabas({ close }) {
 
     const [
-        pageNum, nextPage, prevPage,
-        url, changeURL, user, changeUser, password, changePassword, useDatabase, changeDatabase,
-        columns, setColumns, primaryKeys, setPrimaryKeys, foreignKeys, setForeingKeys
+        pageNum, nextPage, prevPage, setPageNum,
+        url, changeURL, user, changeUser, password, changePassword, useDatabase, changeDatabase, tableName, changeTableName,
+        columns, setColumns, primaryKeys, changePrimaryKey, foreignKeys, setForeingKeys, confirm
     ] = useAddDatabase();
-
-    const isForeignKey = (foreingKeys, columnName) => {
-        for (let key of foreingKeys) {
-            if (columnName == key[0]) {
-                return key[1];
-            }
-        }
-        return "";
-    }
 
     return (
         <div >
@@ -28,6 +20,10 @@ export default function AddDatabas() {
                     <div className={styles.left}>
                     </div>
                     <div className={styles.center}>
+                        <div style={{ paddingBottom: "10px" }}>
+                            <label className="form-label required">table name</label>
+                            <input type="text" className="form-control" value={tableName} onChange={changeTableName} />
+                        </div>
                         <div style={{ paddingBottom: "10px" }}>
                             <label className="form-label">url</label>
                             <input type="text" className="form-control" value={url} onChange={changeURL} />
@@ -66,6 +62,24 @@ export default function AddDatabas() {
                                 <tr>
                                     <th style={{ borderRight: "3px solid black" }}>
                                         <div style={{ textAlign: "center" }}>
+                                            primary Key
+                                        </div>
+                                    </th>
+                                    {columns.map((value, index) => (
+                                        <th key={index} style={{ borderRight: "1px solid black" }}>
+                                            <div style={{ textAlign: "center" }}>
+                                                <input
+                                                    type="checkbox"
+                                                    name={value.name}
+                                                    checked={primaryKeys.includes(value.name)}
+                                                    onChange={changePrimaryKey} />
+                                            </div>
+                                        </th>
+                                    ))}
+                                </tr>
+                                <tr>
+                                    <th style={{ borderRight: "3px solid black" }}>
+                                        <div style={{ textAlign: "center" }}>
                                             column name
                                         </div>
                                     </th>
@@ -90,7 +104,7 @@ export default function AddDatabas() {
                                         </td>
                                     ))}
                                     <td rowSpan="4">
-                                        <button className={styles.addButton}>
+                                        <button className={styles.addButton} onClick={() => setPageNum(3)}>
                                             +
                                         </button>
                                     </td>
@@ -111,7 +125,7 @@ export default function AddDatabas() {
                                     </td>
                                     {columns.map((value, index) => (
                                         <td key={index} style={{ borderRight: "1px solid black" }}>
-                                            {isForeignKey(foreignKeys, value.name)}
+                                            {value.foreignKey}
                                         </td>
                                     ))}
                                 </tr>
@@ -119,22 +133,39 @@ export default function AddDatabas() {
                         </table>
                     </div>
                     <div className={styles.right}>
-                        <button className="btn" style={{ fontSize: "40px" }} onClick={nextPage}>&gt;</button>
                     </div>
                 </div>
             )}
-            {pageNum == 2 && (
-                <div className={styles.mainContainer}>
-                    <div className={styles.left}>
-                        <button className="btn" style={{ fontSize: "40px" }} onClick={prevPage}>&lt;</button>
-                    </div>
-                    <div className={styles.center}>
-                        bad
-                    </div>
-                    <div className={styles.right}>
-                    </div>
+            {pageNum == 3 && (
+                <div>
+                    <EditColumn
+                        colName={""}
+                        setCols={setColumns}
+                        colNum={-1}
+                        close={() => setPageNum(1)}
+                        foreignKey={foreignKeys}
+                        setForeignKey={setForeingKeys}
+                    />
                 </div>
+
             )}
+            {[0, 1].includes(pageNum) && 
+            <div className={styles.buttonContainer}>
+                <button
+                    className="btn btn-secondary"
+                    style={{ marginTop: "20px" }}
+                    onClick={close}
+                >閉じる</button>
+                <button
+                    className="btn btn-primary"
+                    style={{ marginTop: "20px" }}
+                    onClick={() => {
+                        confirm(close)
+                    }}
+                >決定</button>
+            </div>
+            }
+
         </div>
     )
 }

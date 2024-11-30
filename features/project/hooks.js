@@ -24,23 +24,25 @@ export default function useProject() {
                         name: "id",
                         type: "varchar(32)",
                         constraint: [],
-                        default: "$unique"
+                        default: "$unique",
+                        foreignKey: ""
                     },
                     {
                         name: "name",
                         type: "varchar(16)",
                         constraint: ["unique", "notNull"],
-                        default: null
+                        default: null,
+                        foreignKey: ""
                     },
                     {
                         name: "age",
                         type: "integer",
                         constraint: [],
-                        default: null
+                        default: null,
+                        foreignKey: ""
                     }
                 ],
                 primaryKey: ["id"],
-                foreignKey: []
             },
             "tweets": {
                 url: "",
@@ -52,23 +54,25 @@ export default function useProject() {
                         name: "tweetId",
                         type: "integer",
                         constraint: [],
-                        default: "$sequential"
+                        default: "$sequential",
+                        foreignKey: ""
                     },
                     {
                         name: "accountId",
                         type: "varchar(32)",
                         constraint: [],
-                        default: null
+                        default: null,
+                        foreignKey: "accounts.id"
                     },
                     {
                         name: "content",
                         type: "text",
                         constraint: [],
-                        default: ""
+                        default: "",
+                        foreignKey: ""
                     }
                 ],
                 primaryKey: ["tweetId"],
-                foreignKey: [["accountId", "accounts.id"]]
             }
         }
     });

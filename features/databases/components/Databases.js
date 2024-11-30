@@ -29,12 +29,7 @@ export default function Databases() {
             >add table</button>
             
             <Popup isOpen={isCreateDBOpen}>
-                <AddDatabas />
-                <button
-                    className="btn btn-secondary"
-                    style={{marginTop: "20px"}}
-                    onClick={() => {setIsCreateDBOpen(false)}}
-                >閉じる</button>
+                <AddDatabas close={() => {setIsCreateDBOpen(false)}}/>
             </Popup>
             
             <Popup isOpen={isEditDBOpen}>

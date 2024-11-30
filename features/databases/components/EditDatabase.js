@@ -2,15 +2,6 @@ import styles from "./EditDatabase.module.css"
 
 export default function EditDatabase({ database }) {
 
-    const isForeignKey = (foreingKeys, columnName) => {
-        for(let key of foreingKeys) {
-            if (columnName == key[0]) {
-                return key[1];
-            }
-        }
-        return "";
-    }
-
     return (
         <div>
             <table>
@@ -58,7 +49,7 @@ export default function EditDatabase({ database }) {
                         </td>
                         {database.columns.map((value, index) => (
                             <td key={index} style={{ borderRight: "1px solid black" }}>
-                                {isForeignKey(database.foreignKey, value.name)}
+                                {value.foreignKey}
                             </td>
                         ))}
                     </tr>
@@ -69,10 +60,10 @@ export default function EditDatabase({ database }) {
                 url:&nbsp;&nbsp;&nbsp;{database.url}
             </div>
             <div style={{ padding: "5px" }}>
-                user:&nbsp;&nbsp;&nbsp;{database.url}
+                user:&nbsp;&nbsp;&nbsp;{database.user}
             </div>
             <div style={{ padding: "5px" }}>
-                password:&nbsp;&nbsp;&nbsp;{database.url}
+                password:&nbsp;&nbsp;&nbsp;{database.password}
             </div>
             <div style={{ padding: "5px" }}>
                 database:&nbsp;&nbsp;&nbsp;{database.database}
