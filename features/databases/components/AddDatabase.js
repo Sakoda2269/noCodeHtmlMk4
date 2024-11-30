@@ -7,7 +7,7 @@ export default function AddDatabas({ close, edit, name }) {
     const [
         pageNum, nextPage, prevPage, setPageNum,
         url, changeURL, user, changeUser, password, changePassword, useDatabase, changeDatabase, tableName, changeTableName,
-        columns, setColumns, primaryKeys, changePrimaryKey, confirm, deleteColumn
+        columns, setColumns, primaryKeys, changePrimaryKey, confirm, deleteColumn, deleteTable
     ] = useAddDatabase(edit, name);
 
     return (
@@ -156,7 +156,7 @@ export default function AddDatabas({ close, edit, name }) {
                         <div style={{ paddingBottom: "10px" }}>
                             <label className="form-label">このテーブルを削除する</label>
                             <br />
-                            <button className="btn btn-danger">削除</button>
+                            <button className="btn btn-danger" onClick={() => {deleteTable(close)}}>削除</button>
                         </div>
                     </div>
                     <div className={styles.right}>

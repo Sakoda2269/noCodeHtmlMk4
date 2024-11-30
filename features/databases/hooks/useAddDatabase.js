@@ -88,6 +88,17 @@ export default function useAddDatabase(edit, name) {
         });
     }
 
+    const deleteTable = (close) => {
+        setProject((prev) =>{
+            const {[name]: some, ...others} = prev["databases"]
+            return {
+                ...prev,
+                ["databases"]: {...others}
+            }
+        })
+        close();
+    }
+
     const confirm = (close) => {
         if(columns.length == 0) {
             alert("列が一つ以上必要です");
@@ -138,6 +149,6 @@ export default function useAddDatabase(edit, name) {
     return [
         pageNum, nextPage, prevPage, setPageNum,
         url, changeURL, user, changeUser, password, changePassword, useDatabase, changeDatabase, tableName, changeTableName,
-        columns, setColumns, primaryKeys, changePrimaryKey, confirm, deleteColumn
+        columns, setColumns, primaryKeys, changePrimaryKey, confirm, deleteColumn, deleteTable
     ]
 }
