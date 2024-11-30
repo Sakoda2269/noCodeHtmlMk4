@@ -143,6 +143,23 @@ export default function AddDatabas({ close, edit, name }) {
                         </table>
                     </div>
                     <div className={styles.right}>
+                        {edit && <button className="btn" style={{ fontSize: "40px" }} onClick={nextPage}>&gt;</button>}
+                    </div>
+                </div>
+            )}
+            {pageNum == 2 && (
+                <div className={styles.mainContainer}>
+                    <div className={styles.left}>
+                    <button className="btn" style={{ fontSize: "40px" }} onClick={prevPage}>&lt;</button>
+                    </div>
+                    <div className={styles.center}>
+                        <div style={{ paddingBottom: "10px" }}>
+                            <label className="form-label">このテーブルを削除する</label>
+                            <br />
+                            <button className="btn btn-danger">削除</button>
+                        </div>
+                    </div>
+                    <div className={styles.right}>
                     </div>
                 </div>
             )}
