@@ -83,5 +83,9 @@ export default function useProject() {
 
     const [selectingContainer, setSelectingContainer] = useState("");
 
-    return [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting, selectingContainer, setSelectingContainer];
+    const [loading, setLoading] = useState(false);
+
+    return [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting, selectingContainer, setSelectingContainer
+        ,loading, setLoading
+    ];
 }

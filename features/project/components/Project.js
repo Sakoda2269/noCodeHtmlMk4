@@ -13,11 +13,12 @@ import Layer from "@/features/layer/components/Layer";
 import ElementProperty from "@/features/elementProperty/components/ElementProperty";
 import Variables from "@/features/variables/components/Variables";
 import Databases from "@/features/databases/components/Databases";
+import { LoadingContext, SetLoadingContext } from "../contexts/loadingContext";
 
 export default function Project() {
 
     const [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting,
-        selectingContainer, setSelectingContainer
+        selectingContainer, setSelectingContainer, loading, setLoadin
     ] = useProject();
 
 
@@ -31,6 +32,8 @@ export default function Project() {
             <SetSelectingContext.Provider value={setSelecting}>
             <SelectingContainerContext.Provider value={selectingContainer}>
             <SetSelectingContainerContext.Provider value={setSelectingContainer}>
+            <LoadingContext.Provider value={loading}>
+            <SetLoadingContext.Provider value={setLoadin}>
             <Sidebar>
 
                 <SideItem>
@@ -78,6 +81,8 @@ export default function Project() {
                 </RightBody>
 
             </Sidebar>
+            </SetLoadingContext.Provider>
+            </LoadingContext.Provider>
             </SetSelectingContainerContext.Provider>
             </SelectingContainerContext.Provider>
             </SetSelectingContext.Provider>

@@ -16,7 +16,6 @@ export default function useWrapper(element, path) {
     const setProject = useContext(SetProjectContext);
     const screen = useContext(ScreenContext);
     const setSelectingContainer = useContext(SetSelectingContainerContext);
-
     const [position, setPosition] = useState({
         x: getNum(element.data.styles.value.left.value),
         y: getNum(element.data.styles.value.top.value)
@@ -34,15 +33,19 @@ export default function useWrapper(element, path) {
     });
     const [isSelecting, setIsSelecting] = useState(false);
 
+
     const setStyle = useCallback((key, value) => {
         setStyles((prevStyle) => ({
             ...prevStyle,
             [key]: value
         }));
-        
+
         const prevProject = project;
         const paths = path.split("/");
         let component = prevProject.screens[screen].components;
+        if(component.length == 0) {
+            return;
+        }
         for(let i = 0; i < paths.length; i++) {
             if(paths[i] == "") {
                 break;
@@ -61,7 +64,7 @@ export default function useWrapper(element, path) {
         }
         setProject({...prevProject});
         
-    }, [])
+    }, [screen, path, project]);
 
     const removeStyle = useCallback((key) => {
         const { [key]: value, ...other } = styles;
@@ -87,12 +90,12 @@ export default function useWrapper(element, path) {
     useEffect(() => {
         setStyle("width", size.w + "px");
         setStyle("height", size.h + "px");
-    }, [size, setStyle]);
+    }, [size]);
 
     useEffect(() => {
         setStyle("top", position.y + "px");
         setStyle("left", position.x + "px");
-    }, [position, setStyle])
+    }, [position])
     
     useEffect(() => {
         const res = {};
@@ -100,7 +103,7 @@ export default function useWrapper(element, path) {
             res[key] = value.value;
         });
         setStyles(res)
-    }, [project])
+    }, [element])
     
 
     const select = (e) => {

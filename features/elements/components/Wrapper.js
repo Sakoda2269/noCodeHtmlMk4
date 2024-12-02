@@ -34,6 +34,7 @@ export default function Wrapper({ element, layout, path }) {
         ...Elements, ...Containers
     }[element.type]
 
+
     switch(layout) {
         case "absolute":
             styles["position"] = "absolute";

@@ -4,6 +4,7 @@ import { SelectingContainerContext, SetSelectingContainerContext } from "@/featu
 import { SelectingContext, SetSelectingContext } from "@/features/project/contexts/selectingContext";
 import { useContext, useEffect, useState } from "react";
 import { LayerDragginContext, SetLayerDraggingContext } from "../contexts/layerDragginContext";
+import { SetLoadingContext } from "@/features/project/contexts/loadingContext";
 
 
 export default function useLayer() {
@@ -42,6 +43,7 @@ export function useComponent(path, isContainer, screenIndex) {
     const setProject = useContext(SetProjectContext);
     const screen = useContext(ScreenContext);
     const setScreen = useContext(SetScreenContext);
+    const setLoading = useContext(SetLoadingContext);
     
     const [dragOn, setDragOn] = useState(false);
     const [buttomDragOn, setButtomDragOn] = useState(false);
@@ -50,7 +52,12 @@ export function useComponent(path, isContainer, screenIndex) {
     
     const select = () => {
         setSelecting(path);
-        setScreen(screenIndex)
+        setScreen((pre) => {
+            if(pre != screenIndex) {
+                setLoading(true);
+            }
+            return screenIndex
+        });
         if(isContainer) {
             setSelectingContainer(path);
         }
