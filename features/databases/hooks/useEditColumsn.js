@@ -20,7 +20,7 @@ export default function useEditColumns(col, setCols, colNum) {
     const setName = (e) => {
         setColData((prev) => ({
             ...prev,
-            ["name"]: e.target.value
+            ["name"]: e.target.value + ""
         }))
     }
 

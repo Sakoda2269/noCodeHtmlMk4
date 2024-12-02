@@ -31,14 +31,14 @@ export default function useProject() {
                         name: "name",
                         type: "text",
                         constraint: ["unique", "notNull"],
-                        default: null,
+                        default: "",
                         foreignKey: ""
                     },
                     {
                         name: "age",
                         type: "integer",
                         constraint: [],
-                        default: null,
+                        default: "",
                         foreignKey: ""
                     }
                 ],
@@ -61,7 +61,7 @@ export default function useProject() {
                         name: "accountId",
                         type: "text",
                         constraint: [],
-                        default: null,
+                        default: "",
                         foreignKey: "accounts.id"
                     },
                     {

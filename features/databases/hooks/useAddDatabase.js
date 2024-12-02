@@ -108,6 +108,10 @@ export default function useAddDatabase(edit, name) {
             alert("テーブル名を入力してください");
             return;
         }
+        if(primaryKeys.length == 0) {
+            alert("主キーは一つ以上必要です。");
+            return;
+        }
         setProject((prev) => {
             if(!edit) {
                 return {
