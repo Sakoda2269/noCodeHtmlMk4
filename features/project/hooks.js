@@ -22,14 +22,14 @@ export default function useProject() {
                 columns: [
                     {
                         name: "id",
-                        type: "varchar(32)",
+                        type: "text",
                         constraint: [],
                         default: "$unique",
                         foreignKey: ""
                     },
                     {
                         name: "name",
-                        type: "varchar(16)",
+                        type: "text",
                         constraint: ["unique", "notNull"],
                         default: null,
                         foreignKey: ""
@@ -59,7 +59,7 @@ export default function useProject() {
                     },
                     {
                         name: "accountId",
-                        type: "varchar(32)",
+                        type: "text",
                         constraint: [],
                         default: null,
                         foreignKey: "accounts.id"
