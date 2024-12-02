@@ -2,4 +2,24 @@
     background-color: pink;
     width: 100%;
     height: 40px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.left {
+    width: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.right {
+    width: 5%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.center {
+    width: 90%;
+    padding: 10px;
+    flex-grow: 1;
 }

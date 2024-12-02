@@ -65,7 +65,7 @@ export default function useProject() {
                         foreignKey: "accounts.id"
                     },
                     {
-                        name: "content",
+                        name: "contents",
                         type: "text",
                         constraint: [],
                         default: "",
