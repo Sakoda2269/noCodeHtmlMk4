@@ -14,6 +14,7 @@ import ElementProperty from "@/features/elementProperty/components/ElementProper
 import Variables from "@/features/variables/components/Variables";
 import Databases from "@/features/databases/components/Databases";
 import { LoadingContext, SetLoadingContext } from "../contexts/loadingContext";
+import Header from "@/features/header/component/Header";
 
 export default function Project() {
 
@@ -34,6 +35,9 @@ export default function Project() {
             <SetSelectingContainerContext.Provider value={setSelectingContainer}>
             <LoadingContext.Provider value={loading}>
             <SetLoadingContext.Provider value={setLoadin}>
+
+            <Header />
+
             <Sidebar>
 
                 <SideItem>
@@ -81,6 +85,7 @@ export default function Project() {
                 </RightBody>
 
             </Sidebar>
+            
             </SetLoadingContext.Provider>
             </LoadingContext.Provider>
             </SetSelectingContainerContext.Provider>
