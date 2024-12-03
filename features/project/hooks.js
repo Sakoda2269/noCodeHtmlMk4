@@ -74,6 +74,12 @@ export default function useProject() {
                 ],
                 primaryKey: ["tweetId"],
             }
+        },
+        views: {
+            accountTweets: {
+                tables: ["accounts", "tweets"],
+                colmus: ["tweets.tweetId", "account.name", "tweets.contents"]
+            }
         }
     });
 

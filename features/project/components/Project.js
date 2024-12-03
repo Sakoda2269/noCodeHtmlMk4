@@ -1,6 +1,6 @@
 "use client"
 import { CenterBody, RightBody, Sidebar, SideBody, SideIcon, SideItem } from "../../sidebar/components/Sidebar";
-import { FaPlus, FaDatabase, FaLayerGroup, FaGear } from "react-icons/fa6";
+import { FaPlus, FaDatabase, FaLayerGroup, FaGear, FaTable } from "react-icons/fa6";
 import { AiOutlineFunction } from "react-icons/ai";
 import Canvas from "../../canvas/components/Canvas";
 import useProject from "../hooks";
@@ -15,6 +15,7 @@ import Variables from "@/features/variables/components/Variables";
 import Databases from "@/features/databases/components/Databases";
 import { LoadingContext, SetLoadingContext } from "../contexts/loadingContext";
 import Header from "@/features/header/component/Header";
+import Views from "@/features/views/components/Views";
 
 export default function Project() {
 
@@ -64,6 +65,15 @@ export default function Project() {
                     </SideIcon>
                     <SideBody>
                         <Databases />
+                    </SideBody>
+                </SideItem>
+                
+                <SideItem>
+                    <SideIcon>
+                        <FaTable />
+                    </SideIcon>
+                    <SideBody>
+                        <Views />
                     </SideBody>
                 </SideItem>
                 
