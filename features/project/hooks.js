@@ -53,23 +53,27 @@ export default function useProject() {
                     {
                         name: "tweetId",
                         type: "integer",
-                        constraint: [],
                         default: "$sequential",
-                        foreignKey: ""
-                    },
-                    {
-                        name: "accountId",
-                        type: "text",
-                        constraint: [],
-                        default: "",
-                        foreignKey: "accounts.id"
                     },
                     {
                         name: "contents",
                         type: "text",
-                        constraint: [],
                         default: "",
-                        foreignKey: ""
+                    },
+                    {
+                        name: "accounts",
+                        type: "table",
+                        relationKey: "accounts.id",
+                        columns: [
+                            {
+                                name: "name",
+                                type: "text"
+                            },
+                            {
+                                name: "age",
+                                type: "integer"
+                            }
+                        ]
                     }
                 ],
                 primaryKey: ["tweetId"],

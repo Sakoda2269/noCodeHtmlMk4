@@ -45,6 +45,8 @@ a {
 table {
   border-collapse: collapse; /* 枠線を結合 */
   width: 100%; /* テーブル全体を幅いっぱいに */
+  border-collapse: collapse;
+  border: 2px solid rgb(140 140 140);
 }
 td {
   padding: 8px; /* セル内の余白 */
@@ -52,9 +54,11 @@ td {
   vertical-align: middle; /* 縦方向も中央揃え */
 }
 th {
+  padding: 8px;
+  width: 15%;
   text-align: center; /* 中央揃え */
-  background-color: #f2f2f2; /* ヘッダーの背景色 */
   vertical-align: middle;
+  background-color: #f2f2f2; /* ヘッダーの背景色 */
 }
 
 .required::after {

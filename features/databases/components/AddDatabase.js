@@ -1,197 +1,128 @@
+import Popup from "@/components/popup/popup";
 import useAddDatabase from "../hooks/useAddDatabase"
 import styles from "./AddDatabase.module.css"
 import EditColumn from "./EditColumn";
+import AddColumns from "./AddColumn";
 
 export default function AddDatabas({ close, edit, name }) {
 
     const [
-        pageNum, nextPage, prevPage, setPageNum,
-        url, changeURL, user, changeUser, password, changePassword, useDatabase, changeDatabase, tableName, changeTableName,
-        columns, setColumns, primaryKeys, changePrimaryKey, confirm, deleteColumn, deleteTable
-    ] = useAddDatabase(edit, name);
+        pageNum, setPageNum, prevPage, nextPage,
+        tableName, setTableName, url, setUrl, user, setUser, password, setPassword,
+        createColOpen, setCreateColOpen, addColType, openAddColScreen,
+        database, columns, setColumns
+    ] = useAddDatabase(edit, name)
+
+    const pad10 = { padding: "10px" };
+    const border = { border: "1px solid black" }
 
     return (
-        <div >
-            <h3>
-                Add Table
-            </h3>
-            {pageNum == 0 && (
-                <div className={styles.mainContainer}>
-                    <div className={styles.left}>
-                    </div>
-                    <div className={styles.center}>
-                        <div style={{ paddingBottom: "10px" }}>
-                            <label className="form-label required">table name</label>
-                            <input type="text" className="form-control" value={tableName} onChange={changeTableName} />
-                        </div>
-                        <div style={{ paddingBottom: "10px" }}>
-                            <label className="form-label">url</label>
-                            <input type="text" className="form-control" value={url} onChange={changeURL} />
-                        </div>
-                        <div style={{ paddingBottom: "10px" }}>
-                            <label className="form-label">user</label>
-                            <input type="text" className="form-control" value={user} onChange={changeUser} />
-                        </div>
-                        <div style={{ paddingBottom: "10px" }}>
-                            <label className="form-label">password</label>
-                            <input type="text" className="form-control" value={password} onChange={changePassword} />
-                        </div>
-                        <div style={{ paddingBottom: "10px" }}>
-                            <label className="form-label">database</label>
-                            <br />
-                            <select className="btn border-secondary dropdown-toggle" value={useDatabase} onChange={changeDatabase}>
-                                <option value="">選択しない</option>
-                                <option value="postgresql">PostgreSQL</option>
-                                <option value="mysql">MySQL</option>
-                            </select>
+        <div>
+            <div className={styles.center}>
+                {pageNum == 0 &&
+                    <div>
+                        <h3>Add table</h3>
+                        <div>
+                            <div style={pad10}>
+                                <label className="form-label required">table name</label>
+                                <input type="text" className="form-control" value={tableName} onChange={(e) => setTableName(e.target.value)} />
+                            </div>
+                            <div style={pad10}>
+                                <label className="form-label">url</label>
+                                <input type="text" className="form-control" value={url} onChange={(e) => setUrl(e.target.value)} />
+                            </div>
+                            <div style={pad10}>
+                                <label className="form-label">user</label>
+                                <input type="text" className="form-control" value={user} onChange={(e) => setUser(e.target.value)} />
+                            </div>
+                            <div style={pad10}>
+                                <label className="form-label">password</label>
+                                <input type="text" className="form-control" value={password} onChange={(e) => setPassword(e.target.value)} />
+                            </div>
                         </div>
                     </div>
-                    <div className={styles.right}>
-                        <button className="btn" style={{ fontSize: "40px" }} onClick={nextPage}>&gt;</button>
-                    </div>
-                </div>
-            )}
-            {pageNum == 1 && (
-                <div className={styles.mainContainer}>
-                    <div className={styles.left}>
-                        <button className="btn" style={{ fontSize: "40px" }} onClick={prevPage}>&lt;</button>
-                    </div>
-                    <div className={styles.center}>
+                }
+                {pageNum == 1 &&
+                    <div>
+                        <h3 style={pad10}>Add column</h3>
                         <table>
-                            <thead>
-                                <tr>
-                                    <th style={{ borderRight: "3px solid black" }}>
-                                        <div style={{ textAlign: "center" }}>
-                                            primary Key
-                                        </div>
-                                    </th>
-                                    {columns.map((value, index) => (
-                                        <th key={index} style={{ borderRight: "1px solid black" }}>
-                                            <div style={{ textAlign: "center" }}>
-                                                <input
-                                                    type="checkbox"
-                                                    name={value.name}
-                                                    checked={primaryKeys.includes(value.name)}
-                                                    onChange={changePrimaryKey} />
-                                            </div>
-                                        </th>
-                                    ))}
-                                </tr>
-                                <tr>
-                                    <th style={{ borderRight: "3px solid black" }}>
-                                        <div style={{ textAlign: "center" }}>
-                                            column name
-                                        </div>
-                                    </th>
-                                    {columns.map((value, index) => (
-                                        <th key={index} style={{ borderRight: "1px solid black" }}>
-                                            <button
-                                                className={styles.tableHeaderButton}
-                                                style={{ color: primaryKeys.includes(value.name) ? "red" : "black" }}
-                                            >{value.name}</button>
-                                        </th>
-                                    ))}
-                                </tr>
-                            </thead>
                             <tbody>
                                 <tr>
-                                    <td style={{ borderRight: "3px solid black" }}>
-                                        type
-                                    </td>
-                                    {columns.map((value, index) => (
-                                        <td key={index} style={{ borderRight: "1px solid black" }}>
-                                            {value.type}
-                                        </td>
-                                    ))}
-                                    <td rowSpan="4">
-                                        <button className={styles.addButton} onClick={() => setPageNum(3)}>
-                                            +
-                                        </button>
+                                    <th rowSpan="2" style={border}>name</th>
+                                    {columns.map((value, index) => {
+                                        if (value.type == "table") {
+                                            return <td key={"a"+index} colSpan={value.columns.length} style={border}>{value.name}</td>
+                                        } else {
+                                            return <td key={"a"+index} rowSpan="2" style={border}>{value.name}</td>
+                                        }
+                                    })}
+                                    <td rowSpan="4" style={border}>
+                                        <div style={{paddingBottom: "10px"}}>
+                                            <button className="btn btn-success" onClick={() => openAddColScreen(1)}>列を追加</button>
+                                        </div>
+                                        <div>
+                                            <button className="btn btn-success" onClick={() => openAddColScreen(2)}>外部テーブルから列を追加</button>
+                                        </div>
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style={{ borderRight: "3px solid black" }}>
-                                        constraint
-                                    </td>
-                                    {columns.map((value, index) => (
-                                        <td key={index} style={{ borderRight: "1px solid black" }}>
-                                            {value.constraint.join(", ")}
-                                        </td>
-                                    ))}
+                                    {database.columns.map((value, index) => {
+                                        if (value.type == "table") {
+                                            return (
+                                                <>
+                                                    {value.columns.map((value, index) => (
+                                                        <td key={"b"+index} style={border}>{value.name}</td>
+                                                    ))}
+                                                </>
+                                            )
+                                        } else {
+                                            return;
+                                        }
+                                    })}
                                 </tr>
                                 <tr>
-                                    <td style={{ borderRight: "3px solid black" }}>
-                                        relation
-                                    </td>
-                                    {columns.map((value, index) => (
-                                        <td key={index} style={{ borderRight: "1px solid black" }}>
-                                            {value.foreignKey}
-                                        </td>
-                                    ))}
+                                    <th style={border}>type</th>
+                                    {columns.map((value, index) => {
+                                        if (value.type == "table") {
+                                            return (
+                                                <>
+                                                    {value.columns.map((value, index) => (
+                                                        <td key={"c"+index} style={border}>{value.type}</td>
+                                                    ))}
+                                                </>
+                                            )
+                                        } else {
+                                            return <td key={"c"+index} style={border}>{value.type}</td>
+                                        }
+                                    })}
                                 </tr>
                                 <tr>
-                                    <td style={{ borderRight: "3px solid black" }}>
-                                        delete
-                                    </td>
-                                    {columns.map((value, index) => (
-                                        <td key={index} style={{ borderRight: "1px solid black" }}>
-                                            <button className="btn btn-danger" onClick={() => deleteColumn(index)}>削除</button>
-                                        </td>
-                                    ))}
+                                    <th style={border}>relation key</th>
+                                    {columns.map((value, index) => {
+                                        if (value.type == "table") {
+                                            return <td key={"d" + index} colSpan={value.columns.length} style={border}>{value.relationKey}</td>
+                                        } else {
+                                            return <td key={"d" + index} style={border}></td>;
+                                        }
+                                    })}
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-                    <div className={styles.right}>
-                        {edit && <button className="btn" style={{ fontSize: "40px" }} onClick={nextPage}>&gt;</button>}
+                }
+                {pageNum == 2 &&
+                    <div>
+                        ok
                     </div>
-                </div>
-            )}
-            {pageNum == 2 && (
-                <div className={styles.mainContainer}>
-                    <div className={styles.left}>
-                    <button className="btn" style={{ fontSize: "40px" }} onClick={prevPage}>&lt;</button>
-                    </div>
-                    <div className={styles.center}>
-                        <div style={{ paddingBottom: "10px" }}>
-                            <label className="form-label">このテーブルを削除する</label>
-                            <br />
-                            <button className="btn btn-danger" onClick={() => {deleteTable(close)}}>削除</button>
-                        </div>
-                    </div>
-                    <div className={styles.right}>
-                    </div>
-                </div>
-            )}
-            {pageNum == 3 && (
-                <div>
-                    <EditColumn
-                        colName={""}
-                        setCols={setColumns}
-                        colNum={-1}
-                        close={() => setPageNum(1)}
-                        name={name}
-                    />
-                </div>
-
-            )}
-            {[0, 1].includes(pageNum) && 
-            <div className={styles.buttonContainer}>
-                <button
-                    className="btn btn-secondary"
-                    style={{ marginTop: "20px" }}
-                    onClick={close}
-                >閉じる</button>
-                <button
-                    className="btn btn-primary"
-                    style={{ marginTop: "20px" }}
-                    onClick={() => {
-                        confirm(close)
-                    }}
-                >決定</button>
+                }
             </div>
-            }
-
+            <div className={styles.buttonContainer}>
+                <button className="btn btn-secondary" onClick={[prevPage, close][1 * (pageNum == 0)]}>{["戻る", "閉じる"][1 * (pageNum == 0)]}</button>
+                <button className="btn btn-primary" onClick={[nextPage, close][1 * (pageNum == 3)]}>{["次へ", "決定"][1 * (pageNum == 3)]}</button>
+            </div>
+            <Popup isOpen={createColOpen}>
+                <AddColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType}/>
+            </Popup>
         </div>
     )
 }
