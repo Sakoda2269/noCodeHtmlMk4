@@ -3,6 +3,7 @@ import useAddDatabase from "../hooks/useAddDatabase"
 import styles from "./AddDatabase.module.css"
 import EditColumn from "./EditColumn";
 import AddColumns from "./AddColumn";
+import React from "react";
 
 export default function AddDatabas({ close, edit, name }) {
 
@@ -69,11 +70,11 @@ export default function AddDatabas({ close, edit, name }) {
                                     {database.columns.map((value, index) => {
                                         if (value.type == "table") {
                                             return (
-                                                <>
+                                                <React.Fragment key={"e"+index}>
                                                     {value.columns.map((value, index) => (
                                                         <td key={"b"+index} style={border}>{value.name}</td>
                                                     ))}
-                                                </>
+                                                </React.Fragment>
                                             )
                                         } else {
                                             return;
@@ -85,11 +86,11 @@ export default function AddDatabas({ close, edit, name }) {
                                     {columns.map((value, index) => {
                                         if (value.type == "table") {
                                             return (
-                                                <>
+                                                <React.Fragment key={"f"+index}>
                                                     {value.columns.map((value, index) => (
                                                         <td key={"c"+index} style={border}>{value.type}</td>
                                                     ))}
-                                                </>
+                                                </React.Fragment>
                                             )
                                         } else {
                                             return <td key={"c"+index} style={border}>{value.type}</td>
