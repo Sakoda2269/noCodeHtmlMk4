@@ -14,7 +14,7 @@ export default function AddDatabas({ close, edit, name }) {
     const [
         tableName, setTableName, url, setUrl, user, setUser, password, setPassword,
         createColOpen, setCreateColOpen, addColType, openAddColScreen,
-        database, columns, setColumns
+        columns, setColumns, confirm, primaryKey, setPrimaryKey, editCol, setEditCol
     ] = useAddDatabase(edit, name)
 
     const pad10 = { padding: "10px" };
@@ -52,22 +52,38 @@ export default function AddDatabas({ close, edit, name }) {
                         <table>
                             <tbody>
                                 <tr>
+                                    <th>primary key</th>
+                                    {columns.map((value, index) => {
+                                        if(value.type == "table") {
+                                            return <td colSpan={value.columns.length} key={"prim" + index} style={border}></td>
+                                        } else {
+                                            return <td key={"prim" + index} style={border}>
+                                                <input type="radio" value={value.name} checked={primaryKey == value.name} onChange={(e) => {setPrimaryKey(e.target.value)}}/>
+                                            </td>
+                                        }
+                                    })}
+                                    <td rowSpan="5" style={border}>
+                                        <div style={{paddingBottom: "10px"}}>
+                                            <button className="btn btn-success" onClick={() =>{setEditCol({}); openAddColScreen(1)}}>列を追加</button>
+                                        </div>
+                                        <div>
+                                            <button className="btn btn-success" onClick={() => {setEditCol({});openAddColScreen(2)}}>外部テーブルから列を追加</button>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <th rowSpan="2" style={border}>name</th>
                                     {columns.map((value, index) => {
                                         if (value.type == "table") {
-                                            return <td key={"a"+index} colSpan={value.columns.length} style={border}>{value.name}</td>
+                                            return <td key={"a"+index} colSpan={value.columns.length} style={border}>
+                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {}}>{value.name}</button>
+                                            </td>
                                         } else {
-                                            return <td key={"a"+index} rowSpan="2" style={border}>{value.name}</td>
+                                            return <td key={"a"+index} rowSpan="2" style={border}>
+                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {}}>{value.name}</button>
+                                            </td>
                                         }
                                     })}
-                                    <td rowSpan="4" style={border}>
-                                        <div style={{paddingBottom: "10px"}}>
-                                            <button className="btn btn-success" onClick={() => openAddColScreen(1)}>列を追加</button>
-                                        </div>
-                                        <div>
-                                            <button className="btn btn-success" onClick={() => openAddColScreen(2)}>外部テーブルから列を追加</button>
-                                        </div>
-                                    </td>
                                 </tr>
                                 <tr>
                                     {columns.map((value, index) => {
@@ -122,14 +138,14 @@ export default function AddDatabas({ close, edit, name }) {
             </div>
             <div className={styles.buttonContainer}>
                 <button className="btn btn-secondary" onClick={[prevPage, close][1 * (pageNum == 0)]}>{["戻る", "閉じる"][1 * (pageNum == 0)]}</button>
-                <button className="btn btn-primary" onClick={[nextPage, close][1 * (pageNum == 3)]}>{["次へ", "決定"][1 * (pageNum == 3)]}</button>
+                <button className="btn btn-primary" onClick={[() => {if(tableName=="")alert("必須項目を入力してください");else nextPage()}, () => {confirm(close);}][1 * (pageNum == 1)]}>{["次へ", "決定"][1 * (pageNum == 1)]}</button>
             </div>
             <Popup isOpen={createColOpen}>
                 {addColType == 1 && 
-                    <AddNormalColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType}/>
+                    <AddNormalColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType} edit={editCol}/>
                 }
                 {addColType == 2 &&
-                    <AddForeignColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType} />
+                    <AddForeignColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType} edit={editCol}/>
                 }
             </Popup>
         </div>

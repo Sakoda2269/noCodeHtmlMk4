@@ -2,9 +2,9 @@ import useAddNormalColmun from "../hooks/useAddNormalColmun";
 import usePageControl from "../hooks/usePageControl"
 import styles from "./AddDatabase.module.css"
 
-export default function AddNormalColumns({ close, colmuns, setColumns }) {
+export default function AddNormalColumns({ close, colmuns, setColumns, edit }) {
 
-    const [colName, changeColName, colType, changeColType, colDefault, changeColDefault, confirm] = useAddNormalColmun(setColumns);
+    const [colName, changeColName, colType, changeColType, colDefault, changeColDefault, confirm] = useAddNormalColmun(setColumns, edit);
 
     const pad10 = { padding: "10px" };
 

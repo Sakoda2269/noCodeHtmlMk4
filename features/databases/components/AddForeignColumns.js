@@ -3,9 +3,9 @@ import usePageControl from "../hooks/usePageControl";
 import styles from "./AddDatabase.module.css"
 
 
-export default function AddForeignColumns({ close, colmuns, setColumns }) {
+export default function AddForeignColumns({ close, colmuns, setColumns, edit}) {
 
-    const [foreignTable, setForeignTable, selectedColumns, setSelectedColumns, foreignColumns, databases, confirm] = useAddForeignColumns(setColumns);
+    const [foreignTable, setForeignTable, selectedColumns, setSelectedColumns, foreignColumns, databases, confirm] = useAddForeignColumns(setColumns, edit);
 
     const pad10 = { padding: "10px" };
 
