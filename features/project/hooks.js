@@ -42,7 +42,7 @@ export default function useProject() {
                         foreignKey: ""
                     }
                 ],
-                primaryKey: ["id"],
+                primaryKey: "id",
             },
             "tweets": {
                 url: "",
@@ -63,7 +63,7 @@ export default function useProject() {
                     {
                         name: "accounts",
                         type: "table",
-                        relationKey: "accounts.id",
+                        relationKey: "id",
                         columns: [
                             {
                                 name: "name",
@@ -76,7 +76,7 @@ export default function useProject() {
                         ]
                     }
                 ],
-                primaryKey: ["tweetId"],
+                primaryKey: "tweetId",
             }
         }
     });

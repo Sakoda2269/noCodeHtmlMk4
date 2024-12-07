@@ -2,13 +2,16 @@ import Popup from "@/components/popup/popup";
 import useAddDatabase from "../hooks/useAddDatabase"
 import styles from "./AddDatabase.module.css"
 import EditColumn from "./EditColumn";
-import AddColumns from "./AddColumn";
+import AddNormalColumns from "./AddNormalColumn";
 import React from "react";
+import AddForeignColumns from "./AddForeignColumns";
+import usePageControl from "../hooks/usePageControl";
 
 export default function AddDatabas({ close, edit, name }) {
 
+    const [pageNum, setPageNum, nextPage, prevPage] = usePageControl();
+    
     const [
-        pageNum, setPageNum, prevPage, nextPage,
         tableName, setTableName, url, setUrl, user, setUser, password, setPassword,
         createColOpen, setCreateColOpen, addColType, openAddColScreen,
         database, columns, setColumns
@@ -45,7 +48,7 @@ export default function AddDatabas({ close, edit, name }) {
                 }
                 {pageNum == 1 &&
                     <div>
-                        <h3 style={pad10}>Add column</h3>
+                        <h3 style={pad10}>Columns</h3>
                         <table>
                             <tbody>
                                 <tr>
@@ -67,7 +70,7 @@ export default function AddDatabas({ close, edit, name }) {
                                     </td>
                                 </tr>
                                 <tr>
-                                    {database.columns.map((value, index) => {
+                                    {columns.map((value, index) => {
                                         if (value.type == "table") {
                                             return (
                                                 <React.Fragment key={"e"+index}>
@@ -101,7 +104,7 @@ export default function AddDatabas({ close, edit, name }) {
                                     <th style={border}>relation key</th>
                                     {columns.map((value, index) => {
                                         if (value.type == "table") {
-                                            return <td key={"d" + index} colSpan={value.columns.length} style={border}>{value.relationKey}</td>
+                                            return <td key={"d" + index} colSpan={value.columns.length} style={border}>{value.name}.{value.relationKey}</td>
                                         } else {
                                             return <td key={"d" + index} style={border}></td>;
                                         }
@@ -122,7 +125,12 @@ export default function AddDatabas({ close, edit, name }) {
                 <button className="btn btn-primary" onClick={[nextPage, close][1 * (pageNum == 3)]}>{["次へ", "決定"][1 * (pageNum == 3)]}</button>
             </div>
             <Popup isOpen={createColOpen}>
-                <AddColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType}/>
+                {addColType == 1 && 
+                    <AddNormalColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType}/>
+                }
+                {addColType == 2 &&
+                    <AddForeignColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType} />
+                }
             </Popup>
         </div>
     )
