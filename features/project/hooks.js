@@ -25,21 +25,18 @@ export default function useProject() {
                         type: "text",
                         constraint: [],
                         default: "$unique",
-                        foreignKey: ""
                     },
                     {
                         name: "name",
                         type: "text",
                         constraint: ["unique", "notNull"],
                         default: "",
-                        foreignKey: ""
                     },
                     {
                         name: "age",
                         type: "integer",
                         constraint: [],
                         default: "",
-                        foreignKey: ""
                     }
                 ],
                 primaryKey: "id",

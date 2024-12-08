@@ -3,10 +3,10 @@ import usePageControl from "../hooks/usePageControl";
 import styles from "./AddDatabase.module.css"
 
 
-export default function AddForeignColumns({ close, columns, setColumns, edit}) {
+export default function AddForeignColumns({ close, columns, setColumns, edit, tableName }) {
 
     const [
-        foreignTable, setForeignTable, selectedColumns, setSelectedColumns, 
+        foreignTable, setForeignTable, selectedColumns, setSelectedColumns,
         foreignColumns, databases, confirm, deleteColumn
     ] = useAddForeignColumns(setColumns, columns, edit);
 
@@ -20,9 +20,12 @@ export default function AddForeignColumns({ close, columns, setColumns, edit}) {
                     <label className="form-label">foreign table</label>
                     <select className="form-select" onChange={(e) => setForeignTable(e.target.value)} value={foreignTable}>
                         <option value="" disabled>select...</option>
-                        {Object.keys(databases).map((value, index) => (
-                            <option value={value} key={index}>{value}</option>
-                        ))}
+                        {Object.keys(databases).map((value, index) => {
+                            if (value != tableName) {
+                                return <option value={value} key={index}>{value}</option>
+
+                            }
+                        })}
                     </select>
                 </div>
                 {foreignTable != "" && <div style={pad10}>
@@ -35,10 +38,10 @@ export default function AddForeignColumns({ close, columns, setColumns, edit}) {
                                         const checked = e.target.checked;
                                         if (checked) {
                                             setSelectedColumns((prev) => [...prev, value]);
-                                        }else {
+                                        } else {
                                             setSelectedColumns((prev) => {
                                                 const res = [];
-                                                for(const col of prev) {
+                                                for (const col of prev) {
                                                     if (col != value) {
                                                         res.push(col);
                                                     }
@@ -47,19 +50,19 @@ export default function AddForeignColumns({ close, columns, setColumns, edit}) {
                                             })
                                         }
                                     }
-                                }/>
+                                } />
                                 {value.name}
                             </label>
                         </div>
                     ))}
                 </div>}
-                {edit != -1 && <div style={{textAlign: "center"}}>
+                {edit != -1 && <div style={{ textAlign: "center" }}>
                     <button className="btn btn-danger" onClick={() => deleteColumn(close)}>削除</button>
                 </div>}
             </div>
             <div className={styles.buttonContainer}>
                 <button className="btn btn-secondary" onClick={close}>閉じる</button>
-                <button className="btn btn-primary" onClick={() => {confirm(close)}}>決定</button>
+                <button className="btn btn-primary" onClick={() => { confirm(close) }}>決定</button>
             </div>
         </div>
     )

@@ -14,7 +14,7 @@ export default function AddDatabas({ close, edit, name }) {
     const [
         tableName, setTableName, url, setUrl, user, setUser, password, setPassword,
         createColOpen, setCreateColOpen, addColType, openAddColScreen,
-        columns, setColumns, confirm, primaryKey, setPrimaryKey, editCol, setEditCol, project
+        columns, setColumns, confirm, primaryKey, setPrimaryKey, editCol, setEditCol, project, deleteTable
     ] = useAddDatabase(edit, name)
 
     const pad10 = { padding: "10px" };
@@ -128,6 +128,10 @@ export default function AddDatabas({ close, edit, name }) {
                                 </tr>
                             </tbody>
                         </table>
+                        {edit && <div style={{...pad10, textAlign: "center"}}>
+                            <h4>このテーブルを削除する</h4>
+                            <button className="btn btn-danger" onClick={() => deleteTable(close)}>削除</button>
+                        </div>}
                     </div>
                 }
                 {pageNum == 2 &&
@@ -148,7 +152,8 @@ export default function AddDatabas({ close, edit, name }) {
                     />
                 }
                 {addColType == 2 &&
-                    <AddForeignColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType} edit={editCol}/>
+                    <AddForeignColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} 
+                    type={addColType} edit={editCol} tableName={tableName}/>
                 }
             </Popup>
         </div>

@@ -67,11 +67,35 @@ export default function useAddDatabase(edit, name) {
         })
         close();
     }
+
+    const deleteTable = (close) => {
+        setProject((prev) => {
+            const {[tableName]: tmp, ...other} = prev.databases;
+            for(const keys of Object.keys(other)) {
+                const newCols = []
+                for(const col of other[keys].columns) {
+                    if(col.type != "table") {
+                        newCols.push(col);
+                        continue
+                    }
+                    if(col.name != tableName) {
+                        newCols.push(col);
+                    }
+                }
+                other[keys].columns = newCols;
+            }
+            return {
+                ...prev,
+                databases: other
+            }
+        })
+        close();
+    }
     
     return [
         tableName, setTableName, url, setUrl, user, setUser, password, setPassword,
         createColOpen, setCreateColOpen, addColType, openAddColScreen,
-        columns, setColumns, confirm, primaryKey, setPrimaryKey,editCol, setEditCol, project
+        columns, setColumns, confirm, primaryKey, setPrimaryKey,editCol, setEditCol, project, deleteTable
     ]
     
 }
