@@ -12,7 +12,7 @@ export default function useAddDatabase(edit, name) {
     const [createColOpen, setCreateColOpen] = useState(false);
     const [addColType, setAddColType] = useState(0);
     const [primaryKey, setPrimaryKey] = useState(edit ? edit.primaryKey : "");
-    const [editCol, setEditCol] = useState({});
+    const [editCol, setEditCol] = useState(-1);
     
     const [columns, setColumns] = useState(edit ? edit.columns : []);
     

@@ -1,11 +1,11 @@
 import { ProjectContext } from "@/features/project/contexts/projectContext";
 import { useContext, useEffect, useState } from "react";
 
-export default function useAddForeignColumns(setCol, edit) {
+export default function useAddForeignColumns(setCol, columns, edit) {
     const project = useContext(ProjectContext);
-    const [foreignTable, setForeignTable] = useState(Object.keys(edit).length == 0 ? "" : edit.name);
-    const [selectedColumns, setSelectedColumns] = useState(Object.keys(edit).length == 0 ? [] : edit.columns);
-    const [foreignColumns, setForeignColumns] = useState(Object.keys(edit).length == 0 ? [] : project.databases[foreignTable]);
+    const [foreignTable, setForeignTable] = useState(edit == -1 ? "" : columns[edit].name);
+    const [selectedColumns, setSelectedColumns] = useState(edit == -1 ? [] : columns[edit].columns);
+    const [foreignColumns, setForeignColumns] = useState(edit == -1 ? [] : project.databases[foreignTable]);
     
     const databases = project.databases;
     

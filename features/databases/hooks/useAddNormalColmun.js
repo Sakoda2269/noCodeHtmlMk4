@@ -1,9 +1,9 @@
 import { useState } from "react";
 
-export default function useAddNormalColmun(setCols, edit) {
-    const [colName, setColName] = useState(Object.keys(edit).length == 0 ? "" : edit.name);
-    const [colType, setColType] = useState(Object.keys(edit).length == 0 ? "" : edit.type);
-    const [colDefault, setColDefault] = useState(Object.keys(edit).length == 0 ? "" : edit.default);
+export default function useAddNormalColmun(setCols, columns, edit) {
+    const [colName, setColName] = useState(edit == -1 ? "" : columns[edit].name);
+    const [colType, setColType] = useState(edit == -1 ? "" : columns[edit].type);
+    const [colDefault, setColDefault] = useState(edit == -1 ? "" : columns[edit].default);
     
     const changeColName = (e) => {
         setColName(e.target.value);

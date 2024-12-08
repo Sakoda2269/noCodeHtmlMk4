@@ -64,10 +64,10 @@ export default function AddDatabas({ close, edit, name }) {
                                     })}
                                     <td rowSpan="5" style={border}>
                                         <div style={{paddingBottom: "10px"}}>
-                                            <button className="btn btn-success" onClick={() =>{setEditCol({}); openAddColScreen(1)}}>列を追加</button>
+                                            <button className="btn btn-success" onClick={() =>{setEditCol(-1); openAddColScreen(1)}}>列を追加</button>
                                         </div>
                                         <div>
-                                            <button className="btn btn-success" onClick={() => {setEditCol({});openAddColScreen(2)}}>外部テーブルから列を追加</button>
+                                            <button className="btn btn-success" onClick={() => {setEditCol(-1);openAddColScreen(2)}}>外部テーブルから列を追加</button>
                                         </div>
                                     </td>
                                 </tr>
@@ -76,11 +76,11 @@ export default function AddDatabas({ close, edit, name }) {
                                     {columns.map((value, index) => {
                                         if (value.type == "table") {
                                             return <td key={"a"+index} colSpan={value.columns.length} style={border}>
-                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {}}>{value.name}</button>
+                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {setEditCol(index); openAddColScreen(2)}}>{value.name}</button>
                                             </td>
                                         } else {
                                             return <td key={"a"+index} rowSpan="2" style={border}>
-                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {}}>{value.name}</button>
+                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {setEditCol(index);openAddColScreen(1)}}>{value.name}</button>
                                             </td>
                                         }
                                     })}
