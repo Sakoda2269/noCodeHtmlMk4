@@ -114,7 +114,7 @@ function constructForeignCols(column, tableName, pkey, pkeyType, databases, fore
     const fkey = column.relationKey;
     const res = []
     const fkeyType = searchFkeyType(databases, foreignTable, fkey);
-    res.push(createChange(tableName, pkey, pkeyType, `${fTableName}${capitalizeFirstLetter(fkey)}`, typeChange[fkeyType]));
+    res.push(createChange(tableName, pkey, pkeyType, `${fkey}Of${capitalizeFirstLetter(fTableName)}`, typeChange[fkeyType]));
     for (const i of column.columns) {
         res.push(createForeignCols(tableName, pkey, pkeyType, foreignTable, fkey, typeChange[fkeyType], databases[foreignTable].columns[i].name, typeChange[databases[foreignTable].columns[i].type], fTableName))
     }
@@ -131,11 +131,11 @@ function searchFkeyType(databases, tableName, fkey) {
 }
 
 function createForeignCols(tableName, pkey, pkeyType, fTableName, fkey, fkeyType, fcol, fcolType, colName) {
-    const col = `${colName}${capitalizeFirstLetter(fcol)}`
+    const col = `${fcol}Of${capitalizeFirstLetter(colName)}`
     const channelName = `${col}Of${capitalizeFirstLetter(tableName)}`;
     const colType = fcolType;
     const newCol = `new${capitalizeFirstLetter(col)}`;
-    fkey = `${colName}${capitalizeFirstLetter(fkey)}`;
+    fkey = `${fkey}Of${capitalizeFirstLetter(colName)}`;
     const newFkey = `new${capitalizeFirstLetter(fkey)}`;
     return (
 `channel ${channelName}(${pkey}: ${pkeyType}){
