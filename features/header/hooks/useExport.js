@@ -30,23 +30,33 @@ const typeChange = {
 
 function constructDatabaseModel(databases) {
     const res = []
-    for(const key in databases) {
+    for (const key in databases) {
         const value = databases[key];
         const pkeys = value.primaryKey;
-        const pkeysTypes = [];
+        let pkeysTypes = "";
         const otherCols = [];
         const otherColsTypes = [];
-        for(const col of value.columns) {
-            if(pkeys.includes(col.name)) {
-                pkeysTypes.push(typeChange[col.type]);
+        const foreignCols = []
+        for (const col of value.columns) {
+            if (pkeys == col.name) {
+                pkeysTypes = typeChange[col.type];
             } else {
-                otherCols.push(col.name);
-                otherColsTypes.push(typeChange[col.type]);
+                if (col.type == "table") {
+                    foreignCols.push(col);
+                } else {
+                    otherCols.push(col.name);
+                    otherColsTypes.push(typeChange[col.type]);
+                }
             }
         }
-        res.push(createAddToMap(key, pkeys[0], pkeysTypes[0], pkeys.slice(1).concat(otherCols), pkeysTypes.slice(1).concat(otherColsTypes)))
-        for(let i = 0; i < otherCols.length; i++) {
+        res.push(createAddToMap(key, pkeys, pkeysTypes, otherCols, otherColsTypes, foreignCols, databases))
+        for (let i = 0; i < otherCols.length; i++) {
             res.push(createChange(key, pkeys, pkeysTypes, otherCols[i], otherColsTypes[i]));
+        }
+        for (const col of foreignCols) {
+            for (const fcol of constructForeignCols(col, key, pkeys, pkeysTypes, databases)) {
+                res.push(fcol);
+            }
         }
     }
     return res.join("\n");
@@ -60,38 +70,79 @@ function constructModelFile(project) {
     return databases + "\n\n" + ui;
 }
 
-function createAddToMap(mapName, id, idType, others, othersTypes) {
+function createAddToMap(mapName, id, idType, others, othersTypes, foreignCols, databases) {
     const channelName = "add" + capitalizeFirstLetter(mapName);
-    
     let nameAndTypes = []
-    for(let i = 0; i < others.length; i++) {
+    for (let i = 0; i < others.length; i++) {
         nameAndTypes.push(`${others[i]}: ${othersTypes[i]}`)
+    }
+    for(const fcol of foreignCols) {
+        const fkey = fcol.name + capitalizeFirstLetter(fcol.relationKey);
+        nameAndTypes.push(`${fkey}: ${typeChange[searchFkeyType(databases, fcol.name, fcol.relationKey)]}`)
     }
     const args = id + ": " + idType + ", " + nameAndTypes.join(", ");
     let insertJson = [];
-    for(let other of others) {
+    for (const other of others) {
         insertJson.push(`"${other}": ${other}`)
     }
+    for (const fcol of foreignCols) {
+        const fkey = fcol.name + capitalizeFirstLetter(fcol.relationKey);
+        insertJson.push(`"${fkey}": ${fkey}`)
+    }
     return (
-`channel ${channelName} {
+        `channel ${channelName} {
         out ${mapName}(${mapName}: Map, ${channelName}(${args})) = insert(${mapName}, ${id}, {${insertJson.join(",")}})
 }
 `
     )
 }
 
-function createChange(mapName, pkeys, pkeysTypes, colName, colType) {
+function createChange(mapName, pkey, pkeyType, colName, colType) {
     const Col = capitalizeFirstLetter(colName);
     const channelName = "change" + capitalizeFirstLetter(mapName) + Col;
-    const pkeyAndTypes = [];
-    for(let i = 0; i < pkeys.length; i++) {
-        pkeyAndTypes.push(pkeys[i] + ": " + pkeysTypes[i]);
-    }
-    const paths = [mapName, ...pkeys.map((pkey) => "{" + pkey + "}"), colName];
+    const paths = [mapName, `{${pkey}}`, colName];
     return (
-`channel ${channelName}(${pkeyAndTypes.join(",")}) {
+        `channel ${channelName}(${pkey}: ${pkeyType}) {
         out ${paths.join(".")}(${colName}: ${colType}, ${channelName}(new${Col}: ${colType})) = new${Col}
 }
+`
+    )
+}
+
+function constructForeignCols(column, tableName, pkey, pkeyType, databases) {
+    const fTableName = column.name;
+    const fkey = column.relationKey;
+    const res = []
+    const fkeyType = searchFkeyType(databases, fTableName, fkey);
+    res.push(createChange(tableName, pkey, pkeyType, `${fTableName}${capitalizeFirstLetter(fkey)}`, typeChange[fkeyType]));
+    for (const i of column.columns) {
+        res.push(createForeignCols(tableName, pkey, pkeyType, fTableName, fkey, typeChange[fkeyType], databases[fTableName].columns[i].name, typeChange[databases[fTableName].columns[i].type]))
+    }
+    return res;
+}
+
+function searchFkeyType(databases, tableName, fkey) {
+    console.log(databases, tableName)
+    for (const col of databases[tableName].columns) {
+        if (col.name == fkey) {
+            return col.type;
+        }
+    }
+}
+
+function createForeignCols(tableName, pkey, pkeyType, fTableName, fkey, fkeyType, fcol, fcolType) {
+    const col = `${fTableName}${capitalizeFirstLetter(fcol)}`
+    const channelName = `${col}Of${capitalizeFirstLetter(tableName)}`;
+    const colType = fcolType;
+    const newCol = `new${capitalizeFirstLetter(col)}`;
+    fkey = `${fTableName}${capitalizeFirstLetter(fkey)}`;
+    const newFkey = `new${capitalizeFirstLetter(fkey)}`;
+    return (
+        `channel ${channelName}(${pkey}: ${pkeyType}){
+    in ${tableName}.{${pkey}}.${fkey}(${fkey}: ${fkeyType}, ${channelName}(${newFkey}: ${fkeyType}, ${newCol}: ${colType})) = ${newFkey}
+    in ${fTableName}.{${newFkey}}.${fcol}(${fcol}: ${fcolType}, ${channelName}(${newFkey}, ${newCol})) = ${newCol}
+    out ${tableName}.{${pkey}}.${col}(${col}, ${channelName}(${newFkey}, ${newCol})) = ${newCol}
+} 
 `
     )
 }
@@ -99,4 +150,4 @@ function createChange(mapName, pkeys, pkeysTypes, colName, colType) {
 function capitalizeFirstLetter(str) {
     if (!str) return ""; // 空文字の場合はそのまま返す
     return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+}
