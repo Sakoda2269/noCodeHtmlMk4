@@ -1,8 +1,6 @@
 import Popup from "@/components/popup/popup";
 import useDatabases from "../hooks/useDatabases"
 import styles from "./Databases.module.css"
-import { FaExpeditedssl } from "react-icons/fa6";
-import EditDatabase from "./EditDatabase";
 import AddDatabas from "./AddDatabase";
 
 export default function Databases() {

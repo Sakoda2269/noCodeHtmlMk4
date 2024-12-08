@@ -78,7 +78,7 @@ export default function useAddDatabase(edit, name) {
                         newCols.push(col);
                         continue
                     }
-                    if(col.name != tableName) {
+                    if(col.foreignTable != tableName) {
                         newCols.push(col);
                     }
                 }

@@ -1,7 +1,6 @@
 import Popup from "@/components/popup/popup";
 import useAddDatabase from "../hooks/useAddDatabase"
 import styles from "./AddDatabase.module.css"
-import EditColumn from "./EditColumn";
 import AddNormalColumns from "./AddNormalColumn";
 import React from "react";
 import AddForeignColumns from "./AddForeignColumns";
@@ -76,7 +75,9 @@ export default function AddDatabas({ close, edit, name }) {
                                     {columns.map((value, index) => {
                                         if (value.type == "table") {
                                             return <td key={"a"+index} colSpan={value.columns.length} style={border}>
-                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {setEditCol(index); openAddColScreen(2)}}>{value.name}</button>
+                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {setEditCol(index); openAddColScreen(2)}}>
+                                                    {value.name} <b>from</b> {value.foreignTable}
+                                                </button>
                                             </td>
                                         } else {
                                             return <td key={"a"+index} rowSpan="2" style={border}>
@@ -91,7 +92,7 @@ export default function AddDatabas({ close, edit, name }) {
                                             return (
                                                 <React.Fragment key={"e"+index}>
                                                     {value.columns.map((v, index) => (
-                                                        <td key={"b"+index} style={border}>{project.databases[value.name].columns[v].name}</td>
+                                                        <td key={"b"+index} style={border}>{project.databases[value.foreignTable].columns[v].name}</td>
                                                     ))}
                                                 </React.Fragment>
                                             )
@@ -107,7 +108,7 @@ export default function AddDatabas({ close, edit, name }) {
                                             return (
                                                 <React.Fragment key={"e"+index}>
                                                     {value.columns.map((v, index) => (
-                                                        <td key={"b"+index} style={border}>{project.databases[value.name].columns[v].type}</td>
+                                                        <td key={"b"+index} style={border}>{project.databases[value.foreignTable].columns[v].type}</td>
                                                     ))}
                                                 </React.Fragment>
                                             )
@@ -120,7 +121,7 @@ export default function AddDatabas({ close, edit, name }) {
                                     <th style={border}>relation key</th>
                                     {columns.map((value, index) => {
                                         if (value.type == "table") {
-                                            return <td key={"d" + index} colSpan={value.columns.length} style={border}>{value.name}.{value.relationKey}</td>
+                                            return <td key={"d" + index} colSpan={value.columns.length} style={border}>{value.foreignTable}.{value.relationKey}</td>
                                         } else {
                                             return <td key={"d" + index} style={border}></td>;
                                         }
