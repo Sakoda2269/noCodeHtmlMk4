@@ -23,19 +23,16 @@ export default function useProject() {
                     {
                         name: "id",
                         type: "text",
-                        constraint: [],
                         default: "$unique",
                     },
                     {
                         name: "name",
                         type: "text",
-                        constraint: ["unique", "notNull"],
                         default: "",
                     },
                     {
                         name: "age",
                         type: "integer",
-                        constraint: [],
                         default: "",
                     }
                 ],
