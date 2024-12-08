@@ -46,6 +46,19 @@ export default function useAddForeignColumns(setCol, columns, edit) {
         }
         close();
     }
+
+    const deleteColumn = (close) => {
+        setCol((prev) => {
+            const res = [];
+            for(const col of prev) {
+                if(col.name != foreignTable) {
+                    res.push(col);
+                }
+            }
+            return res;
+        })
+        close();
+    }
     
-    return [foreignTable, setForeignTable, selectedColumns, setSelectedColumns, foreignColumns, databases, confirm];
+    return [foreignTable, setForeignTable, selectedColumns, setSelectedColumns, foreignColumns, databases, confirm, deleteColumn];
 }

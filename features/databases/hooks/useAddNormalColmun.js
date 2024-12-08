@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-export default function useAddNormalColmun(setCols, columns, edit) {
+export default function useAddNormalColmun(setCols, columns, edit, pkey) {
     const [colName, setColName] = useState(edit == -1 ? "" : columns[edit].name);
     const [colType, setColType] = useState(edit == -1 ? "" : columns[edit].type);
     const [colDefault, setColDefault] = useState(edit == -1 ? "" : columns[edit].default);
@@ -42,7 +42,24 @@ export default function useAddNormalColmun(setCols, columns, edit) {
         }
         close();
     }
+
+    const deleteColumn = (close) => {
+        if(pkey == colName) {
+            alert("主キーは削除できません");
+            return;
+        }
+        setCols((prev) => {
+            const res = [];
+            for(const col of prev) {
+                if (col.name != colName) {
+                    res.push(col)
+                }
+            }
+            return res;
+        })
+        close();
+    }
     
-    return [colName, changeColName, colType, changeColType, colDefault, changeColDefault, confirm];
+    return [colName, changeColName, colType, changeColType, colDefault, changeColDefault, confirm, deleteColumn];
     
 }

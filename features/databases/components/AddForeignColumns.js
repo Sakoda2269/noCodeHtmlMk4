@@ -5,7 +5,10 @@ import styles from "./AddDatabase.module.css"
 
 export default function AddForeignColumns({ close, columns, setColumns, edit}) {
 
-    const [foreignTable, setForeignTable, selectedColumns, setSelectedColumns, foreignColumns, databases, confirm] = useAddForeignColumns(setColumns, columns, edit);
+    const [
+        foreignTable, setForeignTable, selectedColumns, setSelectedColumns, 
+        foreignColumns, databases, confirm, deleteColumn
+    ] = useAddForeignColumns(setColumns, columns, edit);
 
     const pad10 = { padding: "10px" };
 
@@ -49,6 +52,9 @@ export default function AddForeignColumns({ close, columns, setColumns, edit}) {
                             </label>
                         </div>
                     ))}
+                </div>}
+                {edit != -1 && <div style={{textAlign: "center"}}>
+                    <button className="btn btn-danger" onClick={() => deleteColumn(close)}>削除</button>
                 </div>}
             </div>
             <div className={styles.buttonContainer}>

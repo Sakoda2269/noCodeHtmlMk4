@@ -2,9 +2,12 @@ import useAddNormalColmun from "../hooks/useAddNormalColmun";
 import usePageControl from "../hooks/usePageControl"
 import styles from "./AddDatabase.module.css"
 
-export default function AddNormalColumns({ close, columns, setColumns, edit }) {
+export default function AddNormalColumns({ close, columns, setColumns, edit, pkey }) {
 
-    const [colName, changeColName, colType, changeColType, colDefault, changeColDefault, confirm] = useAddNormalColmun(setColumns, columns, edit);
+    const [
+        colName, changeColName, colType, changeColType, colDefault, 
+        changeColDefault, confirm, deleteColumn
+    ] = useAddNormalColmun(setColumns, columns, edit, pkey);
 
     const pad10 = { padding: "10px" };
 
@@ -28,6 +31,9 @@ export default function AddNormalColumns({ close, columns, setColumns, edit }) {
                     <label className="form-label">default</label>
                     <input type="text" className="form-control" value={colDefault} onChange={changeColDefault} />
                 </div>
+                {edit != -1 && <div style={{textAlign: "center"}}>
+                    <button className="btn btn-danger" onClick={() => deleteColumn(close)}>削除</button>
+                </div>}
             </div>
             <div className={styles.buttonContainer}>
                 <button className="btn btn-secondary" onClick={close}>閉じる</button>

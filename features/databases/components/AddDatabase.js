@@ -142,7 +142,10 @@ export default function AddDatabas({ close, edit, name }) {
             </div>
             <Popup isOpen={createColOpen}>
                 {addColType == 1 && 
-                    <AddNormalColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType} edit={editCol}/>
+                    <AddNormalColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} 
+                    type={addColType} edit={editCol}
+                    pkey={primaryKey}
+                    />
                 }
                 {addColType == 2 &&
                     <AddForeignColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} type={addColType} edit={editCol}/>
