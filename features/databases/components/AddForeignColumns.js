@@ -6,6 +6,7 @@ import styles from "./AddDatabase.module.css"
 export default function AddForeignColumns({ close, columns, setColumns, edit, tableName }) {
 
     const [
+        colName, setColName,
         foreignTable, setForeignTable, selectedColumns, setSelectedColumns,
         foreignColumns, databases, confirm, deleteColumn
     ] = useAddForeignColumns(setColumns, columns, edit);
@@ -17,7 +18,7 @@ export default function AddForeignColumns({ close, columns, setColumns, edit, ta
             <h3>Add foreign column</h3>
             <div className={styles.center}>
                 <div style={pad10}>
-                    <label className="form-label">foreign table</label>
+                    <label className="form-label required">foreign table</label>
                     <select className="form-select" onChange={(e) => setForeignTable(e.target.value)} value={foreignTable}>
                         <option value="" disabled>select...</option>
                         {Object.keys(databases).map((value, index) => {
@@ -27,6 +28,10 @@ export default function AddForeignColumns({ close, columns, setColumns, edit, ta
                             }
                         })}
                     </select>
+                </div>
+                <div style={pad10}>
+                    <label className="form-label required">name</label>
+                    <input type="text" className="form-control" value={colName} onChange={(e) => setColName(e.target.value)} />
                 </div>
                 {foreignTable != "" && <div style={pad10}>
                     {foreignColumns && foreignColumns.columns.map((value, index) => (
