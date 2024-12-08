@@ -1,7 +1,6 @@
 import Popup from "@/components/popup/popup";
 import useAddDatabase from "../hooks/useAddDatabase"
 import styles from "./AddDatabase.module.css"
-import EditColumn from "./EditColumn";
 import AddNormalColumns from "./AddNormalColumn";
 import React from "react";
 import AddForeignColumns from "./AddForeignColumns";

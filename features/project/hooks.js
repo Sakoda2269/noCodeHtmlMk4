@@ -56,6 +56,7 @@ export default function useProject() {
                     },
                     {
                         name: "accounts",
+                        table: "accounts",
                         type: "table",
                         relationKey: "id",
                         columns: [1, 2]
