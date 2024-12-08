@@ -14,7 +14,7 @@ export default function AddDatabas({ close, edit, name }) {
     const [
         tableName, setTableName, url, setUrl, user, setUser, password, setPassword,
         createColOpen, setCreateColOpen, addColType, openAddColScreen,
-        columns, setColumns, confirm, primaryKey, setPrimaryKey, editCol, setEditCol
+        columns, setColumns, confirm, primaryKey, setPrimaryKey, editCol, setEditCol, project
     ] = useAddDatabase(edit, name)
 
     const pad10 = { padding: "10px" };
@@ -90,8 +90,8 @@ export default function AddDatabas({ close, edit, name }) {
                                         if (value.type == "table") {
                                             return (
                                                 <React.Fragment key={"e"+index}>
-                                                    {value.columns.map((value, index) => (
-                                                        <td key={"b"+index} style={border}>{value.name}</td>
+                                                    {value.columns.map((v, index) => (
+                                                        <td key={"b"+index} style={border}>{project.databases[value.name].columns[v].name}</td>
                                                     ))}
                                                 </React.Fragment>
                                             )
@@ -105,9 +105,9 @@ export default function AddDatabas({ close, edit, name }) {
                                     {columns.map((value, index) => {
                                         if (value.type == "table") {
                                             return (
-                                                <React.Fragment key={"f"+index}>
-                                                    {value.columns.map((value, index) => (
-                                                        <td key={"c"+index} style={border}>{value.type}</td>
+                                                <React.Fragment key={"e"+index}>
+                                                    {value.columns.map((v, index) => (
+                                                        <td key={"b"+index} style={border}>{project.databases[value.name].columns[v].type}</td>
                                                     ))}
                                                 </React.Fragment>
                                             )

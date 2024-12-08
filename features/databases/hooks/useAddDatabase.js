@@ -1,8 +1,9 @@
-import { SetProjectContext } from "@/features/project/contexts/projectContext";
+import { ProjectContext, SetProjectContext } from "@/features/project/contexts/projectContext";
 import { useContext, useState } from "react";
 
 export default function useAddDatabase(edit, name) {
     
+    const project = useContext(ProjectContext);
     const setProject = useContext(SetProjectContext);
     
     const [tableName, setTableName] = useState(name ? name : "");
@@ -70,7 +71,7 @@ export default function useAddDatabase(edit, name) {
     return [
         tableName, setTableName, url, setUrl, user, setUser, password, setPassword,
         createColOpen, setCreateColOpen, addColType, openAddColScreen,
-        columns, setColumns, confirm, primaryKey, setPrimaryKey,editCol, setEditCol
+        columns, setColumns, confirm, primaryKey, setPrimaryKey,editCol, setEditCol, project
     ]
     
 }

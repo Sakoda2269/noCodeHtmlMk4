@@ -13,7 +13,7 @@ export default function useAddForeignColumns(setCol, columns, edit) {
         setForeignColumns(project.databases[foreignTable]);
     }, [foreignTable])
     
-    const confirm = () => {
+    const confirm = (close) => {
         if(foreignTable == "") {
             alert("テーブルを選択してください");
             return;
@@ -22,22 +22,29 @@ export default function useAddForeignColumns(setCol, columns, edit) {
             alert("列を一つ以上選択してください");
             return;
         }
-        const columns = [];
-        for(const col of selectedColumns) {
-            columns.push({
-                name: databases[foreignTable].columns[col].name,
-                type: databases[foreignTable].columns[col].type
+        if(edit != -1) {
+            setCol((prev) => {
+                const res = [...prev]
+                res[edit] = {
+                    name: foreignTable,
+                    type: "table",
+                    relationKey: databases[foreignTable].primaryKey,
+                    columns:selectedColumns
+                };
+                return res;
             })
+        } else {
+            setCol((prev) => ([
+                ...prev,
+                {
+                    name: foreignTable,
+                    type: "table",
+                    relationKey: databases[foreignTable].primaryKey,
+                    columns:selectedColumns
+                }
+            ]))
         }
-        setCol((prev) => ([
-            ...prev,
-            {
-                name: foreignTable,
-                type: "table",
-                relationKey: databases[foreignTable].primaryKey,
-                columns:columns
-            }
-        ]))
+        close();
     }
     
     return [foreignTable, setForeignTable, selectedColumns, setSelectedColumns, foreignColumns, databases, confirm];

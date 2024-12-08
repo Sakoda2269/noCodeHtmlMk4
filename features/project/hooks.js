@@ -64,16 +64,7 @@ export default function useProject() {
                         name: "accounts",
                         type: "table",
                         relationKey: "id",
-                        columns: [
-                            {
-                                name: "name",
-                                type: "text"
-                            },
-                            {
-                                name: "age",
-                                type: "integer"
-                            }
-                        ]
+                        columns: [1, 2]
                     }
                 ],
                 primaryKey: "tweetId",

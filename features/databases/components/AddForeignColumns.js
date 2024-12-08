@@ -53,7 +53,7 @@ export default function AddForeignColumns({ close, columns, setColumns, edit}) {
             </div>
             <div className={styles.buttonContainer}>
                 <button className="btn btn-secondary" onClick={close}>閉じる</button>
-                <button className="btn btn-primary" onClick={() => {confirm(); close(); }}>決定</button>
+                <button className="btn btn-primary" onClick={() => {confirm(close)}}>決定</button>
             </div>
         </div>
     )
