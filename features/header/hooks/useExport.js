@@ -77,7 +77,7 @@ function createAddToMap(mapName, id, idType, others, othersTypes, foreignCols, d
         nameAndTypes.push(`${others[i]}: ${othersTypes[i]}`)
     }
     for (const fcol of foreignCols) {
-        const fkey = fcol.name + capitalizeFirstLetter(fcol.relationKey);
+        const fkey = fcol.relationKey + "Of" + capitalizeFirstLetter(fcol.name);
         nameAndTypes.push(`${fkey}: ${typeChange[searchFkeyType(databases, fcol.foreignTable, fcol.relationKey)]}`)
     }
     const args = id + ": " + idType + ", " + nameAndTypes.join(", ");
@@ -86,7 +86,7 @@ function createAddToMap(mapName, id, idType, others, othersTypes, foreignCols, d
         insertJson.push(`"${other}": ${other}`)
     }
     for (const fcol of foreignCols) {
-        const fkey = fcol.name + capitalizeFirstLetter(fcol.relationKey);
+        const fkey = fcol.relationKey+ "Of" + capitalizeFirstLetter(fcol.name);
         insertJson.push(`"${fkey}": ${fkey}`)
     }
     return (
