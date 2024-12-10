@@ -117,9 +117,18 @@ function Property({ name, property, path }) {
 }
 
 function ButtonActions() {
+    
+    const pad10 = {padding: "10px", width: "100%"}
+    
     return (
         <div>
-            <div>navigation</div>
+            <div style={pad10}>
+                <label className="form-label">navigation</label>
+                <select style={{width: "100%"}} className="form-select">
+                    <option value="">なし</option>
+                    <option value="screen1">screen1</option>
+                </select>
+            </div>
             <div>save data</div>
             <div>get data</div>
         </div>
