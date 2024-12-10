@@ -13,6 +13,7 @@ export default function useProperties() {
     const setProject = useContext(SetProjectContext);
     const screen = useContext(ScreenContext);
     const [properties, setProperties] = useState({});
+    const [componentType, setComponentType] = useState("");
     
     useEffect(() => {
         const paths = selecting.split("/");
@@ -28,6 +29,7 @@ export default function useProperties() {
             }
         }
         setProperties(component.data)
+        setComponentType(component.type)
     }, [project, selecting])
     
     const deleteComponent = () => {
@@ -47,6 +49,6 @@ export default function useProperties() {
         setSelectingContainer("");
     }
     
-    return [properties, selecting, deleteComponent];
+    return [properties, selecting, deleteComponent, componentType];
     
 }
