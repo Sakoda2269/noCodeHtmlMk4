@@ -12,7 +12,8 @@ export default function ElementProperty() {
     
     return (
         <div style={{width: "100%", height: "100%"}}>
-            {selecting && <div className={styles.all}>
+            {selecting && 
+            <div className={styles.all}>
                 <h3>Component</h3>
                 {Object.entries(properties).map(([key, value]) => (
                     <Property key={key} property={value} name={key} path={key}/>
