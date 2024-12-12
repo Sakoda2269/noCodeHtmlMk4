@@ -3,7 +3,7 @@ import { ScreenContext } from "@/features/project/contexts/screenContext";
 import { SelectingContext } from "@/features/project/contexts/selectingContext";
 import { useContext, useEffect, useState } from "react";
 
-export default function useActions() {
+export default function useNavigateAction() {
     const selectingScreen = useContext(ScreenContext);
     const selecting = useContext(SelectingContext);
     const project = useContext(ProjectContext);

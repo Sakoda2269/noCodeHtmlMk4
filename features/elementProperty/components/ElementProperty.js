@@ -6,7 +6,7 @@ import { Collapse } from "react-bootstrap";
 import useProperty from "../hooks/useProperty";
 import useScreenProperty from "../hooks/useScreenProperty";
 import { Tab, Tabs } from "react-bootstrap";
-import useActions from "../hooks/useActions";
+import useNavigateAction from "../hooks/useNavigateAction";
 
 export default function ElementProperty() {
 
@@ -23,15 +23,15 @@ export default function ElementProperty() {
                         onSelect={setTabKey}
                     >
                         <Tab eventKey={"properties"} title="プロパティ">
-                            <div style={{ paddingTop: "10px"}}>
+                            <div style={{ paddingTop: "10px" }}>
                                 <h5>Component</h5>
                                 {Object.entries(properties).map(([key, value]) => (
                                     <Property key={key} property={value} name={key} path={key} />
                                 ))}
                             </div>
                         </Tab>
-                        <Tab eventKey={"actions"} title="アクション" style={{width: "200%"}}>
-                            <div style={{ paddingTop: "10px", width: "100%"}}>
+                        <Tab eventKey={"actions"} title="アクション" style={{ width: "200%" }}>
+                            <div style={{ paddingTop: "10px", width: "100%" }}>
                                 <h5>Acctions</h5>
                                 {componentType == "button" && <ButtonActions />}
                             </div>
@@ -117,19 +117,32 @@ function Property({ name, property, path }) {
 
 function ButtonActions() {
 
-    const [selectingScreen, project, navigation, selectNavigation] = useActions();
-    
+
     return (
         <div className={styles.propertyContainer}>
+            <NavigateAction />
+            <div>
+                <div className="form-label">Set Data</div>
+            </div>
+        </div>
+    )
+}
+
+function NavigateAction() {
+
+    const [selectingScreen, project, navigation, selectNavigation] = useNavigateAction();
+
+    return (
+        <div>
             <div className={styles.propertyName}>
                 <label className="form-label">navigation</label>
             </div>
-            <div style={{width: "100%"}}>
+            <div style={{ width: "100%" }}>
                 <select style={{ width: "100%" }} className="form-select" value={navigation} onChange={selectNavigation}>
                     <option value="">なし</option>
                     {project.screens.map((value, index) => {
-                        if(index != selectingScreen) {
-                            return <option value={value.title} key={"navigate"+index}>{value.title}</option>
+                        if (index != selectingScreen) {
+                            return <option value={value.title} key={"navigate" + index}>{value.title}</option>
                         } else {
                             return;
                         }
@@ -138,4 +151,5 @@ function ButtonActions() {
             </div>
         </div>
     )
+
 }
