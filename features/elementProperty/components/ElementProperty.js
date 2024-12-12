@@ -6,6 +6,7 @@ import { Collapse } from "react-bootstrap";
 import useProperty from "../hooks/useProperty";
 import useScreenProperty from "../hooks/useScreenProperty";
 import { Tab, Tabs } from "react-bootstrap";
+import useActions from "../hooks/useActions";
 
 export default function ElementProperty() {
 
@@ -22,19 +23,17 @@ export default function ElementProperty() {
                         onSelect={setTabKey}
                     >
                         <Tab eventKey={"properties"} title="プロパティ">
-                            <div style={{ paddingTop: "10px" }}>
+                            <div style={{ paddingTop: "10px"}}>
                                 <h5>Component</h5>
                                 {Object.entries(properties).map(([key, value]) => (
                                     <Property key={key} property={value} name={key} path={key} />
                                 ))}
                             </div>
                         </Tab>
-                        <Tab eventKey={"actions"} title="アクション">
-                            <div style={{ paddingTop: "10px" }}>
+                        <Tab eventKey={"actions"} title="アクション" style={{width: "200%"}}>
+                            <div style={{ paddingTop: "10px", width: "100%"}}>
                                 <h5>Acctions</h5>
-                                <div>
-                                    {componentType == "button" && <ButtonActions />}
-                                </div>
+                                {componentType == "button" && <ButtonActions />}
                             </div>
                         </Tab>
                     </Tabs>
@@ -117,20 +116,26 @@ function Property({ name, property, path }) {
 }
 
 function ButtonActions() {
-    
-    const pad10 = {padding: "10px", width: "100%"}
+
+    const [selectingScreen, project, navigation, selectNavigation] = useActions();
     
     return (
-        <div>
-            <div style={pad10}>
+        <div className={styles.propertyContainer}>
+            <div className={styles.propertyName}>
                 <label className="form-label">navigation</label>
-                <select style={{width: "100%"}} className="form-select">
+            </div>
+            <div style={{width: "100%"}}>
+                <select style={{ width: "100%" }} className="form-select" value={navigation} onChange={selectNavigation}>
                     <option value="">なし</option>
-                    <option value="screen1">screen1</option>
+                    {project.screens.map((value, index) => {
+                        if(index != selectingScreen) {
+                            return <option value={value.title} key={"navigate"+index}>{value.title}</option>
+                        } else {
+                            return;
+                        }
+                    })}
                 </select>
             </div>
-            <div>save data</div>
-            <div>get data</div>
         </div>
     )
 }

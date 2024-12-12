@@ -60,6 +60,13 @@ export default function useAddComponent() {
                 value: type
             };
         }
+        if(type == "button") {
+            data["actions"] = {
+                "navigation": "",
+                "setData": {},
+                "getData": {}
+            }
+        }
         container.push(data);
         setProject((prevProject) => ({
             ...prevProject,

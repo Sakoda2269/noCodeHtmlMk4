@@ -8,7 +8,55 @@ export default function useProject() {
         screens: [
             {
                 title: "screen1",
-                components:[]
+                components:[
+                    {
+                        "type": "button",
+                        "data": {
+                            "text": {
+                                "type": "string",
+                                "value": "hello"
+                            },
+                            "id": {
+                                "type": "string",
+                                "value": "btn-1"
+                            },
+                            "styles": {
+                                "type": "object",
+                                "value": {
+                                    "left": {
+                                        "type": "string",
+                                        "value": "10px"
+                                    },
+                                    "top": {
+                                        "type": "string",
+                                        "value": "10px"
+                                    },
+                                    "width": {
+                                        "type": "string",
+                                        "value": "100px"
+                                    },
+                                    "height": {
+                                        "type": "string",
+                                        "value": "40px"
+                                    }
+                                }
+                            }
+                        },
+                        "actions": {
+                            "navigation": "",
+                            "setData": {
+                                "target": "accounts",
+                                "datas": ["input1", "input2", "input3"]
+                            },
+                            "getData": {
+                                "target": "label1",
+                                "data": {
+                                    "type": "database"
+                                }
+                            }
+                        }
+                    },
+                ]
             }
         ],
         variables: [

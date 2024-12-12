@@ -1,20 +1,19 @@
-"use client"
 import { ProjectContext, SetProjectContext } from "@/features/project/contexts/projectContext";
 import { ScreenContext } from "@/features/project/contexts/screenContext";
 import { SelectingContext } from "@/features/project/contexts/selectingContext";
 import { useContext, useEffect, useState } from "react";
 
-
-export default function useProperty(propertyName) {
-    const screen = useContext(ScreenContext);
+export default function useActions() {
+    const selectingScreen = useContext(ScreenContext);
     const selecting = useContext(SelectingContext);
     const project = useContext(ProjectContext);
     const setProject = useContext(SetProjectContext);
-    const [property, setProperty] = useState("");
-        
+    
+    const [navigation, setNavigation] = useState("");
+    
     useEffect(() => {
         const paths = selecting.split("/");
-        let component = project.screens[screen].components;
+        let component = project.screens[selectingScreen].components;
         for(let i = 0; i < paths.length; i++) {
             const path = paths[i];
             if (path == "") {
@@ -25,24 +24,14 @@ export default function useProperty(propertyName) {
                 component = component.children;
             }
         }
-        const propPaths = propertyName.split("/");
-        let prop = component.data[propPaths[0]];
-        for(let i = 1; i < propPaths.length; i++) {
-            if(!prop) {
-                return;
-            }
-            prop = prop.value[propPaths[i]];
-        }
-        if(prop) {
-            setProperty(prop.value);
-        }
-    }, [selecting, project, propertyName])
+        setNavigation(component.actions.navigation);
+    }, [selectingScreen, selecting])
     
-    const onChange = (e) => {
-        setProperty(e.target.value);
+    const selectNavigation = (e) => {
+        setNavigation(e.target.value);
         const value = e.target.value;
         const paths = selecting.split("/");
-        let component = project.screens[screen].components;
+        let component = project.screens[selectingScreen].components;
         for(let i = 0; i < paths.length; i++) {
             const path = paths[i];
             if (path == "") {
@@ -53,20 +42,9 @@ export default function useProperty(propertyName) {
                 component = component.children;
             }
         }
-        const propPaths = propertyName.split("/");
-        let prop = component.data[propPaths[0]];
-        for(let i = 1; i < propPaths.length; i++) {
-            if(!prop) {
-                return;
-            }
-            prop = prop.value[propPaths[i]];
-        }
-        if(prop) {
-            prop.value = e.target.value;
-        }
+        component.actions.navigation = e.target.value;
         setProject({...project});
     }
     
-    return [property, onChange];
-    
+    return [selectingScreen, project, navigation, selectNavigation];
 }
