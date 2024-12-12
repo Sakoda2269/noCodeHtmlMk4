@@ -24,12 +24,13 @@ export default function useActions() {
                 component = component.children;
             }
         }
-        setNavigation(component.actions.navigation);
+        if(component.type == "button") {
+            setNavigation(component.actions.navigation);
+        }
     }, [selectingScreen, selecting])
     
     const selectNavigation = (e) => {
         setNavigation(e.target.value);
-        const value = e.target.value;
         const paths = selecting.split("/");
         let component = project.screens[selectingScreen].components;
         for(let i = 0; i < paths.length; i++) {
@@ -42,7 +43,9 @@ export default function useActions() {
                 component = component.children;
             }
         }
-        component.actions.navigation = e.target.value;
+        if(component.type == "button") {
+            component.actions.navigation = e.target.value;
+        }
         setProject({...project});
     }
     

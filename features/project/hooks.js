@@ -18,7 +18,7 @@ export default function useProject() {
                             },
                             "id": {
                                 "type": "string",
-                                "value": "btn-1"
+                                "value": "btn1"
                             },
                             "styles": {
                                 "type": "object",
@@ -58,8 +58,6 @@ export default function useProject() {
                     },
                 ]
             }
-        ],
-        variables: [
         ],
         databases: {
             "accounts": {

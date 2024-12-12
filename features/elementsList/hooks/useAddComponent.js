@@ -21,7 +21,7 @@ export default function useAddComponent() {
             }
             container = container[path].children;
         }
-        const id = self.crypto.randomUUID();
+        const id = self.crypto.randomUUID().replace(/-/g, '');
         const data = {
             type: type,
             data: {

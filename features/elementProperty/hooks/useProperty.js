@@ -39,8 +39,6 @@ export default function useProperty(propertyName) {
     }, [selecting, project, propertyName])
     
     const onChange = (e) => {
-        setProperty(e.target.value);
-        const value = e.target.value;
         const paths = selecting.split("/");
         let component = project.screens[screen].components;
         for(let i = 0; i < paths.length; i++) {
@@ -54,6 +52,10 @@ export default function useProperty(propertyName) {
             }
         }
         const propPaths = propertyName.split("/");
+        let value = e.target.value;
+        if (propPaths == "id") {
+            value = value.replace(/[-\s\r\n]+/g, '');
+        }
         let prop = component.data[propPaths[0]];
         for(let i = 1; i < propPaths.length; i++) {
             if(!prop) {
@@ -62,8 +64,9 @@ export default function useProperty(propertyName) {
             prop = prop.value[propPaths[i]];
         }
         if(prop) {
-            prop.value = e.target.value;
+            prop.value = value;
         }
+        setProperty(value);
         setProject({...project});
     }
     
