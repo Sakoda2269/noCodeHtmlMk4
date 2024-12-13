@@ -46,7 +46,13 @@ export default function useProject() {
                             "navigation": "",
                             "setData": {
                                 "target": "accounts",
-                                "datas": ["input1", "input2", "input3"]
+                                "datas": {
+                                    "id": "${input1}",
+                                    "name": "${input2}",
+                                    "age": "${input3}"
+                                },
+                                "success": "screen2",
+                                "fail": "screen3"
                             },
                             "getData": {
                                 "target": "label1",

@@ -13,6 +13,7 @@ export default function useProperties() {
     const setProject = useContext(SetProjectContext);
     const screen = useContext(ScreenContext);
     const [properties, setProperties] = useState({});
+    const [actions, setActions] = useState({});
     const [componentType, setComponentType] = useState("");
     
     useEffect(() => {
@@ -28,6 +29,7 @@ export default function useProperties() {
                 component = component.children;
             }
         }
+        setActions(component.actions);
         setProperties(component.data)
         setComponentType(component.type)
     }, [project, selecting])
@@ -49,6 +51,6 @@ export default function useProperties() {
         setSelectingContainer("");
     }
     
-    return [properties, selecting, deleteComponent, componentType];
+    return [properties, selecting, deleteComponent, componentType, actions];
     
 }

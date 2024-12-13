@@ -1,7 +1,7 @@
 import { capitalizeFirstLetter } from "./useExport";
 
 
-const dataSenderIds = []
+const dataSenderIds = new Set()
 
 export default function consturctUIModel(screens) {
     
@@ -120,7 +120,9 @@ function constructActionChannel(screens) {
     for(const screen of screens) {
         for(const widget of screen.components) {
             if(widget.type == "button") {
-                res.push(constructNavigationChannel(widget, screen.title));
+                if(widget.actions.navigation != "") {
+                    res.push(constructNavigationChannel(widget, screen.title));
+                }
             }
             if(widget.data.text.value.includes("${")) {
                 res.push(constructSendTexts(widget, screen.title));
@@ -136,7 +138,7 @@ function constructSendTexts(widget, scId) {
     const channelName = `${wid}TextSender`;
     const res = [];
     for(const target of extractAllContents(text)) {
-        dataSenderIds.push(wid);
+        dataSenderIds.add(wid);
         res.push(constructSenderChannel(channelName, scId, wid, target));
     }
     return res.join("\n");
