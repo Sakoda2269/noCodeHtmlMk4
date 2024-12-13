@@ -34,12 +34,13 @@ export default function useSetDataAction(actions) {
                 component = component.children;
             }
         }
-        
-        setSelectedDatabase(component.actions.setData.target);
-        setColumns(Object.keys(component.actions.setData.datas));
-        setColumnStates(component.actions.setData.datas);
-        setSuccessNavigation(component.actions.setData.success);
-        setFailNavigation(component.actions.setData.fail);
+        if (component.type == "button") {
+            setSelectedDatabase(component.actions.setData.target);
+            setColumns(Object.keys(component.actions.setData.datas));
+            setColumnStates(component.actions.setData.datas);
+            setSuccessNavigation(component.actions.setData.success);
+            setFailNavigation(component.actions.setData.fail);
+        }
         
     }, [project, selecting])
     
@@ -80,14 +81,15 @@ export default function useSetDataAction(actions) {
                 component = component.children;
             }
         }
-        
-        component.actions.setData = {
-            target: selectedDatabase,
-            datas: columnStates,
-            success: successNavigation,
-            fail: fialNavigation
+        if(component.type == "button") {
+            component.actions.setData = {
+                target: selectedDatabase,
+                datas: columnStates,
+                success: successNavigation,
+                fail: fialNavigation
+            }
+            setProject({...project});
         }
-        setProject({...project});
     }
 
     return [
