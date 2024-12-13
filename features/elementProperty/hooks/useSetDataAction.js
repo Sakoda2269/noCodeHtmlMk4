@@ -21,6 +21,28 @@ export default function useSetDataAction(actions) {
         screens.push(screen.title);
     }
     
+    useEffect(() => {
+        const paths = selecting.split("/");
+        let component = project.screens[selectingScreen].components;
+        for(let i = 0; i < paths.length; i++) {
+            const path = paths[i];
+            if (path == "") {
+                return;
+            }
+            component = component[path];
+            if(i != paths.length - 1) {
+                component = component.children;
+            }
+        }
+        
+        setSelectedDatabase(component.actions.setData.target);
+        setColumns(Object.keys(component.actions.setData.datas));
+        setColumnStates(component.actions.setData.datas);
+        setSuccessNavigation(component.actions.setData.success);
+        setFailNavigation(component.actions.setData.fail);
+        
+    }, [project, selecting])
+    
     const changeColumnStates = (e, key) => {
         setColumnStates((prev) => {
             prev[key] = e.target.value;
@@ -62,8 +84,8 @@ export default function useSetDataAction(actions) {
         component.actions.setData = {
             target: selectedDatabase,
             datas: columnStates,
-            successNavigation: successNavigation,
-            fialNavigation: fialNavigation
+            success: successNavigation,
+            fail: fialNavigation
         }
         setProject({...project});
     }

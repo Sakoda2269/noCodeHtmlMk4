@@ -63,7 +63,12 @@ export default function useAddComponent() {
         if(type == "button") {
             data["actions"] = {
                 "navigation": "",
-                "setData": {},
+                "setData": {
+                    "target": "",
+                    "datas": {},
+                    "success": "",
+                    "fail": ""
+                },
                 "getData": {}
             }
         }
