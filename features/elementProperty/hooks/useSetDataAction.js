@@ -85,6 +85,7 @@ export default function useSetDataAction(actions) {
             component.actions.setData = {
                 target: selectedDatabase,
                 datas: columnStates,
+                pkey: project.databases[selectedDatabase].primaryKey,
                 success: successNavigation,
                 fail: fialNavigation
             }

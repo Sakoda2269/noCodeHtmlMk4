@@ -116,6 +116,9 @@ function constructActionChannel(screens) {
                 if(widget.actions.navigation != "") {
                     res.push(constructNavigationChannel(widget));
                 }
+                if(widget.actions.setData.target != "") {
+                    res.push(constructSetData(widget))
+                }
             }
             if(widget.data.text.value.includes("${")) {
                 res.push(constructSendTexts(widget, screen.title));
@@ -164,3 +167,71 @@ function constructNavigationChannel(widget) {
 }`
     )
 }
+
+function constructSetData(widget) {
+    const database = widget.actions.setData.target;
+    const datas = widget.actions.setData.datas;
+    const wid = widget.data.id.value;
+    let pkeyCol = widget.actions.setData.pkey;
+    const channelName = wid + capitalizeFirstLetter(database) + "SetData";
+    const resJson = {};
+    const ref = {}
+    const args = ["nextState"];
+    let isPkeyConst = false;
+    const success = widget.actions.setData.success;
+    const fail = widget.actions.setData.fail;
+    for(const key of Object.keys(datas)) {
+        const value = datas[key];
+        const refTarget = extractAllContents(value);
+        if(refTarget.length != 0) {
+            dataSenderIds.add(refTarget);
+            resJson[key] = key;
+            args.push(key);
+            args.push(refTarget[0]);
+            ref[key] = refTarget[0];
+        } else {
+            if(key == pkeyCol) {
+                pkeyCol = "\"" + value + "\"";
+                isPkeyConst = true;
+            } else {
+                resJson[key] = "\"" + value + "\"";
+            }
+        }
+    }
+    args.push(database+"Ref");
+    const message = channelName + "(" + args.join(", ") + ")";
+    const res = [
+        `channel ${channelName}(wid: Str){`,
+        `\tin screen.widgets.{wid="${wid}"}.state(curState, ${message}) = nextState`
+    ]
+    const insertJson = [];
+    for(const key of Object.keys(ref)) {
+        res.push(
+            `\tref ${ref[key]}(${ref[key]}, ${message})`
+        )
+        res.push(
+            `\tref screen.widgets.{${ref[key]}}.text(${key}, ${message})`
+        )
+    }
+    for(const key of Object.keys(resJson)) {
+        
+        if(key != pkeyCol) {
+            insertJson.push(`"${key}": ${resJson[key]}`)
+        }
+    }
+    res.push(
+        `\tref ${database}(${database}Ref, ${message})`
+    )
+    const constraint1 = `(nextState == 0)`
+    const constraint2 = `(${widget.actions.setData.pkey} != "") && (!contains(${database}Ref, ${isPkeyConst ? "\"" + pkeyCol + "\"": pkeyCol}))`
+    res.push(
+        `\tout ${database}(${database}: Map, ${message}) = if(${constraint1} && ${constraint2}, insert(${database}, ${pkeyCol}, {${insertJson.join(", ")}}), ${database})`
+    )
+    //A == 0 && 
+    if(success != "" || fail != "") {
+        res.push(`\tout curScreen(curScreen, ${message}) = if(${constraint1}, if(${constraint2}, ${success == "" ? "curScreen" : "\""+success+"\""}, ${fail == "" ? "curScreen" : "\""+fail+"\""}), curScreen)`)
+    }
+    res.push("}")
+    return res.join("\n");
+}
+

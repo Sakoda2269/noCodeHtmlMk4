@@ -51,6 +51,7 @@ export default function useProject() {
                                     "name": "${input2}",
                                     "age": "${input3}"
                                 },
+                                "pkey": "id",
                                 "success": "screen2",
                                 "fail": "screen3"
                             },
