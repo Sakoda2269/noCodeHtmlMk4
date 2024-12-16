@@ -57,6 +57,18 @@ channel ScreenTransition {
 	ref screenTemplates.{nextScId}(screen, transScreen(nextScId, screen))
 	out screen(curS, transScreen(nextScId, screen)) = screen
 }
+    
+channel EventDispatch(wid: Str) {
+	in screen.widgets.{wid}.state(curState: Int, dispatchEvent(curScId, wid, nextState)) = nextState
+	ref curScreen(curScId: Str, dispatchEvent(curScId, wid, nextState))
+	out screenTemplates.{curScId}.widgets.{wid}.state(curState: Int, dispatchEvent(curScId, wid, nextState)) = nextState
+}
+    
+channel EventDispatch2(wid: Str) {
+	in screen.widgets.{wid}.text(curText: Str, dispatchEvent2(curScId, wid, nextText)) = nextText
+	ref curScreen(curScId: Str, dispatchEvent2(curScId, wid, nextText))
+	out screenTemplates.{curScId}.widgets.{wid}.text(curText: Str, dispatchEvent2(curScId, wid, nextText)) = nextText
+}
 
 ${actions}
 `;
@@ -98,13 +110,8 @@ function constructScreen(screen) {
 }
 
 function constructWidget(widget) {
-    if(widget.type == "textInput") {
-        return (
-            `"${widget.data.id.value}": {"type": "${widget.type}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value)}, "y": ${parseFloat(widget.data.styles.value.top.value)}, "width": ${parseFloat(widget.data.styles.value.width.value)}, "height": ${parseFloat(widget.data.styles.value.height.value)}}`
-        )
-    }
     return (
-`"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value)}, "y": ${parseFloat(widget.data.styles.value.top.value)}, "width": ${parseFloat(widget.data.styles.value.width.value)}, "height": ${parseFloat(widget.data.styles.value.height.value)}}`
+        `"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value)}, "y": ${parseFloat(widget.data.styles.value.top.value)}, "width": ${parseFloat(widget.data.styles.value.width.value)}, "height": ${parseFloat(widget.data.styles.value.height.value)}}`
     )
 }
 
@@ -114,10 +121,10 @@ function constructActionChannel(screens) {
         for(const widget of screen.components) {
             if(widget.type == "button") {
                 if(widget.actions.navigation != "") {
-                    res.push(constructNavigationChannel(widget));
+                    res.push(constructNavigationChannel(widget, screen.title));
                 }
                 if(widget.actions.setData.target != "") {
-                    res.push(constructSetData(widget))
+                    res.push(constructSetData(widget, screen.title))
                 }
             }
             if(widget.data.text.value.includes("${")) {
@@ -128,22 +135,22 @@ function constructActionChannel(screens) {
     return res.join("\n")
 }
 
-function constructSendTexts(widget) {
+function constructSendTexts(widget, scId) {
     const wid = widget.data.id.value;
     const text = widget.data.text.value;
     const channelName = `${wid}TextSender`;
     const res = [];
     for(const target of extractAllContents(text)) {
         dataSenderIds.add(wid);
-        res.push(constructSenderChannel(channelName, wid, target));
+        res.push(constructSenderChannel(channelName, wid, target, scId));
     }
     return res.join("\n");
 }
 
-function constructSenderChannel(channelName, wid, target) {
+function constructSenderChannel(channelName, wid, target, scId) {
     return (
-`channel ${channelName}(wid: Str) {
-    in screen.widgets.{wid="${target}"}.text(curText: Str, ${channelName}(nextText: Str, target)) = nextText
+`channel ${channelName}(scId: Str, wid: Str) {
+    in screenTemplates.{scId="${scId}"}.widgets.{wid="${target}"}.text(curText: Str, ${channelName}(nextText: Str, target)) = nextText
     ref ${wid}(target, ${channelName}(nextText, target))
     out screen.widgets.{target}.text(curText: Str, ${channelName}(nextText, target)) = nextText
 }
@@ -156,19 +163,19 @@ function extractAllContents(value) {
   }
   
 
-function constructNavigationChannel(widget) {
+function constructNavigationChannel(widget, scId) {
     const wid = widget.data.id.value;
     const channelName = wid + "Navigate";
     const targetScreen = widget.actions.navigation;
     return (
-`channel ${channelName}(wid: Str){
-    in screen.widgets.{wid="${wid}"}.state(curState: Str, ${channelName}(nextState)) = nextState
+`channel ${channelName}(scId: Str, wid: Str){
+    in screenTemplates.{scId="${scId}"}.widgets.{wid="${wid}"}.state(curState: Str, ${channelName}(nextState)) = nextState
 	out curScreen(curScId: Str, ${channelName}(nextState)) = if(nextState==0, "${targetScreen}", curScId)
 }`
     )
 }
 
-function constructSetData(widget) {
+function constructSetData(widget, scId) {
     const database = widget.actions.setData.target;
     const datas = widget.actions.setData.datas;
     const wid = widget.data.id.value;
@@ -201,8 +208,8 @@ function constructSetData(widget) {
     args.push(database+"Ref");
     const message = channelName + "(" + args.join(", ") + ")";
     const res = [
-        `channel ${channelName}(wid: Str){`,
-        `\tin screen.widgets.{wid="${wid}"}.state(curState, ${message}) = nextState`
+        `channel ${channelName}(scId: Str, wid: Str){`,
+        `\tin screenTemplates.{scId="${scId}"}.widgets.{wid="${wid}"}.state(curState, ${message}) = nextState`
     ]
     const insertJson = [];
     for(const key of Object.keys(ref)) {
