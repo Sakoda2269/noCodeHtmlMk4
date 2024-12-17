@@ -26,10 +26,43 @@ export default function useTableData(data, setOtherData) {
     } : []);
     const [rowHeight, setRowHeight] = useState(curRowHeight!="" ? curRowHeight : "100px");
 
-    useEffect(() => {
-        if (source != "") {
+    const handleChangeColumns = (e) => {
+        let newCol = [];
+        if (e.target.checked) {
+            setColumns((prev) => {
+                const tmp =[...prev, e.target.name];
+                newCol = tmp; 
+                return tmp;
+            });
+        } else {
+            setColumns((prev) => {
+                const res = [];
+                for (const col of prev) {
+                    if (col != e.target.name) {
+                        res.push(col);
+                    }
+                }
+                newCol = res;
+                return res;
+            })
+        }
+        setOtherData((prev) => ({
+            ...prev,
+            columns: newCol
+        }));
+    }
+    
+    const handleChangeSource = (e) => {
+        setSource(e.target.value);
+        setOtherData((prev) => (
+            {
+                ...prev,
+                source: e.target.value
+            }
+        ));
+        if (e.target.value != "") {
             const res = [];
-            for (const col of project.databases[source].columns) {
+            for (const col of project.databases[e.target.value].columns) {
                 if(col.type == "table") {
                     const foreignTable = col.foreignTable;
                     for(const i of col.columns) {
@@ -41,41 +74,6 @@ export default function useTableData(data, setOtherData) {
             }
             setSourceColumns(res);
         }
-    }, [source, project])
-    
-    useEffect(() => {
-        setOtherData((prev) => ({
-            ...prev,
-            columns: columns
-        }));
-    }, [columns])
-
-    const handleChangeColumns = (e) => {
-        if (e.target.checked) {
-            setColumns((prev) => (
-                [...prev, e.target.name]
-            ));
-        } else {
-            setColumns((prev) => {
-                const res = [];
-                for (const col of prev) {
-                    if (col != e.target.name) {
-                        res.push(col);
-                    }
-                }
-                return res;
-            })
-        }
-    }
-    
-    const handleChangeSource = (e) => {
-        setSource(e.target.value);
-        setOtherData((prev) => (
-            {
-                ...prev,
-                source: e.target.value
-            }
-        ));
     }
     
     const handleChangeRowNum = (e) => {
@@ -89,7 +87,7 @@ export default function useTableData(data, setOtherData) {
         setRowHeight(e.target.value);
         setOtherData((prev) => ({
             ...prev,
-            rowHeight: rowHeight
+            rowHeight: e.target.value
         }))
     }
 

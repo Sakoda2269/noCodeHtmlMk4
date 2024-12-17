@@ -77,7 +77,7 @@ export default function useAddComponent() {
                 "source": "",
                 "columns": [],
                 "rowName": 1,
-                "rowHeight": "100px"
+                "rowHeight": "40px"
             }
         }
         container.push(data);
