@@ -72,6 +72,14 @@ export default function useAddComponent() {
                 "getData": {}
             }
         }
+        if(type == "table") {
+            data["other"] = {
+                "source": "",
+                "columns": [],
+                "rowName": 1,
+                "rowHeight": "100px"
+            }
+        }
         container.push(data);
         setProject((prevProject) => ({
             ...prevProject,

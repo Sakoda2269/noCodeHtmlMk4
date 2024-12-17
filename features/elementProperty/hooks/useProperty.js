@@ -11,6 +11,7 @@ export default function useProperty(propertyName) {
     const project = useContext(ProjectContext);
     const setProject = useContext(SetProjectContext);
     const [property, setProperty] = useState("");
+    const [selectOptions, setSelectOptions] = useState([]);
         
     useEffect(() => {
         const paths = selecting.split("/");
@@ -35,6 +36,11 @@ export default function useProperty(propertyName) {
         }
         if(prop) {
             setProperty(prop.value);
+            if(prop.type == "select") {
+                if(prop.source == "databases") {
+                    setSelectOptions(Object.keys(project.databases));
+                }
+            }
         }
     }, [selecting, project, propertyName])
     
@@ -70,6 +76,6 @@ export default function useProperty(propertyName) {
         setProject({...project});
     }
     
-    return [property, onChange];
+    return [property, onChange, selectOptions];
     
 }
