@@ -21,7 +21,7 @@ export default function useAddComponent() {
             }
             container = container[path].children;
         }
-        const id = self.crypto.randomUUID();
+        const id = self.crypto.randomUUID().replace(/-/g, '');
         const data = {
             type: type,
             data: {
@@ -59,6 +59,18 @@ export default function useAddComponent() {
                 type: "string",
                 value: type
             };
+        }
+        if(type == "button") {
+            data["actions"] = {
+                "navigation": "",
+                "setData": {
+                    "target": "",
+                    "datas": {},
+                    "success": "",
+                    "fail": ""
+                },
+                "getData": {}
+            }
         }
         container.push(data);
         setProject((prevProject) => ({

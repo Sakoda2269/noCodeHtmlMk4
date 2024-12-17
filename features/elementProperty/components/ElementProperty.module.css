@@ -2,10 +2,11 @@
 .all {
     display: flex;
     flex-direction: column;
-    align-items: center;
+    align-items: flex-start;
     width: 100%;
     height: 100%;
     margin: 5px;
+    padding-left: 10px;
     padding-right: 10px;
     overflow-y: auto;
 }
@@ -28,6 +29,11 @@
 }
 
 .deleteButton {
-    width: 80%;
+    width: 100%;
     margin-top: 10px;
+}
+
+.max {
+    width: 100%;
+    height: 100%;
 }

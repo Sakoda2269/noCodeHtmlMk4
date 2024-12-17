@@ -8,10 +8,63 @@ export default function useProject() {
         screens: [
             {
                 title: "screen1",
-                components:[]
+                components:[
+                    {
+                        "type": "button",
+                        "data": {
+                            "text": {
+                                "type": "string",
+                                "value": "hello"
+                            },
+                            "id": {
+                                "type": "string",
+                                "value": "btn1"
+                            },
+                            "styles": {
+                                "type": "object",
+                                "value": {
+                                    "left": {
+                                        "type": "string",
+                                        "value": "10px"
+                                    },
+                                    "top": {
+                                        "type": "string",
+                                        "value": "10px"
+                                    },
+                                    "width": {
+                                        "type": "string",
+                                        "value": "100px"
+                                    },
+                                    "height": {
+                                        "type": "string",
+                                        "value": "40px"
+                                    }
+                                }
+                            }
+                        },
+                        "actions": {
+                            "navigation": "",
+                            "setData": {
+                                "target": "accounts",
+                                "datas": {
+                                    "id": "${input1}",
+                                    "name": "${input2}",
+                                    "age": "${input3}"
+                                },
+                                "pkey": "id",
+                                "success": "screen2",
+                                "fail": "screen3"
+                            },
+                            "getData": {
+                                "target": "label1",
+                                "data": {
+                                    "type": "database"
+                                }
+                            }
+                        }
+                    },
+                ]
             }
-        ],
-        variables: [
         ],
         databases: {
             "accounts": {
