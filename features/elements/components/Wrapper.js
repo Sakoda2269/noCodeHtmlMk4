@@ -5,6 +5,7 @@ import useWrapper from "../hooks/useWrapper"
 import AbsoluteContainer from "./AbsoluteContainer"
 import Button from "./Button"
 import HorizontalContainer from "./HorizontalContainer";
+import Table from "./Table";
 import TextInput from "./TextInput";
 import Label from "./TextLabel";
 import VerticalContainer from "./VerticalContaner";
@@ -12,7 +13,8 @@ import VerticalContainer from "./VerticalContaner";
 export const Elements = {
     button: Button,
     label: Label,
-    textInput:TextInput
+    textInput:TextInput,
+    table: Table
 }
 
 export const Containers = {

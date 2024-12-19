@@ -15,6 +15,7 @@ export default function useProperties() {
     const [properties, setProperties] = useState({});
     const [actions, setActions] = useState({});
     const [componentType, setComponentType] = useState("");
+    const [otherData, setOtherData] = useState({});
     
     useEffect(() => {
         const paths = selecting.split("/");
@@ -32,7 +33,27 @@ export default function useProperties() {
         setActions(component.actions);
         setProperties(component.data)
         setComponentType(component.type)
-    }, [project, selecting])
+        setOtherData(component.other)
+        console.log(component, selecting)
+    }, [project, selecting, screen]);
+    
+    useEffect(() => {
+        const paths = selecting.split("/");
+        const newProject = {...project}
+        let component = newProject.screens[screen].components;
+        for(let i = 0; i < paths.length; i++) {
+            const path = paths[i];
+            if (path == "") {
+                return;
+            }
+            component = component[path];
+            if(i != paths.length - 1) {
+                component = component.children;
+            }
+        }
+        component.other = otherData;
+        setProject({...newProject});
+    }, [otherData])
     
     const deleteComponent = () => {
         const newProject = {...project};
@@ -51,6 +72,7 @@ export default function useProperties() {
         setSelectingContainer("");
     }
     
-    return [properties, selecting, deleteComponent, componentType, actions];
+    
+    return [properties, selecting, deleteComponent, componentType, actions, otherData, setOtherData];
     
 }

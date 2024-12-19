@@ -10,10 +10,11 @@ import useNavigateAction from "../hooks/useNavigateAction";
 import useSetDataAction from "../hooks/useSetDataAction";
 import usePopup from "../hooks/usePopup";
 import Popup from "@/components/popup/popup";
+import useTableData from "../hooks/useTableData";
 
 export default function ElementProperty() {
 
-    const [properties, selecting, deleteComponent, componentType, actions] = useProperties();
+    const [properties, selecting, deleteComponent, componentType, actions, otherData, setOtherData] = useProperties();
     const [tabKey, setTabKey] = useState("properties");
 
     return (
@@ -40,6 +41,12 @@ export default function ElementProperty() {
                                 <input type="text" style={{ visibility: "hidden" }} />
                             </div>
                         </Tab>
+                        <Tab eventKey={"otehr"} title="その他" style={{width: "100%"}}>
+                        <div style={{ paddingTop: "10px", width: "100%" }}>
+                                <h5>Others</h5>
+                                {componentType == "table" && <TableSourceSetting data={otherData} setData={setOtherData}/>}
+                            </div>
+                        </Tab>
                     </Tabs>
                     <button
                         className={`btn btn-danger ${styles.deleteButton}`}
@@ -47,6 +54,10 @@ export default function ElementProperty() {
                     >
                         delete
                     </button>
+                    <br />
+                    <br />
+                    <br />
+                    <br />
                 </div>}
             {!selecting && <div className={styles.all}>
                 <h3>Screen</h3>
@@ -77,12 +88,12 @@ function ScreenProperty({ property }) {
 function Property({ name, property, path }) {
 
     const [isOpen, setOpen] = useState(false);
-    const [propData, onChange] = useProperty(path);
+    const [propData, onChange, selectOptions] = useProperty(path);
 
     return (
         <div className={styles.propertyContainer}>
             <div className={styles.propertyName}>
-                {property.type == "string" && <label className="form-label">{name}</label>}
+                {(["string", "integer", "select"].includes(property.type)) && <label className="form-label">{name}</label>}
                 {property.type == "object" && <button
                     className={styles.groupButton}
                     onClick={() => { setOpen(!isOpen); }}
@@ -100,6 +111,24 @@ function Property({ name, property, path }) {
                         value={propData}
                         onChange={onChange}
                         className="form-control" />}
+                {property.type == "integer" && 
+                    <input 
+                        type="number"
+                        value={propData}
+                        onChange={onChange}
+                        className="form-control" />
+                    }
+                {property.type == "select" && 
+                    <select 
+                        value={propData}
+                        onChange={onChange}
+                        className="form-select">
+                            <option value="" disabled>選択してください...</option>
+                            {selectOptions.map((value, index) => (
+                                <option value={value} key={"select" + index}>{value}</option>
+                            ))}
+                        </select>
+                }
                 {property.type == "object" &&
                     <Collapse in={isOpen}>
                         <div id="properties">
@@ -224,4 +253,49 @@ function SetDataAction({ actions }) {
         </div>
     )
 
+}
+
+function TableSourceSetting({data, setData}) {
+    
+    const [
+        source, handleChangeSource, columns, handleChangeColumns, rowNum, handleChangeRowNum, sourceColums, databases,
+        rowHeight, handleChangeRowHeight
+    ] = useTableData(data, setData); 
+    
+    const pad10 = {"padding": "10px 0px"}
+    
+    console.log(source)
+    
+    return (
+        <div>
+            <div style={pad10}>
+                <label className="form-label">ソース</label>
+                <select className="form-select" value={source} onChange={handleChangeSource}>
+                    <option value="" disabled>選択してください...</option>
+                    {databases.map((value, index) => (
+                        <option value={value} key={"source"+index}>{value}</option>
+                    ))}
+                </select>
+            </div>
+            {source != "" && <div style={pad10}>
+                <label className="form-label">項目</label>
+                {sourceColums.map((value, index) => (
+                    <div key={"col" + index}>
+                        <label className="form-label">
+                            <input type="checkbox" onChange={handleChangeColumns} checked={columns.includes(value)} name={value} />
+                            {value}
+                        </label>
+                    </div>
+                ))}
+            </div>}
+            <div style={pad10}>
+                <label className="form-label">表示する列数</label>
+                <input type="number" className="form-control" value={rowNum} onChange={handleChangeRowNum} />
+            </div>
+            <div style={pad10}>
+                <label className="form-label">列の高さ</label>
+                <input type="text" className="form-control" value={rowHeight} onChange={handleChangeRowHeight} />
+            </div>
+        </div>
+    )   
 }
