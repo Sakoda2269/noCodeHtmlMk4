@@ -3,6 +3,7 @@ export default function Table({ element }) {
     for (let i = 0; i < parseInt(element.other.rowNum); i++) {
         rowNumTmp.push("");
     }
+    
     return (
         <div style={{ width: "100%", height: "100%", overflowY: "auto" }}>
             <table>

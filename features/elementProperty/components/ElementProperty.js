@@ -264,6 +264,8 @@ function TableSourceSetting({data, setData}) {
     
     const pad10 = {"padding": "10px 0px"}
     
+    console.log(source)
+    
     return (
         <div>
             <div style={pad10}>
