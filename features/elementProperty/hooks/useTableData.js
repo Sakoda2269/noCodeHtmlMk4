@@ -28,6 +28,9 @@ export default function useTableData(data, setOtherData) {
                 component = component.children;
             }
         }
+        if(component.type != "table") {
+            return;
+        }
         const data = component.other
         setSource(data.source ? data.source : "");
         setColumns(data.columns ? data.columns : "");
