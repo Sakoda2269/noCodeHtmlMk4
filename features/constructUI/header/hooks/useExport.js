@@ -25,7 +25,7 @@ export default function useExport() {
 
 }
 
-function constructModelFile(project) {
+export function constructModelFile(project) {
 
     const ui = consturctUIModel(project.screens);
     const databases = constructDatabaseModel(project.databases);

@@ -5,7 +5,7 @@ import { SelectingContext } from "@/features/constructUI/project/contexts/select
 import { useContext, useEffect, useState } from "react";
 
 export default function useTableData(data, setOtherData) {
-    
+
     const project = useContext(ProjectContext);
     const selecting = useContext(SelectingContext);
     const screen = useContext(ScreenContext);
@@ -14,40 +14,42 @@ export default function useTableData(data, setOtherData) {
     const [rowNum, setRowNum] = useState(1);
     const [sourceColums, setSourceColumns] = useState([]);
     const [rowHeight, setRowHeight] = useState("40px");
-    
+
     useEffect(() => {
         const paths = selecting.split("/");
         let component = project.screens[screen].components;
-        for(let i = 0; i < paths.length; i++) {
+        for (let i = 0; i < paths.length; i++) {
             const path = paths[i];
             if (path == "") {
                 return;
             }
             component = component[path];
-            if(i != paths.length - 1) {
+            if (i != paths.length - 1) {
                 component = component.children;
             }
         }
         const data = component.other
-        setSource(data.source ? data.source : "");
-        setColumns(data.columns ? data.columns : "");
-        setRowNum(data.rowNum ? parseInt(data.rowNum) : 1);
-        setRowHeight(data.rowHeight ? data.rowHeight : "40px");
-        if(data.source != "") {
-            const cols = [];
-            for (const col of project.databases[data.source].columns) {
-                if(col.type == "table") {
-                    const foreignTable = col.foreignTable;
-                    for(const i of col.columns) {
-                        cols.push(col.name + "." + project.databases[foreignTable].columns[i].name);
+        if (data) {
+            setSource(data.source ? data.source : "");
+            setColumns(data.columns ? data.columns : "");
+            setRowNum(data.rowNum ? parseInt(data.rowNum) : 1);
+            setRowHeight(data.rowHeight ? data.rowHeight : "40px");
+            if (data.source != "") {
+                const cols = [];
+                for (const col of project.databases[data.source].columns) {
+                    if (col.type == "table") {
+                        const foreignTable = col.foreignTable;
+                        for (const i of col.columns) {
+                            cols.push(col.name + "." + project.databases[foreignTable].columns[i].name);
+                        }
+                    } else {
+                        cols.push(col.name);
                     }
-                } else {
-                    cols.push(col.name);
                 }
+                setSourceColumns(cols);
+            } else {
+                setSourceColumns([]);
             }
-            setSourceColumns(cols);
-        } else {
-            setSourceColumns([]);
         }
     }, [selecting, screen])
 
@@ -55,8 +57,8 @@ export default function useTableData(data, setOtherData) {
         let newCol = [];
         if (e.target.checked) {
             setColumns((prev) => {
-                const tmp =[...prev, e.target.name];
-                newCol = tmp; 
+                const tmp = [...prev, e.target.name];
+                newCol = tmp;
                 return tmp;
             });
         } else {
@@ -76,7 +78,7 @@ export default function useTableData(data, setOtherData) {
             columns: newCol
         }));
     }
-    
+
     const handleChangeSource = (e) => {
         setSource(e.target.value);
         setColumns([]);
@@ -90,9 +92,9 @@ export default function useTableData(data, setOtherData) {
         if (e.target.value != "") {
             const res = [];
             for (const col of project.databases[e.target.value].columns) {
-                if(col.type == "table") {
+                if (col.type == "table") {
                     const foreignTable = col.foreignTable;
-                    for(const i of col.columns) {
+                    for (const i of col.columns) {
                         res.push(col.name + "." + project.databases[foreignTable].columns[i].name);
                     }
                 } else {
@@ -102,7 +104,7 @@ export default function useTableData(data, setOtherData) {
             setSourceColumns(res);
         }
     }
-    
+
     const handleChangeRowNum = (e) => {
         setRowNum(e.target.value);
         setOtherData((prev) => ({

@@ -87,7 +87,6 @@ function constructForeignCols(column, tableName, pkey, pkeyType, databases, fore
 }
 
 function searchFkeyType(databases, tableName, fkey) {
-    console.log(databases, tableName)
     for (const col of databases[tableName].columns) {
         if (col.name == fkey) {
             return col.type;

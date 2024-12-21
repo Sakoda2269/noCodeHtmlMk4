@@ -88,6 +88,7 @@ function constructInit(screens) {
     screenTemplates := {
         ${res.join(",\n\t\t")}
     }
+    curScreen := "screen1"
     ${ids.join("\n\t")}
 }
 `
