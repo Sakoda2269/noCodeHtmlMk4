@@ -39,6 +39,10 @@ native channel SetWidth(wid: Str) {
 native channel SetHeight(wid: Str) {
 	in screen.widgets.{wid}.height(curHeight: Int, setHeight(nextHeight)) = nextHeight
 }
+    
+native channel OnTableChanged(wid: Str) {
+	in screen.widgets.{wid}.data(curData: Map, tableChanged(nextData)) = nextData
+}
 
 native channel MouseEvent(wid: Str) {
 	out screen.widgets.{wid}.state(curState: Int, mouseEvent(nextState)) = nextState
@@ -110,9 +114,48 @@ function constructScreen(screen) {
 }
 
 function constructWidget(widget) {
-    return (
-        `"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value)}, "y": ${parseFloat(widget.data.styles.value.top.value)}, "width": ${parseFloat(widget.data.styles.value.width.value)}, "height": ${parseFloat(widget.data.styles.value.height.value)}}`
-    )
+    if(widget.type == "table") {
+        console.log(widget)
+        const atributes = [
+            `"type": "${widget.type}"`,
+            `"text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}"`,
+            `"visible": true`,
+            `"x": ${parseFloat(widget.data.styles.value.left.value)}`,
+            `"y": ${parseFloat(widget.data.styles.value.top.value)}`,
+            `"width": ${parseFloat(widget.data.styles.value.width.value)}`,
+            `"height": ${parseFloat(widget.data.styles.value.height.value)}`
+        ];
+        const notPrimaryCols = [];
+        const forDataCols = [];
+        let primaryKeyname = "";
+        for(const col of widget.other.columns) {
+            if(col != widget.other.primaryKeyName) {
+                notPrimaryCols.push(col)
+                forDataCols.push(`"${col}": "_"`);
+            } else {
+                primaryKeyname = col;
+            }
+        }
+        const data = `{"_": {${forDataCols.join(", ")}}}`;
+        const columns = constructColumns(notPrimaryCols, 0);
+        atributes.push(`"data": ${data}`)
+        atributes.push(`"columns": ${columns}`)
+        atributes.push(`"primaryKeyName": "${primaryKeyname}"`)
+        
+        return `"${widget.data.id.value}": {${atributes.join(", ")}}`
+    } else {
+        return (
+            `"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value)}, "y": ${parseFloat(widget.data.styles.value.top.value)}, "width": ${parseFloat(widget.data.styles.value.width.value)}, "height": ${parseFloat(widget.data.styles.value.height.value)}}`
+        )
+    }
+}
+
+function constructColumns(cols, i) {
+    if(i == cols.length - 1) {
+        return `append(nil, "${cols[i]}")`
+    } else {
+        return `append(${constructColumns(cols, i + 1)}, "${cols[i]}")`
+    }
 }
 
 function constructActionChannel(screens) {
@@ -126,6 +169,9 @@ function constructActionChannel(screens) {
                 if(widget.actions.setData.target != "") {
                     res.push(constructSetData(widget, screen.title))
                 }
+            }
+            if(widget.type == "table") {
+                res.push(constructTableChannel(widget, screen.title));
             }
             if(widget.data.text.value.includes("${")) {
                 res.push(constructSendTexts(widget, screen.title));
@@ -160,8 +206,7 @@ function constructSenderChannel(channelName, wid, target, scId) {
 function extractAllContents(value) {
     const matches = value.match(/\$\{([^}]+)\}/g);  // 全ての${}をマッチ
     return matches ? matches.map(match => match.slice(2, -1)) : [];
-  }
-  
+}
 
 function constructNavigationChannel(widget, scId) {
     const wid = widget.data.id.value;
@@ -242,3 +287,24 @@ function constructSetData(widget, scId) {
     return res.join("\n");
 }
 
+function constructTableChannel(widget, scId) {
+    const source = widget.other.source;
+    const wid = widget.data.id.value;
+    const channelName = `send${capitalizeFirstLetter(source)}To${capitalizeFirstLetter(wid)}`;
+    dataSenderIds.add(scId);
+    dataSenderIds.add(wid);
+    return (
+`channel ${channelName} {
+	in ${source}(cur: Map, ${channelName}(next: Map, scId:Str, wid:Str)) = next
+	ref ${scId}(scId:Str, ${channelName}(next, scId, wid))
+	ref ${wid}(wid: Str, ${channelName}(next, scId, wid))
+	out screenTemplates.{scId}.widgets.{wid}.data(cur: Map, ${channelName}(next, scId, wid)) = next 
+}
+    
+channel ${channelName}Event(curScId: Str, wid: Str) {
+	in screenTemplates.{curScId="${scId}"}.widgets.{wid="${wid}"}.data(curData: Map, ${channelName}Event(nextData, wid)) = nextData
+	out screen.widgets.{wid}.data(curData: Map, ${channelName}Event(nextData, wid)) = nextData
+}
+`
+    )
+}

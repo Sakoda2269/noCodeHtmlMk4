@@ -84,7 +84,8 @@ export default function useTableData(data, setOtherData) {
             {
                 ...prev,
                 source: e.target.value,
-                columns: []
+                columns: [],
+                primaryKeyName: project.databases[e.target.value].primaryKey
             }
         ));
         if (e.target.value != "") {
