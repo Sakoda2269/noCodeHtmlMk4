@@ -57,8 +57,13 @@ export default function useSetDataAction(actions) {
         const states = {};
         if (e.target.value != "") {
             for (const col of project.databases[e.target.value].columns) {
-                tmp.push(col.name);
-                states[col.name] = "";
+                if(col.type == "table") {
+                    tmp.push(col.name + "." + col.relationKey);
+                    states[col.name + "." + col.relationKey] = "";
+                } else {
+                    tmp.push(col.name);
+                    states[col.name] = "";
+                }
             }
             setColumns(tmp);
             setColumnStates(states);

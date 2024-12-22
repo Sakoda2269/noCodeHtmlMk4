@@ -3,6 +3,8 @@ import { capitalizeFirstLetter } from "./useExport";
 
 const dataSenderIds = new Set()
 
+//TODO 外部テーブルのカラムの名前の統一
+
 export default function consturctUIModel(screens) {
     
     const actions = constructActionChannel(screens);
@@ -73,6 +75,12 @@ channel EventDispatch2(wid: Str) {
 	ref curScreen(curScId: Str, dispatchEvent2(curScId, wid, nextText))
 	out screenTemplates.{curScId}.widgets.{wid}.text(curText: Str, dispatchEvent2(curScId, wid, nextText)) = nextText
 }
+    
+channel OnWidgetUpdata(scId: Str, wid: Str) {
+	ref curScreen(curScId: Str, handle(curScId: Str, screen: Json, wid))
+	in screenTemplates.{scId=curScId}.widgets.{wid}(curScreen, handle(curScId, nextScreen, wid)) = nextScreen
+	out screen.widgets.{wid}(cur, handler(curScId, next, wid)) = next
+}
 
 ${actions}
 `;
@@ -130,8 +138,9 @@ function constructWidget(widget) {
         let primaryKeyname = "";
         for(const col of widget.other.columns) {
             if(col != widget.other.primaryKeyName) {
-                notPrimaryCols.push(col)
-                forDataCols.push(`"${col}": "_"`);
+                const tmp = createRefName(col);
+                notPrimaryCols.push(tmp)
+                forDataCols.push(`"${tmp}": "_"`);
             } else {
                 primaryKeyname = col;
             }
@@ -149,7 +158,6 @@ function constructWidget(widget) {
         )
     }
 }
-
 function constructColumns(cols, i) {
     if(i == cols.length - 1) {
         return `append(nil, "${cols[i]}")`
@@ -232,8 +240,9 @@ function constructSetData(widget, scId) {
     let isPkeyConst = false;
     const success = widget.actions.setData.success;
     const fail = widget.actions.setData.fail;
-    for(const key of Object.keys(datas)) {
+    for(let key of Object.keys(datas)) {
         const value = datas[key];
+        key = createRefName(key);
         const refTarget = extractAllContents(value);
         if(refTarget.length != 0) {
             dataSenderIds.add(refTarget);
@@ -301,10 +310,15 @@ function constructTableChannel(widget, scId) {
 	out screenTemplates.{scId}.widgets.{wid}.data(cur: Map, ${channelName}(next, scId, wid)) = next 
 }
     
-channel ${channelName}Event(curScId: Str, wid: Str) {
-	in screenTemplates.{curScId="${scId}"}.widgets.{wid="${wid}"}.data(curData: Map, ${channelName}Event(nextData, wid)) = nextData
-	out screen.widgets.{wid}.data(curData: Map, ${channelName}Event(nextData, wid)) = nextData
-}
 `
     )
+}
+
+function createRefName(str){
+    const splitStr = str.split(".")
+    splitStr.reverse();
+    for(let i = 1; i < splitStr.length; i++) {
+        splitStr[i] = capitalizeFirstLetter(splitStr[i]);
+    }
+    return splitStr.join("Of")
 }
