@@ -3,24 +3,30 @@ import { useEffect, useRef, useState } from "react";
 
 export default function useWebsocket() {
     const [message, setMessage] = useState("");
+    const [widgets, setWidgets] = useState([]);
     const socketRef = useRef()
     const searchParams = useSearchParams()
     const id = searchParams.get('id')
 
-    // #0.WebSocket関連の処理は副作用なので、useEffect内で実装
     useEffect(() => {
-        // #1.WebSocketオブジェクトを生成しサーバとの接続を開始
         const websocket = new WebSocket('ws://localhost:8080/ws')
         socketRef.current = websocket
 
         const onOpen = (event) => {
             console.log("ws connect!");
-            websocket.send(id);
+            websocket.send(`{"method": "connect", "id": "${id}"}`);
         }
 
-        // #2.メッセージ受信時のイベントハンドラを設定
         const onMessage = (event) => {
             setMessage(event.data)
+            console.log(event.data)
+            const message = JSON.parse(event.data);
+            console.log(message);
+            const method = message.method;
+            if(method == "updateHtml") {
+                const addWidget = message.data.add;
+                setWidgets(addWidget);
+            }
         }
         websocket.addEventListener('message', onMessage)
         websocket.addEventListener("open", onOpen);
@@ -33,12 +39,12 @@ export default function useWebsocket() {
         }
     }, []);
 
-    const sendMessage = () => {
+    const sendMessage = (message) => {
         if (socketRef.current) {
-            socketRef.current.send("hello");
+            socketRef.current.send(message);
         }
     }
 
 
-    return [message, sendMessage]
+    return [message, widgets, sendMessage]
 }

@@ -25,7 +25,7 @@ export default function useSimulation() {
             body: form
         });
         if(response.ok) {
-            router.push("/simulation?id="+id);
+            window.open("/simulation?id="+id, '_blank');
         }
     }
     
