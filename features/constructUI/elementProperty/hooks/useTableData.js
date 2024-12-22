@@ -28,6 +28,9 @@ export default function useTableData(data, setOtherData) {
                 component = component.children;
             }
         }
+        if(component.type != "table") {
+            return;
+        }
         const data = component.other
         if (data) {
             setSource(data.source ? data.source : "");
@@ -86,7 +89,8 @@ export default function useTableData(data, setOtherData) {
             {
                 ...prev,
                 source: e.target.value,
-                columns: []
+                columns: [],
+                primaryKeyName: project.databases[e.target.value].primaryKey
             }
         ));
         if (e.target.value != "") {

@@ -3,6 +3,8 @@ import { capitalizeFirstLetter } from "./useExport";
 
 const dataSenderIds = new Set()
 
+//TODO 外部テーブルのカラムの名前の統一
+
 export default function consturctUIModel(screens) {
     
     const actions = constructActionChannel(screens);
@@ -39,6 +41,10 @@ native channel SetWidth(wid: Str) {
 native channel SetHeight(wid: Str) {
 	in screen.widgets.{wid}.height(curHeight: Int, setHeight(nextHeight)) = nextHeight
 }
+    
+native channel OnTableChanged(wid: Str) {
+	in screen.widgets.{wid}.data(curData: Map, tableChanged(nextData)) = nextData
+}
 
 native channel MouseEvent(wid: Str) {
 	out screen.widgets.{wid}.state(curState: Int, mouseEvent(nextState)) = nextState
@@ -68,6 +74,12 @@ channel EventDispatch2(wid: Str) {
 	in screen.widgets.{wid}.text(curText: Str, dispatchEvent2(curScId, wid, nextText)) = nextText
 	ref curScreen(curScId: Str, dispatchEvent2(curScId, wid, nextText))
 	out screenTemplates.{curScId}.widgets.{wid}.text(curText: Str, dispatchEvent2(curScId, wid, nextText)) = nextText
+}
+    
+channel OnWidgetUpdata(scId: Str, wid: Str) {
+	ref curScreen(curScId: Str, handle(curScId: Str, screen: Json, wid))
+	in screenTemplates.{scId=curScId}.widgets.{wid}(curScreen, handle(curScId, nextScreen, wid)) = nextScreen
+	out screen.widgets.{wid}(cur, handler(curScId, next, wid)) = next
 }
 
 ${actions}
@@ -111,9 +123,48 @@ function constructScreen(screen) {
 }
 
 function constructWidget(widget) {
-    return (
-        `"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value)}, "y": ${parseFloat(widget.data.styles.value.top.value)}, "width": ${parseFloat(widget.data.styles.value.width.value)}, "height": ${parseFloat(widget.data.styles.value.height.value)}}`
-    )
+    if(widget.type == "table") {
+        console.log(widget)
+        const atributes = [
+            `"type": "${widget.type}"`,
+            `"text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}"`,
+            `"visible": true`,
+            `"x": ${parseFloat(widget.data.styles.value.left.value)}`,
+            `"y": ${parseFloat(widget.data.styles.value.top.value)}`,
+            `"width": ${parseFloat(widget.data.styles.value.width.value)}`,
+            `"height": ${parseFloat(widget.data.styles.value.height.value)}`
+        ];
+        const notPrimaryCols = [];
+        const forDataCols = [];
+        let primaryKeyname = "";
+        for(const col of widget.other.columns) {
+            if(col != widget.other.primaryKeyName) {
+                const tmp = createRefName(col);
+                notPrimaryCols.push(tmp)
+                forDataCols.push(`"${tmp}": "_"`);
+            } else {
+                primaryKeyname = col;
+            }
+        }
+        const data = `{"_": {${forDataCols.join(", ")}}}`;
+        const columns = constructColumns(notPrimaryCols, 0);
+        atributes.push(`"data": ${data}`)
+        atributes.push(`"columns": ${columns}`)
+        atributes.push(`"primaryKeyName": "${primaryKeyname}"`)
+        
+        return `"${widget.data.id.value}": {${atributes.join(", ")}}`
+    } else {
+        return (
+            `"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value)}, "y": ${parseFloat(widget.data.styles.value.top.value)}, "width": ${parseFloat(widget.data.styles.value.width.value)}, "height": ${parseFloat(widget.data.styles.value.height.value)}}`
+        )
+    }
+}
+function constructColumns(cols, i) {
+    if(i == cols.length - 1) {
+        return `append(nil, "${cols[i]}")`
+    } else {
+        return `append(${constructColumns(cols, i + 1)}, "${cols[i]}")`
+    }
 }
 
 function constructActionChannel(screens) {
@@ -127,6 +178,9 @@ function constructActionChannel(screens) {
                 if(widget.actions.setData.target != "") {
                     res.push(constructSetData(widget, screen.title))
                 }
+            }
+            if(widget.type == "table") {
+                res.push(constructTableChannel(widget, screen.title));
             }
             if(widget.data.text.value.includes("${")) {
                 res.push(constructSendTexts(widget, screen.title));
@@ -161,8 +215,7 @@ function constructSenderChannel(channelName, wid, target, scId) {
 function extractAllContents(value) {
     const matches = value.match(/\$\{([^}]+)\}/g);  // 全ての${}をマッチ
     return matches ? matches.map(match => match.slice(2, -1)) : [];
-  }
-  
+}
 
 function constructNavigationChannel(widget, scId) {
     const wid = widget.data.id.value;
@@ -188,8 +241,9 @@ function constructSetData(widget, scId) {
     let isPkeyConst = false;
     const success = widget.actions.setData.success;
     const fail = widget.actions.setData.fail;
-    for(const key of Object.keys(datas)) {
+    for(let key of Object.keys(datas)) {
         const value = datas[key];
+        key = createRefName(key);
         const refTarget = extractAllContents(value);
         if(refTarget.length != 0) {
             dataSenderIds.add(refTarget);
@@ -243,3 +297,29 @@ function constructSetData(widget, scId) {
     return res.join("\n");
 }
 
+function constructTableChannel(widget, scId) {
+    const source = widget.other.source;
+    const wid = widget.data.id.value;
+    const channelName = `send${capitalizeFirstLetter(source)}To${capitalizeFirstLetter(wid)}`;
+    dataSenderIds.add(scId);
+    dataSenderIds.add(wid);
+    return (
+`channel ${channelName} {
+	in ${source}(cur: Map, ${channelName}(next: Map, scId:Str, wid:Str)) = next
+	ref ${scId}(scId:Str, ${channelName}(next, scId, wid))
+	ref ${wid}(wid: Str, ${channelName}(next, scId, wid))
+	out screenTemplates.{scId}.widgets.{wid}.data(cur: Map, ${channelName}(next, scId, wid)) = next 
+}
+    
+`
+    )
+}
+
+function createRefName(str){
+    const splitStr = str.split(".")
+    splitStr.reverse();
+    for(let i = 1; i < splitStr.length; i++) {
+        splitStr[i] = capitalizeFirstLetter(splitStr[i]);
+    }
+    return splitStr.join("Of")
+}
