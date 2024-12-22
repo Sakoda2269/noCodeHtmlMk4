@@ -1,4 +1,4 @@
-import Project from "@/features/project/components/Project";
+import Project from "@/features/constructUI/project/components/Project";
 
 export default function Home() {
     return (
