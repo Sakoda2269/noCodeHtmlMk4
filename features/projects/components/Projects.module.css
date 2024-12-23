@@ -1,0 +1,34 @@
+.projectList {
+    border: 2px solid gray;
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.projectButton {
+    width: 100%;
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #dddddd;
+}
+
+.rowOdd {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #eeeeee;
+}
+
+.rowEven {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #dddddd;
+}
+
+.rowMouseHover {
+    padding: 10px;
+    border-radius: 10px;
+    border: none;
+    background-color: #cccccc;
+}

@@ -15,12 +15,28 @@ import Variables from "@/features/constructUI/variables/components/Variables";
 import Databases from "@/features/constructUI/databases/components/Databases";
 import { LoadingContext, SetLoadingContext } from "../contexts/loadingContext";
 import Header from "@/features/constructUI/header/component/Header";
+import { useEffect } from "react";
 
-export default function Project() {
+export default function Project({pid}) {
 
     const [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting,
         selectingContainer, setSelectingContainer, loading, setLoadin
-    ] = useProject();
+    ] = useProject(pid);
+    
+    useEffect(() => {
+        // ページを離れる前に確認するためのイベントリスナーを設定
+        const handleBeforeUnload = (event) => {
+          const message = "このページを離れますか？未保存の変更が失われる可能性があります。";
+          event.returnValue = message; // Chrome, Firefox 用
+          return message; // 古いブラウザや一部ブラウザ用
+        };
+    
+        window.addEventListener('beforeunload', handleBeforeUnload, true);
+    
+        return () => {
+          window.removeEventListener('beforeunload', handleBeforeUnload, true);
+        };
+      }, []);
 
 
     return (
@@ -36,8 +52,8 @@ export default function Project() {
             <LoadingContext.Provider value={loading}>
             <SetLoadingContext.Provider value={setLoadin}>
 
-            <Header />
-
+            <Header pid={pid}/>
+            {!loading && 
             <Sidebar>
 
                 <SideItem>
@@ -85,7 +101,8 @@ export default function Project() {
                 </RightBody>
 
             </Sidebar>
-            
+            }
+            {loading && <div>loading...</div>}
             </SetLoadingContext.Provider>
             </LoadingContext.Provider>
             </SetSelectingContainerContext.Provider>
