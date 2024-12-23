@@ -20,7 +20,7 @@ import { useEffect } from "react";
 export default function Project({pid}) {
 
     const [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting,
-        selectingContainer, setSelectingContainer, loading, setLoadin
+        selectingContainer, setSelectingContainer, loading, setLoadin, connecting
     ] = useProject(pid);
     
     useEffect(() => {
@@ -53,7 +53,7 @@ export default function Project({pid}) {
             <SetLoadingContext.Provider value={setLoadin}>
 
             <Header pid={pid}/>
-            {!loading && 
+            {!connecting && 
             <Sidebar>
 
                 <SideItem>
@@ -102,7 +102,7 @@ export default function Project({pid}) {
 
             </Sidebar>
             }
-            {loading && <div>loading...</div>}
+            {connecting && <div>loading...</div>}
             </SetLoadingContext.Provider>
             </LoadingContext.Provider>
             </SetSelectingContainerContext.Provider>
