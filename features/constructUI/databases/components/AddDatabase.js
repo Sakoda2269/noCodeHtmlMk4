@@ -17,7 +17,7 @@ export default function AddDatabas({ close, edit, name }) {
     ] = useAddDatabase(edit, name)
 
     const pad10 = { padding: "10px" };
-    const border = { border: "1px solid black" }
+    const border = { border: "1px solid black", overflowX: "auto", maxWidth: "150px", minWidth: "100px" }
 
     return (
         <div>
@@ -48,6 +48,7 @@ export default function AddDatabas({ close, edit, name }) {
                 {pageNum == 1 &&
                     <div>
                         <h3 style={pad10}>Columns</h3>
+                        <div style={{overflowX: "auto"}}>
                         <table>
                             <tbody>
                                 <tr>
@@ -61,11 +62,11 @@ export default function AddDatabas({ close, edit, name }) {
                                             </td>
                                         }
                                     })}
-                                    <td rowSpan="5" style={border}>
-                                        <div style={{paddingBottom: "10px"}}>
+                                    <td rowSpan="5" style={{border: "1px solid black"}}>
+                                        <div style={{paddingBottom: "10px", width: "100%"}}>
                                             <button className="btn btn-success" onClick={() =>{setEditCol(-1); openAddColScreen(1)}}>列を追加</button>
                                         </div>
-                                        <div>
+                                        <div style={{width: "100%", minWidth: "250px"}}>
                                             <button className="btn btn-success" onClick={() => {setEditCol(-1);openAddColScreen(2)}}>外部テーブルから列を追加</button>
                                         </div>
                                     </td>
@@ -129,6 +130,7 @@ export default function AddDatabas({ close, edit, name }) {
                                 </tr>
                             </tbody>
                         </table>
+                        </div>
                         {edit && <div style={{...pad10, textAlign: "center"}}>
                             <h4>このテーブルを削除する</h4>
                             <button className="btn btn-danger" onClick={() => deleteTable(close)}>削除</button>
