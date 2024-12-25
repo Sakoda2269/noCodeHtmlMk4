@@ -12,7 +12,8 @@ export default function useAddComponent() {
     const selectingScreen = useContext(ScreenContext);
 
     const addComponent = (type) => {
-        const screen = project.screens[selectingScreen];
+        const newProject = {...project}
+        const screen = newProject.screens[selectingScreen];
         const paths = selectingContainer.split("/");
         let container = screen.components;
         for(const path of paths) {
@@ -81,10 +82,7 @@ export default function useAddComponent() {
             }
         }
         container.push(data);
-        setProject((prevProject) => ({
-            ...prevProject,
-            [selectingScreen]: screen
-        }));
+        setProject(newProject);
     };
     return [addComponent];
 }

@@ -1,3 +1,6 @@
+const uri = process.env.NEXT_PUBLIC_SIMULATOR_URI;
+
+
 export async function POST(req) {
     try {
         // リクエストから FormData を取得
@@ -7,7 +10,7 @@ export async function POST(req) {
 
         try {
             // 外部API（http://tmp.com/api/test）への POST リクエストを送信
-            const response = await fetch('http://localhost:8080/api/open_model_text', {
+            const response = await fetch(uri + '/api/open_model_text', {
               method: 'POST',
               body: formData
             });

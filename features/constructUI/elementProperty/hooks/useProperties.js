@@ -34,7 +34,6 @@ export default function useProperties() {
         setProperties(component.data)
         setComponentType(component.type)
         setOtherData(component.other)
-        console.log(component, selecting)
     }, [project, selecting, screen]);
     
     useEffect(() => {
