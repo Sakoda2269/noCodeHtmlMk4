@@ -8,6 +8,14 @@ export default function useExport() {
     const project = useContext(ProjectContext);
 
     const exportModel = (e) => {
+        let canCreateModel = true;
+        for(screen of project.screens) {
+            canCreateModel = canCreateModel && (screen.components.length > 0)
+        }
+        if(!canCreateModel) {
+            alert("ウィジェットが一つもないスクリーンを作ることはできません")
+            return;
+        }
         const text = constructModelFile(project);
         const blob = new Blob([text], { type: "text/plain" });
         const a = document.createElement("a");
