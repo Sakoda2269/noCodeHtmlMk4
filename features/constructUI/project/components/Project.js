@@ -91,14 +91,14 @@ export default function Project({pid}) {
                     </SideBody>
                 </SideItem>
                 
-                <SideItem>
+                {/* <SideItem>
                     <SideIcon>
                         <AiOutlineFunction />
                     </SideIcon>
                     <SideBody>
                         <Variables />
                     </SideBody>
-                </SideItem>
+                </SideItem> */}
 
                 <CenterBody>
                     <Canvas />
