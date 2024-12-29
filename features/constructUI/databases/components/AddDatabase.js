@@ -24,7 +24,7 @@ export default function AddDatabas({ close, edit, name }) {
             <div className={styles.center}>
                 {pageNum == 0 &&
                     <div>
-                        <h3>Add table</h3>
+                        {edit ? <h3>Edit table</h3> : <h3>Add Table</h3>}
                         <div>
                             <div style={pad10}>
                                 <label className="form-label required">table name</label>

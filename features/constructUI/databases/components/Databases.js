@@ -12,6 +12,12 @@ export default function Databases() {
 
     return (
         <div className={styles.container}>
+            
+            <button 
+                className={styles.containerElement}
+                onClick={() => {setIsCreateDBOpen(true)}}
+            >add table</button>
+            
             <div className={styles.containerElement}>
                 {Object.entries(databases).map(([key, value]) => (
                     <div key={key} style={{width: "100%", marginBottom: "10px"}}>
@@ -21,10 +27,6 @@ export default function Databases() {
                     </div>
                 ))}
             </div>
-            <button 
-                className={styles.containerElement}
-                onClick={() => {setIsCreateDBOpen(true)}}
-            >add table</button>
             
             <Popup isOpen={isCreateDBOpen}>
                 <AddDatabas close={() => {setIsCreateDBOpen(false)}}/>
