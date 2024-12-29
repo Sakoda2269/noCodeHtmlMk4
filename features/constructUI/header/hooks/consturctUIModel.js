@@ -129,10 +129,10 @@ function constructWidget(widget) {
             `"type": "${widget.type}"`,
             `"text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}"`,
             `"visible": true`,
-            `"x": ${parseFloat(widget.data.styles.value.left.value)}`,
-            `"y": ${parseFloat(widget.data.styles.value.top.value)}`,
-            `"width": ${parseFloat(widget.data.styles.value.width.value)}`,
-            `"height": ${parseFloat(widget.data.styles.value.height.value)}`
+            `"x": ${parseFloat(widget.data.styles.value.left.value) * 1.6}`,
+            `"y": ${parseFloat(widget.data.styles.value.top.value)  * 1.6}`,
+            `"width": ${parseFloat(widget.data.styles.value.width.value) * 1.6}`,
+            `"height": ${parseFloat(widget.data.styles.value.height.value) * 1.6}`
         ];
         const notPrimaryCols = [];
         const forDataCols = [];
@@ -155,7 +155,7 @@ function constructWidget(widget) {
         return `"${widget.data.id.value}": {${atributes.join(", ")}}`
     } else {
         return (
-            `"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value)}, "y": ${parseFloat(widget.data.styles.value.top.value)}, "width": ${parseFloat(widget.data.styles.value.width.value)}, "height": ${parseFloat(widget.data.styles.value.height.value)}}`
+            `"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value) * 1.6}, "y": ${parseFloat(widget.data.styles.value.top.value) * 1.6}, "width": ${parseFloat(widget.data.styles.value.width.value) * 1.6}, "height": ${parseFloat(widget.data.styles.value.height.value)  * 1.6}}`
         )
     }
 }

@@ -8,7 +8,7 @@ import useSimulation from "../hooks/useSimulation";
 import useSaveProject from "../hooks/useSaveProject";
 import { useRouter } from "next/navigation";
 
-export default function Header({ pid }) {
+export default function Header({ pid, allHeightRef }) {
 
     const [exportModel] = useExport();
     const [sendModel] = useSimulation();
@@ -17,6 +17,7 @@ export default function Header({ pid }) {
     const router = useRouter();
 
     const back = () => {
+        console.log(allHeightRef.current.offsetHeight);
         if (!window.confirm("このページを離れますか？未保存の変更が失われる可能性があります。")) {
             // ユーザーがキャンセルを選んだ場合、遷移を防ぐ
             return;

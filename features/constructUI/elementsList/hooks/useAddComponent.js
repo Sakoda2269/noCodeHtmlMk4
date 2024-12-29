@@ -43,11 +43,15 @@ export default function useAddComponent() {
                         },
                         width: {
                             type: "string",
-                            value: "100px"
+                            value: "60px"
                         },
                         height: {
                             type: "string",
-                            value: "40px"
+                            value: "24px"
+                        },
+                        fontSize: {
+                            type: "string",
+                            value: "10px"
                         }
                     }
                 }
