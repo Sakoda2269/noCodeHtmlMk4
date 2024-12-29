@@ -70,7 +70,7 @@ export default function ElementProperty() {
 
 function ScreenProperty({ property }) {
 
-    const [propData, onChange, onFocus, onBlur] = useScreenProperty(property)
+    const [propData, onChange, onFocus, onBlur, deleteScreen, lastOne] = useScreenProperty(property)
 
     return (
         <div className={styles.propertyContainer}>
@@ -80,6 +80,9 @@ function ScreenProperty({ property }) {
             <div>
                 <input type="text" value={propData} onChange={onChange} onFocus={onFocus} onBlur={onBlur} className="form-control" />
             </div>
+            {lastOne && <div style={{paddingTop: "10px", textAlign: "center"}}>
+                <button style={{width: "80%"}} className="btn btn-danger" onClick={deleteScreen}>削除</button>
+            </div>}
         </div>
     )
 
