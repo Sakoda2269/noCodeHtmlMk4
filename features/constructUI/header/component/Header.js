@@ -28,7 +28,7 @@ export default function Header({ pid, allHeightRef }) {
     return (
         <div className={styles.header}>
             <div className={styles.left} style={{ marginLeft: "20px" }}>
-                <button className="btn" onClick={back} style={{ marginRight: "20px" }}>
+                <button className="btn" onClick={back}>
                     <IoIosArrowBack />
                 </button>
                 <button className="btn btn-secondary" onClick={saveProject}>
