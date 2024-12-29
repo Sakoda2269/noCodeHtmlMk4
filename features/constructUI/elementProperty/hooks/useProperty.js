@@ -46,7 +46,8 @@ export default function useProperty(propertyName) {
     
     const onChange = (e) => {
         const paths = selecting.split("/");
-        let component = project.screens[screen].components;
+        const newProject = {...project};
+        let component = newProject.screens[screen].components;
         for(let i = 0; i < paths.length; i++) {
             const path = paths[i];
             if (path == "") {
@@ -73,7 +74,8 @@ export default function useProperty(propertyName) {
             prop.value = value;
         }
         setProperty(value);
-        setProject({...project});
+        console.log(newProject)
+        setProject({...newProject});
     }
     
     return [property, onChange, selectOptions];

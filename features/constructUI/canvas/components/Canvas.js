@@ -17,14 +17,14 @@ export default function Canvas() {
             console.log(ref.current.offsetHeight);
         }
     }, [])
-    
-    return(
+
+    return (
         <div className={styles.all}>
             <div className={styles.canvasContaienr}>
                 <div className={styles.canvas} onClick={resetSelecting} ref={ref}>
-                    {!loading && curScreen.components.map((value, index) => (
-                        <Wrapper element={value} layout="absolute" key={index} path={`${index}`}/>
-                    ))}
+                    {!loading && curScreen.components.map((value, index) => {
+                        return <Wrapper element={{...value}} layout="absolute" key={index} path={`${index}`} />
+                    })}
                 </div>
             </div>
             <div className={styles.footer}>
