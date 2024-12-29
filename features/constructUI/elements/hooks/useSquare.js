@@ -4,6 +4,9 @@ const { useState, useEffect } = require("react");
 export default function useSquare(position, setPosition, size, setSize) {
     const [squares, setSquares] = useState();
 
+    const minW = 20;
+    const minH = 20;
+    
     useEffect(() => {
         setSquares(
             [
@@ -34,9 +37,19 @@ export default function useSquare(position, setPosition, size, setSize) {
     }
 
     const move0 = (e) => {
-        const dx = e.pageX - mousePos.x;
-        const dy = e.pageY - mousePos.y;
-        setMousePos({x: e.pageX, y: e.pageY})
+        let dx = e.pageX - mousePos.x;
+        let dy = e.pageY - mousePos.y;
+        let tmpX = e.pageX;
+        let tmpY = e.pageY;
+        if(dx > 0 && size.w < minW) {
+            dx = 0;
+            tmpX = mousePos.x;
+        }
+        if(dy > 0 && size.h < minH) {
+            dy = 0;
+            tmpY = mousePos.y;
+        }
+        setMousePos({x: tmpX, y: tmpY})
         setPosition({
             x: position.x + dx,
             y: position.y + dy
@@ -48,9 +61,19 @@ export default function useSquare(position, setPosition, size, setSize) {
 
     }
     const move1 = (e) => {
-        const dx = e.pageX - mousePos.x;
-        const dy = e.pageY - mousePos.y;
-        setMousePos({x: e.pageX, y: e.pageY})
+        let dx = e.pageX - mousePos.x;
+        let dy = e.pageY - mousePos.y;
+        let tmpX = e.pageX;
+        let tmpY = e.pageY;
+        if(dx < 0 && size.w < minW) {
+            dx = 0;
+            tmpX = mousePos.x;
+        }
+        if(dy > 0 && size.h < minH) {
+            dy = 0;
+            tmpY = mousePos.y;
+        }
+        setMousePos({x: tmpX, y: tmpY})
         setPosition({
             x: position.x,
             y: position.y + dy
@@ -61,9 +84,19 @@ export default function useSquare(position, setPosition, size, setSize) {
         })
     }
     const move2 = (e) => {
-        const dx = e.pageX - mousePos.x;
-        const dy = e.pageY - mousePos.y;
-        setMousePos({x: e.pageX, y: e.pageY})
+        let dx = e.pageX - mousePos.x;
+        let dy = e.pageY - mousePos.y;
+        let tmpX = e.pageX;
+        let tmpY = e.pageY;
+        if(dx > 0 && size.w < minW) {
+            dx = 0;
+            tmpX = mousePos.x;
+        }
+        if(dy < 0 && size.h < minH) {
+            dy = 0;
+            tmpY = mousePos.y;
+        }
+        setMousePos({x: tmpX, y: tmpY})
         setPosition({
             x: position.x + dx,
             y: position.y
@@ -74,9 +107,19 @@ export default function useSquare(position, setPosition, size, setSize) {
         })
     }
     const move3 = (e) => {
-        const dx = e.pageX - mousePos.x;
-        const dy = e.pageY - mousePos.y;
-        setMousePos({x: e.pageX, y: e.pageY})
+        let dx = e.pageX - mousePos.x;
+        let dy = e.pageY - mousePos.y;
+        let tmpx = e.pageX;
+        let tmpy = e.pageY;
+        if(dx < 0 && size.w < minW) {
+            dx = 0;
+            tmpx = mousePos.x;
+        }
+        if(dy < 0 && size.h < minH) {
+            dy = 0;
+            tmpy = mousePos.y;
+        }
+        setMousePos({x: tmpx, y: tmpy})
         setSize({
             w: size.w + dx,
             h: size.h + dy
