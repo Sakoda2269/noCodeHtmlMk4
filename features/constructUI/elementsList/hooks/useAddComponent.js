@@ -25,9 +25,6 @@ export default function useAddComponent() {
             container = container[path].children;
         }
         let id = self.crypto.randomUUID().replace(/-/g, '');
-        while(id in newProject.widgetNames) {
-            id = self.crypto.randomUUID().replace(/-/g, '');
-        }
         id = "w" + id;
         trieInsert(id);
         const data = {

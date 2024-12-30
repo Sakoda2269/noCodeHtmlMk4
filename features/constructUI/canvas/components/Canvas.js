@@ -14,7 +14,6 @@ export default function Canvas() {
     useEffect(() => {
         if (ref.current) {
             setHeight(ref.current.offsetHeight); // 高さを状態にセット
-            console.log(ref.current.offsetHeight);
         }
     }, [])
 

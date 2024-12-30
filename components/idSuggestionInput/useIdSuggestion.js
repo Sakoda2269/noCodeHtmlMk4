@@ -6,7 +6,7 @@ export default function useIdSuggestionInput(onChange, onBlur, onFocus, onKeyDow
     
     const project = useContext(ProjectContext);
     
-    const [suggestions, setSuggestions] = useState(Object.keys(project.widgetNames));
+    const [suggestions, setSuggestions] = useState([]);
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [focus, setFocus] = useState(false);
     const [trieExists, trieFindAll] = useContext(TrieFindContext);

@@ -38,7 +38,6 @@ export default function Project({pid}) {
         
         if(ref.current) {
             setHeight(ref.current.offsetHeight);
-            console.log(ref.current.offsetHeight);
         }
     
         window.addEventListener('beforeunload', handleBeforeUnload, true);
