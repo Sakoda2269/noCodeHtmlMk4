@@ -15,13 +15,16 @@ import Variables from "@/features/constructUI/variables/components/Variables";
 import Databases from "@/features/constructUI/databases/components/Databases";
 import { LoadingContext, SetLoadingContext } from "../contexts/loadingContext";
 import Header from "@/features/constructUI/header/component/Header";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export default function Project({pid}) {
 
     const [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting,
         selectingContainer, setSelectingContainer, loading, setLoadin, connecting
     ] = useProject(pid);
+    
+    const ref = useRef(null);
+    const [height, setHeight] = useState(0);
     
     useEffect(() => {
         // ページを離れる前に確認するためのイベントリスナーを設定
@@ -30,6 +33,11 @@ export default function Project({pid}) {
           event.returnValue = message; // Chrome, Firefox 用
           return message; // 古いブラウザや一部ブラウザ用
         };
+        
+        if(ref.current) {
+            setHeight(ref.current.offsetHeight);
+            console.log(ref.current.offsetHeight);
+        }
     
         window.addEventListener('beforeunload', handleBeforeUnload, true);
     
@@ -40,7 +48,7 @@ export default function Project({pid}) {
 
 
     return (
-        <div>
+        <div ref={ref}>
             <ProjectContext.Provider value={project}>
             <SetProjectContext.Provider value={setProject}>
             <ScreenContext.Provider value={currentScreenId}>
@@ -52,7 +60,7 @@ export default function Project({pid}) {
             <LoadingContext.Provider value={loading}>
             <SetLoadingContext.Provider value={setLoadin}>
 
-            <Header pid={pid}/>
+            <Header pid={pid} allHeightRef={ref}/>
             {!connecting && 
             <Sidebar>
 
@@ -83,14 +91,14 @@ export default function Project({pid}) {
                     </SideBody>
                 </SideItem>
                 
-                <SideItem>
+                {/* <SideItem>
                     <SideIcon>
                         <AiOutlineFunction />
                     </SideIcon>
                     <SideBody>
                         <Variables />
                     </SideBody>
-                </SideItem>
+                </SideItem> */}
 
                 <CenterBody>
                     <Canvas />

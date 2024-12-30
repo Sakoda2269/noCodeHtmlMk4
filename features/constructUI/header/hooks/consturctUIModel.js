@@ -1,15 +1,16 @@
+import { useContext } from "react";
 import { capitalizeFirstLetter } from "./useExport";
+import { ScreenContext } from "../../project/contexts/screenContext";
 
 
 const dataSenderIds = new Set()
 
-//TODO 外部テーブルのカラムの名前の統一
 
-export default function consturctUIModel(screens) {
+export default function consturctUIModel(screens, screen) {
     
     const actions = constructActionChannel(screens);
     
-    return constructInit(screens) + 
+    return constructInit(screens, screens[screen].title) + 
 `native channel ScreenUpdate {
 	in screen(curSc: Json, update(curSc, nextSc)) = nextSc
 }
@@ -86,7 +87,7 @@ ${actions}
 `;
 }
 
-function constructInit(screens) {
+function constructInit(screens, screenName) {
     const res = []
     for(const screen of screens) {
         res.push(constructScreen(screen));
@@ -100,7 +101,7 @@ function constructInit(screens) {
     screenTemplates := {
         ${res.join(",\n\t\t")}
     }
-    curScreen := "screen1"
+    curScreen := "${screenName}"
     ${ids.join("\n\t")}
 }
 `
@@ -129,10 +130,10 @@ function constructWidget(widget) {
             `"type": "${widget.type}"`,
             `"text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}"`,
             `"visible": true`,
-            `"x": ${parseFloat(widget.data.styles.value.left.value)}`,
-            `"y": ${parseFloat(widget.data.styles.value.top.value)}`,
-            `"width": ${parseFloat(widget.data.styles.value.width.value)}`,
-            `"height": ${parseFloat(widget.data.styles.value.height.value)}`
+            `"x": ${Math.round(parseFloat(widget.data.styles.value.left.value) * 1.6)}`,
+            `"y": ${Math.round(parseFloat(widget.data.styles.value.top.value)  * 1.6)}`,
+            `"width": ${Math.round(parseFloat(widget.data.styles.value.width.value) * 1.6)}`,
+            `"height": ${Math.round(parseFloat(widget.data.styles.value.height.value) * 1.6)}`
         ];
         const notPrimaryCols = [];
         const forDataCols = [];
@@ -155,7 +156,7 @@ function constructWidget(widget) {
         return `"${widget.data.id.value}": {${atributes.join(", ")}}`
     } else {
         return (
-            `"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${parseFloat(widget.data.styles.value.left.value)}, "y": ${parseFloat(widget.data.styles.value.top.value)}, "width": ${parseFloat(widget.data.styles.value.width.value)}, "height": ${parseFloat(widget.data.styles.value.height.value)}}`
+            `"${widget.data.id.value}": {"type": "${widget.type}", "text": "${widget.data.text.value.replace(/\$\{[^}]*\}/g, '')}", "visible": true, "x": ${Math.round(parseFloat(widget.data.styles.value.left.value) * 1.6)}, "y": ${Math.round(parseFloat(widget.data.styles.value.top.value) * 1.6)}, "width": ${Math.round(parseFloat(widget.data.styles.value.width.value) * 1.6)}, "height": ${Math.round(parseFloat(widget.data.styles.value.height.value)  * 1.6)}}`
         )
     }
 }

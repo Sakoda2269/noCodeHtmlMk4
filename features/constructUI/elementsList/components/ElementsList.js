@@ -8,7 +8,7 @@ import useAddComponent from "../hooks/useAddComponent";
 
 export default function ElementsList() {
     
-    const [elementsOpen, setElementsOpen] = useState(false);
+    const [elementsOpen, setElementsOpen] = useState(true);
     const [containersOpen, setContainersOpen] = useState(false);
 
     const [addComponent] = useAddComponent();
@@ -31,7 +31,7 @@ export default function ElementsList() {
                 </div>
             </Collapse>
             
-            <button 
+            {/* <button 
                 onClick={() => {setContainersOpen(!containersOpen)}}
                 aria-controls="container"
                 aria-expanded={containersOpen}
@@ -45,7 +45,7 @@ export default function ElementsList() {
                         >{key}</button>
                     ))}
                 </div>
-            </Collapse>
+            </Collapse> */}
                 
         </div>
     )

@@ -51,7 +51,7 @@ export default function Wrapper({ element, layout, path }) {
         <div style={{...styles, zIndex: "100"}} onClick={select}>
             <Element element={element} path={path}/>
             {isSelecting && (
-                <span>
+                <>
                 <div style={{
                     left: "-4px",
                     top:  - 4 -size.h + "px",
@@ -83,7 +83,7 @@ export default function Wrapper({ element, layout, path }) {
                     draggable>
                     </div>
                 ))}
-                </span>
+                </>
             )
             }
             
