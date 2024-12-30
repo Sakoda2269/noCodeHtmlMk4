@@ -3,6 +3,7 @@ import { ProjectContext, SetProjectContext } from "@/features/constructUI/projec
 import { ScreenContext } from "@/features/constructUI/project/contexts/screenContext";
 import { SelectingContext } from "@/features/constructUI/project/contexts/selectingContext";
 import { useContext, useEffect, useState } from "react";
+import { TrieDeleteContext, TrieFindContext, TrieInsertContext } from "../../project/contexts/trieContext";
 
 
 export default function useProperty(propertyName) {
@@ -10,9 +11,13 @@ export default function useProperty(propertyName) {
     const selecting = useContext(SelectingContext);
     const project = useContext(ProjectContext);
     const setProject = useContext(SetProjectContext);
+    const trieInsert = useContext(TrieInsertContext);
+    const trieDelete = useContext(TrieDeleteContext);
+    const [trieExists, trieFindAll] = useContext(TrieFindContext);
     const [property, setProperty] = useState("");
     const [selectOptions, setSelectOptions] = useState([]);
     const [startId, setStartId] = useState("");
+    const [wid, setWid] = useState("");
     
          
     useEffect(() => {
@@ -28,6 +33,7 @@ export default function useProperty(propertyName) {
                 component = component.children;
             }
         }
+        setWid(component.data.id.value);
         const propPaths = propertyName.split("/");
         let prop = component.data[propPaths[0]];
         for(let i = 1; i < propPaths.length; i++) {
@@ -88,7 +94,10 @@ export default function useProperty(propertyName) {
     }
     
     const onIdBlur = (e) => {
-        if(e.target.value in project.widgetNames) {
+        if(e.target.value == startId) {
+            return;
+        }
+        if(trieExists(e.target.value)) {
             alert("このidは使用されています");
             setProperty(startId);
             return;
@@ -100,9 +109,6 @@ export default function useProperty(propertyName) {
         }
         if(e.target.value == "") {
             setProperty(startId);
-            return;
-        }
-        if(e.target.value == startId) {
             return;
         }
         const paths = selecting.split("/");
@@ -133,6 +139,8 @@ export default function useProperty(propertyName) {
         }
         delete newProject.widgetNames[startId];
         newProject.widgetNames[value] = 1;
+        trieDelete(startId);
+        trieInsert(value);
         console.log(value);
         setProject({...newProject});
     }
@@ -143,6 +151,6 @@ export default function useProperty(propertyName) {
         }
     }
     
-    return [property, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown, setProperty];
+    return [property, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown, setProperty, wid];
     
 }

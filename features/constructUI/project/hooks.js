@@ -1,5 +1,6 @@
 "use client"
 
+import useTrie from "@/util/trie";
 import { useEffect, useState } from "react";
 
 export default function useProject(pid) {
@@ -15,6 +16,7 @@ export default function useProject(pid) {
     
     const [connecting, setConnecting] = useState(true);
     
+    const [trieInsert, trieDelete, autoComplete, exists] = useTrie();
     
     useEffect(() => {
         const getProject = async () => {
@@ -22,11 +24,17 @@ export default function useProject(pid) {
             const data = await res.json();
             setProject(data.project)
             setConnecting(false);
+            for(const screen of data.project.screens) {
+                for(const wid of screen.components) {
+                    trieInsert(wid.data.id.value);
+                }
+            }
         }
         getProject();
     }, [])
 
     return [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting, selectingContainer, setSelectingContainer
-        ,loading, setLoading, connecting
+        ,loading, setLoading, connecting,
+        trieInsert, trieDelete, autoComplete, exists
     ];
 }

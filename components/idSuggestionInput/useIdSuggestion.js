@@ -1,13 +1,15 @@
 import { ProjectContext } from "@/features/constructUI/project/contexts/projectContext";
+import { TrieFindContext } from "@/features/constructUI/project/contexts/trieContext";
 import { useContext, useState } from "react";
 
-export default function useIdSuggestionInput(onChange, onBlur, onFocus, value, onKeyDown, setValue) {
+export default function useIdSuggestionInput(onChange, onBlur, onFocus, onKeyDown, wid) {
     
     const project = useContext(ProjectContext);
     
     const [suggestions, setSuggestions] = useState(Object.keys(project.widgetNames));
     const [selectedIndex, setSelectedIndex] = useState(0);
     const [focus, setFocus] = useState(false);
+    const [trieExists, trieFindAll] = useContext(TrieFindContext);
     
     const handleChange = (e) => {
         if(onChange) {
@@ -15,6 +17,9 @@ export default function useIdSuggestionInput(onChange, onBlur, onFocus, value, o
         }
         if(/^\${/.test(e.target.value)) {
             setFocus(true);
+            setSuggestions(trieFindAll(e.target.value.slice(2)).filter((id => id != wid)));
+        } else {
+            setFocus(false);
         }
     }
     

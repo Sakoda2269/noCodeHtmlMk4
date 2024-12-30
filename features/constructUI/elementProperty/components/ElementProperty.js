@@ -100,7 +100,7 @@ function ScreenProperty({ property }) {
 function Property({ name, property, path }) {
 
     const [isOpen, setOpen] = useState(false);
-    const [propData, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown, setProperty] = useProperty(path);
+    const [propData, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown, setProperty, wid] = useProperty(path);
     return (
         <div className={styles.propertyContainer}>
             <div className={styles.propertyName}>
@@ -130,7 +130,7 @@ function Property({ name, property, path }) {
                         value={propData}
                         onChange={onChange}
                         onKeyDown={onKeyDown}
-                        setValue={setProperty}
+                        wid={wid}
                     /> 
                 }
                 {property.type == "integer" && 
