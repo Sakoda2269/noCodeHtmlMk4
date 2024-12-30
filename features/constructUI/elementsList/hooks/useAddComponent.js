@@ -22,7 +22,12 @@ export default function useAddComponent() {
             }
             container = container[path].children;
         }
-        const id = self.crypto.randomUUID().replace(/-/g, '');
+        let id = self.crypto.randomUUID().replace(/-/g, '');
+        while(id in newProject.widgetNames) {
+            id = self.crypto.randomUUID().replace(/-/g, '');
+        }
+        id = "w" + id;
+        newProject.widgetNames[id] = 1;
         const data = {
             type: type,
             data: {

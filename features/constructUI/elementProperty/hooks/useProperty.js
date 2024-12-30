@@ -12,7 +12,9 @@ export default function useProperty(propertyName) {
     const setProject = useContext(SetProjectContext);
     const [property, setProperty] = useState("");
     const [selectOptions, setSelectOptions] = useState([]);
-        
+    const [startId, setStartId] = useState("");
+    
+         
     useEffect(() => {
         const paths = selecting.split("/");
         let component = project.screens[screen].components;
@@ -74,10 +76,73 @@ export default function useProperty(propertyName) {
             prop.value = value;
         }
         setProperty(value);
-        console.log(newProject)
         setProject({...newProject});
     }
     
-    return [property, onChange, selectOptions];
+    const onIdFocus = (e) => {
+        setStartId(e.target.value);
+    }
+    
+    const onIdChange = (e) => {
+        setProperty(e.target.value);
+    }
+    
+    const onIdBlur = (e) => {
+        if(e.target.value in project.widgetNames) {
+            alert("このidは使用されています");
+            setProperty(startId);
+            return;
+        }
+        if(/^\d/.test(e.target.value)) {
+            alert("idの先頭を数字にすることはできません");
+            setProperty(startId);
+            return;
+        }
+        if(e.target.value == "") {
+            setProperty(startId);
+            return;
+        }
+        if(e.target.value == startId) {
+            return;
+        }
+        const paths = selecting.split("/");
+        const newProject = {...project};
+        let component = newProject.screens[screen].components;
+        for(let i = 0; i < paths.length; i++) {
+            const path = paths[i];
+            if (path == "") {
+                return;
+            }
+            component = component[path];
+            if(i != paths.length - 1) {
+                component = component.children;
+            }
+        }
+        const propPaths = propertyName.split("/");
+        let value = e.target.value;
+        value = value.replace(/[-\s\r\n]+/g, '');
+        let prop = component.data[propPaths[0]];
+        for(let i = 1; i < propPaths.length; i++) {
+            if(!prop) {
+                return;
+            }
+            prop = prop.value[propPaths[i]];
+        }
+        if(prop) {
+            prop.value = value;
+        }
+        delete newProject.widgetNames[startId];
+        newProject.widgetNames[value] = 1;
+        console.log(value);
+        setProject({...newProject});
+    }
+    
+    const onKeyDown = (e) => {
+        if(e.key == "Enter") {
+            e.target.blur();
+        }
+    }
+    
+    return [property, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown];
     
 }

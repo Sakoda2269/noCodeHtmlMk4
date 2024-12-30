@@ -97,8 +97,7 @@ function ScreenProperty({ property }) {
 function Property({ name, property, path }) {
 
     const [isOpen, setOpen] = useState(false);
-    const [propData, onChange, selectOptions] = useProperty(path);
-
+    const [propData, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown] = useProperty(path);
     return (
         <div className={styles.propertyContainer}>
             <div className={styles.propertyName}>
@@ -114,17 +113,28 @@ function Property({ name, property, path }) {
                 </button>}
             </div>
             <div>
-                {property.type == "string" &&
+                {name == "id" && 
+                    <input
+                        type="text"
+                        value={propData}
+                        onChange={onIdChange}
+                        onFocus={onIdFocus}
+                        onBlur={onIdBlur}
+                        onKeyDown={onKeyDown}
+                        className="form-control" />}
+                {name != "id" && property.type == "string" &&
                     <input
                         type="text"
                         value={propData}
                         onChange={onChange}
+                        onKeyDown={onKeyDown}
                         className="form-control" />}
                 {property.type == "integer" && 
                     <input 
                         type="number"
                         value={propData}
                         onChange={onChange}
+                        onKeyDown={onKeyDown}
                         className="form-control" />
                     }
                 {property.type == "select" && 
@@ -155,6 +165,10 @@ function Property({ name, property, path }) {
         </div>
     )
 
+}
+
+function IdProperty() {
+    
 }
 
 function ButtonActions({ actions }) {
