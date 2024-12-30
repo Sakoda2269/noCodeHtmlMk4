@@ -28,7 +28,6 @@ export default function useCreateProject() {
                 "screenNames": {
                     "screen1": 1
                 },
-                "widgetNames": {},
                 "databases": {},
             }
         }

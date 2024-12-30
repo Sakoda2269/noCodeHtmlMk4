@@ -71,7 +71,6 @@ export default function useProperties() {
             id = newComps[selecting].data.id.value;
             newComps.children.splice(paths[paths.length - 1], 1);
         }
-        delete newProject.widgetNames[id];
         trieDelete(id);
         console.log(newProject.widgetNames, id);
         setProject(newProject);

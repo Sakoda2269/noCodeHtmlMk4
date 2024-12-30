@@ -137,8 +137,6 @@ export default function useProperty(propertyName) {
         if(prop) {
             prop.value = value;
         }
-        delete newProject.widgetNames[startId];
-        newProject.widgetNames[value] = 1;
         trieDelete(startId);
         trieInsert(value);
         console.log(value);
