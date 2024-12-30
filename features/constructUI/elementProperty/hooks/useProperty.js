@@ -143,6 +143,6 @@ export default function useProperty(propertyName) {
         }
     }
     
-    return [property, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown];
+    return [property, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown, setProperty];
     
 }

@@ -11,6 +11,7 @@ import useSetDataAction from "../hooks/useSetDataAction";
 import usePopup from "../hooks/usePopup";
 import Popup from "@/components/popup/popup";
 import useTableData from "../hooks/useTableData";
+import IdSuggestionInput from "@/components/idSuggestionInput/IdSuggestionInput";
 
 export default function ElementProperty() {
 
@@ -18,16 +19,17 @@ export default function ElementProperty() {
     const [tabKey, setTabKey] = useState("properties");
 
     return (
-        <div style={{ width: "100%", height: "100%" }}>
+        <div style={{ width: "100%", height: "100%"}}>
             {selecting &&
                 <div className={styles.all}>
+                    <div style={{maxWidth: "100%"}}>
                     <Tabs
                         id="controlled-tab-example"
                         activeKey={tabKey}
                         onSelect={setTabKey}
                     >
-                        <Tab eventKey={"properties"} title="プロパティ">
-                            <div style={{ paddingTop: "10px" }}>
+                        <Tab eventKey={"properties"} title="プロパティ" style={{ width: "100%"}}>
+                            <div style={{ paddingTop: "10px"}}>
                                 <h5>Component</h5>
                                 {Object.entries(properties).map(([key, value]) => (
                                     <Property key={key} property={value} name={key} path={key} />
@@ -48,6 +50,7 @@ export default function ElementProperty() {
                             </div>
                         </Tab>
                     </Tabs>
+                    </div>
                     <button
                         className={`btn btn-danger ${styles.deleteButton}`}
                         onClick={deleteComponent}
@@ -97,7 +100,7 @@ function ScreenProperty({ property }) {
 function Property({ name, property, path }) {
 
     const [isOpen, setOpen] = useState(false);
-    const [propData, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown] = useProperty(path);
+    const [propData, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown, setProperty] = useProperty(path);
     return (
         <div className={styles.propertyContainer}>
             <div className={styles.propertyName}>
@@ -123,12 +126,13 @@ function Property({ name, property, path }) {
                         onKeyDown={onKeyDown}
                         className="form-control" />}
                 {name != "id" && property.type == "string" &&
-                    <input
-                        type="text"
+                     <IdSuggestionInput
                         value={propData}
                         onChange={onChange}
                         onKeyDown={onKeyDown}
-                        className="form-control" />}
+                        setValue={setProperty}
+                    /> 
+                }
                 {property.type == "integer" && 
                     <input 
                         type="number"
