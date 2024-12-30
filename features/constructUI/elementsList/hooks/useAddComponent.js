@@ -3,6 +3,7 @@ import { ProjectContext, SetProjectContext } from "@/features/constructUI/projec
 import { ScreenContext } from "@/features/constructUI/project/contexts/screenContext";
 import { SelectingContainerContext } from "@/features/constructUI/project/contexts/selectingContainerContext";
 import { useContext } from "react";
+import { TrieInsertContext } from "../../project/contexts/trieContext";
 
 
 export default function useAddComponent() {
@@ -10,7 +11,8 @@ export default function useAddComponent() {
     const setProject = useContext(SetProjectContext);
     const selectingContainer = useContext(SelectingContainerContext);
     const selectingScreen = useContext(ScreenContext);
-
+    const trieInsert = useContext(TrieInsertContext);
+    
     const addComponent = (type) => {
         const newProject = {...project}
         const screen = newProject.screens[selectingScreen];
@@ -22,7 +24,13 @@ export default function useAddComponent() {
             }
             container = container[path].children;
         }
-        const id = self.crypto.randomUUID().replace(/-/g, '');
+        let id = self.crypto.randomUUID().replace(/-/g, '');
+        while(id in newProject.widgetNames) {
+            id = self.crypto.randomUUID().replace(/-/g, '');
+        }
+        id = "w" + id;
+        newProject.widgetNames[id] = 1;
+        trieInsert(id);
         const data = {
             type: type,
             data: {

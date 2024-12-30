@@ -62,5 +62,6 @@
 
 .right {
     width: 20%;
+    max-width: 20%;
     height: 100%;
 }

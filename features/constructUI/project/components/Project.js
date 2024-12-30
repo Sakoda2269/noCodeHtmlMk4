@@ -16,11 +16,13 @@ import Databases from "@/features/constructUI/databases/components/Databases";
 import { LoadingContext, SetLoadingContext } from "../contexts/loadingContext";
 import Header from "@/features/constructUI/header/component/Header";
 import { useEffect, useRef, useState } from "react";
+import { TrieDeleteContext, TrieFindContext, TrieInsertContext } from "../contexts/trieContext";
 
 export default function Project({pid}) {
 
     const [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting,
-        selectingContainer, setSelectingContainer, loading, setLoadin, connecting
+        selectingContainer, setSelectingContainer, loading, setLoadin, connecting,
+        trieInsert, trieDelete, autoComplete, exists
     ] = useProject(pid);
     
     const ref = useRef(null);
@@ -59,7 +61,10 @@ export default function Project({pid}) {
             <SetSelectingContainerContext.Provider value={setSelectingContainer}>
             <LoadingContext.Provider value={loading}>
             <SetLoadingContext.Provider value={setLoadin}>
-
+            <TrieInsertContext.Provider value={trieInsert}>
+            <TrieDeleteContext.Provider value={trieDelete}>
+            <TrieFindContext.Provider value={[exists, autoComplete]}>
+                
             <Header pid={pid} allHeightRef={ref}/>
             {!connecting && 
             <Sidebar>
@@ -111,6 +116,10 @@ export default function Project({pid}) {
             </Sidebar>
             }
             {connecting && <div>loading...</div>}
+            
+            </TrieFindContext.Provider>
+            </TrieDeleteContext.Provider>
+            </TrieInsertContext.Provider>
             </SetLoadingContext.Provider>
             </LoadingContext.Provider>
             </SetSelectingContainerContext.Provider>

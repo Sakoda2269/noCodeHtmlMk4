@@ -11,6 +11,7 @@ import useSetDataAction from "../hooks/useSetDataAction";
 import usePopup from "../hooks/usePopup";
 import Popup from "@/components/popup/popup";
 import useTableData from "../hooks/useTableData";
+import IdSuggestionInput from "@/components/idSuggestionInput/IdSuggestionInput";
 
 export default function ElementProperty() {
 
@@ -18,16 +19,17 @@ export default function ElementProperty() {
     const [tabKey, setTabKey] = useState("properties");
 
     return (
-        <div style={{ width: "100%", height: "100%" }}>
+        <div style={{ width: "100%", height: "100%"}}>
             {selecting &&
                 <div className={styles.all}>
+                    <div style={{maxWidth: "100%"}}>
                     <Tabs
                         id="controlled-tab-example"
                         activeKey={tabKey}
                         onSelect={setTabKey}
                     >
-                        <Tab eventKey={"properties"} title="プロパティ">
-                            <div style={{ paddingTop: "10px" }}>
+                        <Tab eventKey={"properties"} title="プロパティ" style={{ width: "100%"}}>
+                            <div style={{ paddingTop: "10px"}}>
                                 <h5>Component</h5>
                                 {Object.entries(properties).map(([key, value]) => (
                                     <Property key={key} property={value} name={key} path={key} />
@@ -48,6 +50,7 @@ export default function ElementProperty() {
                             </div>
                         </Tab>
                     </Tabs>
+                    </div>
                     <button
                         className={`btn btn-danger ${styles.deleteButton}`}
                         onClick={deleteComponent}
@@ -70,7 +73,7 @@ export default function ElementProperty() {
 
 function ScreenProperty({ property }) {
 
-    const [propData, onChange, onFocus, onBlur, deleteScreen, lastOne] = useScreenProperty(property)
+    const [propData, onChange, onFocus, onBlur, deleteScreen, lastOne, onEnter] = useScreenProperty(property)
 
     return (
         <div className={styles.propertyContainer}>
@@ -78,7 +81,13 @@ function ScreenProperty({ property }) {
                 <label className="form-label">{property}</label>
             </div>
             <div>
-                <input type="text" value={propData} onChange={onChange} onFocus={onFocus} onBlur={onBlur} className="form-control" />
+                <input type="text" 
+                    value={propData} 
+                    onChange={onChange} 
+                    onFocus={onFocus} 
+                    onBlur={onBlur} 
+                    onKeyDown={onEnter}
+                    className="form-control" />
             </div>
             {lastOne && <div style={{paddingTop: "10px", textAlign: "center"}}>
                 <button style={{width: "80%"}} className="btn btn-danger" onClick={deleteScreen}>削除</button>
@@ -91,8 +100,7 @@ function ScreenProperty({ property }) {
 function Property({ name, property, path }) {
 
     const [isOpen, setOpen] = useState(false);
-    const [propData, onChange, selectOptions] = useProperty(path);
-
+    const [propData, onChange, selectOptions, onIdFocus, onIdChange, onIdBlur, onKeyDown, setProperty, wid] = useProperty(path);
     return (
         <div className={styles.propertyContainer}>
             <div className={styles.propertyName}>
@@ -108,17 +116,29 @@ function Property({ name, property, path }) {
                 </button>}
             </div>
             <div>
-                {property.type == "string" &&
+                {name == "id" && 
                     <input
                         type="text"
                         value={propData}
-                        onChange={onChange}
+                        onChange={onIdChange}
+                        onFocus={onIdFocus}
+                        onBlur={onIdBlur}
+                        onKeyDown={onKeyDown}
                         className="form-control" />}
+                {name != "id" && property.type == "string" &&
+                     <IdSuggestionInput
+                        value={propData}
+                        onChange={onChange}
+                        onKeyDown={onKeyDown}
+                        wid={wid}
+                    /> 
+                }
                 {property.type == "integer" && 
                     <input 
                         type="number"
                         value={propData}
                         onChange={onChange}
+                        onKeyDown={onKeyDown}
                         className="form-control" />
                     }
                 {property.type == "select" && 
@@ -149,6 +169,10 @@ function Property({ name, property, path }) {
         </div>
     )
 
+}
+
+function IdProperty() {
+    
 }
 
 function ButtonActions({ actions }) {
@@ -217,7 +241,11 @@ function SetDataAction({ actions }) {
                         {columns.map((value, index) => (
                             <div key={"columns" + index} style={pad10}>
                                 <label className="form-label">{value}</label>
-                                <input type="text" className="form-control" value={columnStates[value]} onChange={(e) => changeColumnStates(e, value)} />
+                                <IdSuggestionInput 
+                                    onChange={(e) => changeColumnStates(e, value)}
+                                    value={columnStates[value]}
+                                />
+                                {/* <input type="text" className="form-control" value={columnStates[value]} onChange={(e) => changeColumnStates(e, value)} /> */}
                             </div>
                         ))}
                         <div className="bothSideButton" style={{paddingTop: "10px"}}>

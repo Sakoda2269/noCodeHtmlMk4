@@ -23,13 +23,24 @@ export default function useScreenProperty(property) {
     }
     
     const onBlur = (e) => {
-        let tmp = e.target.value;
-        if(tmp == "") {
+        let newName = e.target.value;
+        if(newName == "") {
             setProp(startName);
         } else {
+            if(newName == startName) {
+                return;
+            }
             const newProject = {...project};
-            newProject.screens[screen][property] = tmp;
+            newProject.screens[screen][property] = newName;
+            delete newProject.screenNames[startName];
+            newProject.screenNames[newName] = 1;
             setProject(newProject)
+        }
+    }
+    
+    const onEnter = (e) => {
+        if(e.key == "Enter") {
+            e.target.blur();
         }
     }
     
@@ -43,6 +54,7 @@ export default function useScreenProperty(property) {
         setSelectingContainer("");
         const newProject = {...project};
         newProject.screens.splice(Number(screen), 1);
+        delete newProject.screenNames[screen];
         setProject(newProject);
     }
     
@@ -54,5 +66,5 @@ export default function useScreenProperty(property) {
         setLastOne(project.screens.length > 1);
     }, [project])
     
-    return [prop, onChange, onFocus, onBlur, deleteScreen, lastOne]
+    return [prop, onChange, onFocus, onBlur, deleteScreen, lastOne, onEnter]
 }
