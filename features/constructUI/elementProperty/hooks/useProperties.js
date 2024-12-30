@@ -57,15 +57,20 @@ export default function useProperties() {
     const deleteComponent = () => {
         const newProject = {...project};
         const paths = selecting.split("/");
+        let id = ""
         if(paths.length == 1) {
-          newProject.screens[screen].components.splice(selecting, 1);
+            id = newProject.screens[screen].components[selecting].data.id.value;
+            newProject.screens[screen].components.splice(selecting, 1);
         } else {
             let newComps = newProject.screens[screen].components[paths[0]];
             for(let i = 1; i < paths.length - 1; i++){
                 newComps = newComps.children[paths[i]];
             }
+            id = newComps[selecting].data.id.value;
             newComps.children.splice(paths[paths.length - 1], 1);
         }
+        delete newProject.widgetNames[id];
+        console.log(newProject.widgetNames, id);
         setProject(newProject);
         setSelecting("");
         setSelectingContainer("");
