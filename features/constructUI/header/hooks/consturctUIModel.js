@@ -1,15 +1,16 @@
+import { useContext } from "react";
 import { capitalizeFirstLetter } from "./useExport";
+import { ScreenContext } from "../../project/contexts/screenContext";
 
 
 const dataSenderIds = new Set()
 
-//TODO 外部テーブルのカラムの名前の統一
 
-export default function consturctUIModel(screens) {
+export default function consturctUIModel(screens, screen) {
     
     const actions = constructActionChannel(screens);
     
-    return constructInit(screens) + 
+    return constructInit(screens, screens[screen].title) + 
 `native channel ScreenUpdate {
 	in screen(curSc: Json, update(curSc, nextSc)) = nextSc
 }
@@ -86,7 +87,7 @@ ${actions}
 `;
 }
 
-function constructInit(screens) {
+function constructInit(screens, screenName) {
     const res = []
     for(const screen of screens) {
         res.push(constructScreen(screen));
@@ -100,7 +101,7 @@ function constructInit(screens) {
     screenTemplates := {
         ${res.join(",\n\t\t")}
     }
-    curScreen := "screen1"
+    curScreen := "${screenName}"
     ${ids.join("\n\t")}
 }
 `

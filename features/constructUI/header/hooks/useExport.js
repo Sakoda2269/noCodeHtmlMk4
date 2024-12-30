@@ -2,21 +2,23 @@ import { ProjectContext } from "@/features/constructUI/project/contexts/projectC
 import { useContext } from "react";
 import constructDatabaseModel from "./constructDatabases";
 import consturctUIModel from "./consturctUIModel";
+import { ScreenContext } from "../../project/contexts/screenContext";
 
 export default function useExport() {
 
     const project = useContext(ProjectContext);
-
+    const screen = useContext(ScreenContext);
+    
     const exportModel = (e) => {
         let canCreateModel = true;
-        for(screen of project.screens) {
-            canCreateModel = canCreateModel && (screen.components.length > 0)
+        for(const scr of project.screens) {
+            canCreateModel = canCreateModel && (scr.components.length > 0)
         }
         if(!canCreateModel) {
             alert("ウィジェットが一つもないスクリーンを作ることはできません")
             return;
         }
-        const text = constructModelFile(project);
+        const text = constructModelFile(project, screen);
         const blob = new Blob([text], { type: "text/plain" });
         const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
@@ -33,9 +35,9 @@ export default function useExport() {
 
 }
 
-export function constructModelFile(project) {
+export function constructModelFile(project, screen) {
 
-    const ui = consturctUIModel(project.screens);
+    const ui = consturctUIModel(project.screens, screen);
     const databases = constructDatabaseModel(project.databases);
 
     return ui + "\n" + databases;
