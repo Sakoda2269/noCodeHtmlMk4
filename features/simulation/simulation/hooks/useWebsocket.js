@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from "react";
 
 export default function useWebsocket() {
     const [message, setMessage] = useState("");
-    const [widgets, setWidgets] = useState([]);
+    const [widgets, setWidgets] = useState({});
     const socketRef = useRef()
     const searchParams = useSearchParams()
     const id = searchParams.get('id')
@@ -24,8 +24,18 @@ export default function useWebsocket() {
             console.log(message);
             const method = message.method;
             if(method == "updateHtml") {
-                const addWidget = message.data.add;
-                setWidgets(addWidget);
+                const addWidgets = message.data.add;
+                const widgets = {};
+                for(const widget of addWidgets) {
+                    widgets[widget.id] = widget;
+                }
+                console.log(widgets)
+                setWidgets(widgets);
+            }else if(method == "changeText") {
+                setWidgets((prev) => {
+                    prev[message.id].text = message.datas.newText;
+                    return {...prev};
+                })
             }
         }
         websocket.addEventListener('message', onMessage)
