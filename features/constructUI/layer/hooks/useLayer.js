@@ -15,7 +15,15 @@ export default function useLayer() {
     
     
     const addScreen = () => {
-        const name = "screen" + (project.screens.length + 1);
+        const screenNames = project.screenNames;
+        let i = 1;
+        let name = "screen" + (project.screens.length + 1);
+        console.log(screenNames)
+        while(name in screenNames) {
+            i += 1;
+            name = "screen" + (project.screens.length + i);
+        }
+        screenNames[name] = 1;
         setProject({
             ...project, 
             ["screens"]: [
@@ -24,7 +32,8 @@ export default function useLayer() {
                     title: name,
                     components: []
                 }
-            ]
+            ],
+            ["screenNames"]: screenNames
         })
     }
 

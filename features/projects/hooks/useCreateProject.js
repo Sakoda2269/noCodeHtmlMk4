@@ -25,6 +25,10 @@ export default function useCreateProject() {
                         components: []
                     }
                 ],
+                "screenNames": {
+                    "screen1": 1
+                },
+                "widgetNames": {},
                 "databases": {},
             }
         }
