@@ -241,7 +241,11 @@ function SetDataAction({ actions }) {
                         {columns.map((value, index) => (
                             <div key={"columns" + index} style={pad10}>
                                 <label className="form-label">{value}</label>
-                                <input type="text" className="form-control" value={columnStates[value]} onChange={(e) => changeColumnStates(e, value)} />
+                                <IdSuggestionInput 
+                                    onChange={(e) => changeColumnStates(e, value)}
+                                    value={columnStates[value]}
+                                />
+                                {/* <input type="text" className="form-control" value={columnStates[value]} onChange={(e) => changeColumnStates(e, value)} /> */}
                             </div>
                         ))}
                         <div className="bothSideButton" style={{paddingTop: "10px"}}>
