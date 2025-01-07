@@ -3,11 +3,11 @@ import { capitalizeFirstLetter } from "./useExport";
 import { ScreenContext } from "../../project/contexts/screenContext";
 
 
-const dataSenderIds = new Set()
+const dataSenderIds = new Set();
 
 
 export default function consturctUIModel(screens, screen) {
-    
+    dataSenderIds = new Set();
     const actions = constructActionChannel(screens);
     
     return constructInit(screens, screens[screen].title) + 
