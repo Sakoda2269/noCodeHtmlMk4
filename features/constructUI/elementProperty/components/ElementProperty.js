@@ -22,7 +22,7 @@ export default function ElementProperty() {
         <div style={{ width: "100%", height: "100%"}}>
             {selecting &&
                 <div className={styles.all}>
-                    <div style={{maxWidth: "100%"}}>
+                    <div style={{maxWidth: "100%", width: "100%"}}>
                     <Tabs
                         id="controlled-tab-example"
                         activeKey={tabKey}
