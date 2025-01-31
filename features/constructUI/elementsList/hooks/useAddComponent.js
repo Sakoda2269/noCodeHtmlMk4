@@ -78,6 +78,18 @@ export default function useAddComponent() {
                     "success": "",
                     "fail": ""
                 },
+                "updateData": {
+                    "target": "",
+                    "datas": {},
+                    "success": "",
+                    "fail": ""
+                },
+                "deleteData": {
+                    "target": "",
+                    "datas": {},
+                    "success": "",
+                    "fail": ""
+                },
                 "getData": {}
             }
         }
