@@ -179,10 +179,10 @@ function constructActionChannel(screens) {
                 if(widget.actions.setData.target != "") {
                     res.push(constructSetData(widget, screen.title))
                 }
-                if(widget.actions.updateData.target != "") {
+                if((widget.actions.updateData?.target ?? "") != "") {
                     res.push(constructUpdateData(widget, screen.title))
                 }
-                if(widget.actions.deleteData.target != "") {
+                if((widget.actions.deleteData?.target ?? "") != "") {
                     res.push(constructDeleteData(widget, screen.title))
                 }
             }
