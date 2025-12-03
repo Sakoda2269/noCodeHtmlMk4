@@ -19,6 +19,7 @@ export async function POST(req) {
               return new Response(JSON.stringify({ message: 'データが正常に送信されました' }), { status: 200 });
             } else {
               console.error('APIリクエストに失敗しました');
+              console.log(response)
               return new Response(JSON.stringify({ message: 'APIリクエストに失敗しました' }), { status: response.status });
             }
           } catch (error) {

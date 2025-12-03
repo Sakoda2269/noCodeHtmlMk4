@@ -14,6 +14,7 @@ import useTableData from "../hooks/useTableData";
 import IdSuggestionInput from "@/components/idSuggestionInput/IdSuggestionInput";
 import useUpdateDataAction from "../hooks/useUpdateDataAction";
 import useDeleteDataAction from "../hooks/useDeleteDataAction";
+import { useSearchDataAction } from "../hooks/useSearchDataAction";
 
 export default function ElementProperty() {
 
@@ -186,6 +187,7 @@ function ButtonActions({ actions }) {
             <SetDataAction actions={actions} />
             <UpdateDataAction actions={actions} />
             <DeleteDataAction actions={actions} />
+            <SerachAction actions={actions} />
         </div>
     )
 }
@@ -428,6 +430,64 @@ function DeleteDataAction({actions}) {
                         <div className="bothSideButton" style={{paddingTop: "10px"}}>
                             <button className="btn btn-secondary" onClick={prevPage}>戻る</button>
                             <button className="btn btn-primary" onClick={() => {confirm();setIsOpen(false);prevPage();}}>決定</button>
+                        </div>
+                    </div>
+                }
+            </Popup>
+        </div>
+    )
+}
+
+function SerachAction({actions}) {
+    const [
+        databases, selectedDatabase, onChangeDatabases, columns, columnStates, changeColumnStates,
+        screens, confirm
+    ] = useSearchDataAction(actions);
+    const [isOpen, setIsOpen, pageNum, nextPage, prevPage] = usePopup();
+    const pad10 = { padding: "3px" }
+
+    return (
+        <div>
+            <div className={styles.propertyName}>
+                <h6>search data</h6>
+            </div>
+            <div>
+                <button className="btn btn-secondary" onClick={() => setIsOpen(true)}>設定</button>
+            </div>
+            <Popup isOpen={isOpen}>
+                {pageNum == 0 &&
+                    <div style={{ width: "100%" }}>
+                        <div style={{ width: "100%" }}>
+                            <label className="form-label">table</label>
+                            <select className="form-select" value={selectedDatabase} onChange={onChangeDatabases}>
+                                <option value="">なし</option>
+                                {databases.map((value, index) => (
+                                    <option value={value} key={"setDb" + index}>{value}</option>
+                                ))}
+                            </select>
+                            {columns.map((value, index) => (
+                                <div key={"columns" + index} style={pad10}>
+                                    <label className="form-label">{value}</label>
+                                    <input type="checkbox" value={value}/>
+                                    <IdSuggestionInput 
+                                        onChange={(e) => changeColumnStates(e, value)}
+                                        value={columnStates[value]}
+                                    />
+                                    {/* <input type="text" className="form-control" value={columnStates[value]} onChange={(e) => changeColumnStates(e, value)} /> */}
+                                </div>
+                            ))}
+                        </div>
+                        <div className="bothSideButton" style={{paddingTop: "10px"}}>
+                            <button className="btn btn-secondary" onClick={() => setIsOpen(false)}>閉じる</button>
+                            <button className="btn btn-primary" onClick={nextPage}>次へ</button>
+                        </div>
+                    </div>
+                }
+                {pageNum == 1 && 
+                    <div style={{width: "100%"}}>
+                        <div className="bothSideButton" style={{paddingTop: "10px"}}>
+                            <button className="btn btn-secondary" onClick={prevPage}>戻る</button>
+                            <button className="btn btn-primary" onClick={() => {setIsOpen(false);prevPage();}}>決定</button>
                         </div>
                     </div>
                 }

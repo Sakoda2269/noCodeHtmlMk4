@@ -78,6 +78,12 @@ export default function useAddComponent() {
                     "success": "",
                     "fail": ""
                 },
+                "searchData": {
+                    "target": "",
+                    "datas": {},
+                    "success": "",
+                    "fail": ""
+                },
                 "updateData": {
                     "target": "",
                     "datas": {},
