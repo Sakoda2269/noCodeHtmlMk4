@@ -9,11 +9,11 @@ export default function useDeleteDataAction(actions) {
     const selectingScreen = useContext(ScreenContext);
     const selecting = useContext(SelectingContext);
 
-    const [selectedDatabase, setSelectedDatabase] = useState(actions.deleteData.target);
-    const [columns, setColumns] = useState(Object.keys(actions.deleteData.datas));
-    const [columnStates, setColumnStates] = useState(actions.deleteData.datas);
-    const [successNavigation, setSuccessNavigation] = useState(actions.deleteData.success);
-    const [fialNavigation, setFailNavigation] = useState(actions.deleteData.fail);
+    const [selectedDatabase, setSelectedDatabase] = useState(actions.deleteData?.target ?? "");
+    const [columns, setColumns] = useState(Object.keys(actions.deleteData?.datas ?? {}));
+    const [columnStates, setColumnStates] = useState(actions.deleteData?.datas ?? "");
+    const [successNavigation, setSuccessNavigation] = useState(actions.deleteData?.success ?? "");
+    const [fialNavigation, setFailNavigation] = useState(actions.deleteData?.fail ?? "");
     
     const databases = Object.keys(project.databases);
     const screens = [];
@@ -35,11 +35,11 @@ export default function useDeleteDataAction(actions) {
             }
         }
         if (component.type == "button") {
-            setSelectedDatabase(component.actions.deleteData.target);
-            setColumns(Object.keys(component.actions.deleteData.datas));
-            setColumnStates(component.actions.deleteData.datas);
-            setSuccessNavigation(component.actions.deleteData.success);
-            setFailNavigation(component.actions.deleteData.fail);
+            setSelectedDatabase(component.actions.deleteData?.target ?? "");
+            setColumns(Object.keys(component.actions.deleteData?.datas ?? {}));
+            setColumnStates(component.actions.deleteData?.datas ?? "");
+            setSuccessNavigation(component.actions.deleteData?.success ?? "");
+            setFailNavigation(component.actions.deleteData?.fail ?? "");
         }
         
     }, [project, selecting])

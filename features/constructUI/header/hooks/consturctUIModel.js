@@ -3,11 +3,11 @@ import { capitalizeFirstLetter } from "./useExport";
 import { ScreenContext } from "../../project/contexts/screenContext";
 
 
-const dataSenderIds = new Set()
+let dataSenderIds = new Set();
 
 
 export default function consturctUIModel(screens, screen) {
-    
+    dataSenderIds = new Set();
     const actions = constructActionChannel(screens);
     
     return constructInit(screens, screens[screen].title) + 
@@ -179,10 +179,10 @@ function constructActionChannel(screens) {
                 if(widget.actions.setData.target != "") {
                     res.push(constructSetData(widget, screen.title))
                 }
-                if(widget.actions.updateData.target != "") {
+                if((widget.actions.updateData?.target ?? "") != "") {
                     res.push(constructUpdateData(widget, screen.title))
                 }
-                if(widget.actions.deleteData.target != "") {
+                if((widget.actions.deleteData?.target ?? "") != "") {
                     res.push(constructDeleteData(widget, screen.title))
                 }
             }

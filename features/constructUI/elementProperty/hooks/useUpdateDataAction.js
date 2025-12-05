@@ -9,11 +9,11 @@ export default function useUpdateDataAction(actions) {
     const selectingScreen = useContext(ScreenContext);
     const selecting = useContext(SelectingContext);
 
-    const [selectedDatabase, setSelectedDatabase] = useState(actions.updateData.target);
-    const [columns, setColumns] = useState(Object.keys(actions.updateData.datas));
-    const [columnStates, setColumnStates] = useState(actions.updateData.datas);
-    const [successNavigation, setSuccessNavigation] = useState(actions.updateData.success);
-    const [fialNavigation, setFailNavigation] = useState(actions.updateData.fail);
+    const [selectedDatabase, setSelectedDatabase] = useState(actions.updateData?.target ?? "");
+    const [columns, setColumns] = useState(Object.keys(actions.updateData?.datas ?? {}));
+    const [columnStates, setColumnStates] = useState(actions.updateData?.datas ?? "");
+    const [successNavigation, setSuccessNavigation] = useState(actions.updateData?.success ?? "");
+    const [fialNavigation, setFailNavigation] = useState(actions.updateData?.fail ?? "");
     
     const databases = Object.keys(project.databases);
     const screens = [];
@@ -35,11 +35,11 @@ export default function useUpdateDataAction(actions) {
             }
         }
         if (component.type == "button") {
-            setSelectedDatabase(component.actions.updateData.target);
-            setColumns(Object.keys(component.actions.updateData.datas));
-            setColumnStates(component.actions.updateData.datas);
-            setSuccessNavigation(component.actions.updateData.success);
-            setFailNavigation(component.actions.updateData.fail);
+            setSelectedDatabase(component.actions.updateData?.target ?? "");
+            setColumns(Object.keys(component.actions.updateData?.datas ?? {}));
+            setColumnStates(component.actions.updateData?.datas ?? "");
+            setSuccessNavigation(component.actions.updateData?.success ?? "");
+            setFailNavigation(component.actions.updateData?.fail ?? "");
         }
         
     }, [project, selecting])
