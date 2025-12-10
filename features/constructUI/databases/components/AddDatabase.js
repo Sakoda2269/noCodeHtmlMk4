@@ -9,7 +9,7 @@ import usePageControl from "../hooks/usePageControl";
 export default function AddDatabas({ close, edit, name }) {
 
     const [pageNum, setPageNum, nextPage, prevPage] = usePageControl();
-    
+
     const [
         tableName, setTableName, url, setUrl, user, setUser, password, setPassword,
         createColOpen, setCreateColOpen, addColType, openAddColScreen,
@@ -48,90 +48,94 @@ export default function AddDatabas({ close, edit, name }) {
                 {pageNum == 1 &&
                     <div>
                         <h3 style={pad10}>Columns</h3>
-                        <div style={{overflowX: "auto"}}>
-                        <table>
-                            <tbody>
-                                <tr>
-                                    <th>primary key</th>
-                                    {columns.map((value, index) => {
-                                        if(value.type == "table") {
-                                            return <td colSpan={value.columns.length} key={"prim" + index} style={border}></td>
-                                        } else {
-                                            return <td key={"prim" + index} style={border}>
-                                                <input type="radio" value={value.name} checked={primaryKey == value.name} onChange={(e) => {setPrimaryKey(e.target.value)}}/>
-                                            </td>
-                                        }
-                                    })}
-                                    <td rowSpan="5" style={{border: "1px solid black"}}>
-                                        <div style={{paddingBottom: "10px", width: "100%"}}>
-                                            <button className="btn btn-success" onClick={() =>{setEditCol(-1); openAddColScreen(1)}}>列を追加</button>
-                                        </div>
-                                        <div style={{width: "100%", minWidth: "250px"}}>
-                                            <button className="btn btn-success" onClick={() => {setEditCol(-1);openAddColScreen(2)}}>外部テーブルから列を追加</button>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th rowSpan="2" style={border}>name</th>
-                                    {columns.map((value, index) => {
-                                        if (value.type == "table") {
-                                            return <td key={"a"+index} colSpan={value.columns.length} style={border}>
-                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {setEditCol(index); openAddColScreen(2)}}>
-                                                    {value.name} <b>from</b> {value.foreignTable}
-                                                </button>
-                                            </td>
-                                        } else {
-                                            return <td key={"a"+index} rowSpan="2" style={border}>
-                                                <button className="btn" style={{width: "100%", height: "100%"}} onClick={() => {setEditCol(index);openAddColScreen(1)}}>{value.name}</button>
-                                            </td>
-                                        }
-                                    })}
-                                </tr>
-                                <tr>
-                                    {columns.map((value, index) => {
-                                        if (value.type == "table") {
-                                            return (
-                                                <React.Fragment key={"e"+index}>
-                                                    {value.columns.map((v, index) => (
-                                                        <td key={"b"+index} style={border}>{project.databases[value.foreignTable].columns[v].name}</td>
-                                                    ))}
-                                                </React.Fragment>
-                                            )
-                                        } else {
-                                            return;
-                                        }
-                                    })}
-                                </tr>
-                                <tr>
-                                    <th style={border}>type</th>
-                                    {columns.map((value, index) => {
-                                        if (value.type == "table") {
-                                            return (
-                                                <React.Fragment key={"e"+index}>
-                                                    {value.columns.map((v, index) => (
-                                                        <td key={"b"+index} style={border}>{project.databases[value.foreignTable].columns[v].type}</td>
-                                                    ))}
-                                                </React.Fragment>
-                                            )
-                                        } else {
-                                            return <td key={"c"+index} style={border}>{value.type}</td>
-                                        }
-                                    })}
-                                </tr>
-                                <tr>
-                                    <th style={border}>relation key</th>
-                                    {columns.map((value, index) => {
-                                        if (value.type == "table") {
-                                            return <td key={"d" + index} colSpan={value.columns.length} style={border}>{value.foreignTable}.{value.relationKey}</td>
-                                        } else {
-                                            return <td key={"d" + index} style={border}></td>;
-                                        }
-                                    })}
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div style={{ overflowX: "auto" }}>
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>primary key</th>
+                                        {columns.map((value, index) => {
+                                            if (value.type == "table") {
+                                                return <td colSpan={value.columns.length} key={"prim" + index} style={border}></td>
+                                            } else {
+                                                return <td key={"prim" + index} style={border}>
+                                                    <input type="radio" value={value.name} checked={primaryKey == value.name} onChange={(e) => { setPrimaryKey(e.target.value) }} />
+                                                </td>
+                                            }
+                                        })}
+                                        <td rowSpan="5" style={{ border: "1px solid black" }}>
+                                            <div style={{ paddingBottom: "10px", width: "100%" }}>
+                                                <button className="btn btn-success" onClick={() => { setEditCol(-1); openAddColScreen(1) }}>列を追加</button>
+                                            </div>
+                                            <div style={{ width: "100%", minWidth: "250px" }}>
+                                                <button className="btn btn-success" onClick={() => { setEditCol(-1); openAddColScreen(2) }}>外部テーブルから列を追加</button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <th rowSpan="2" style={border}>name</th>
+                                        {columns.map((value, index) => {
+                                            if (value.type == "table") {
+                                                return (
+                                                    <td key={"a" + index} colSpan={value.columns.length} style={border}>
+                                                        <button className="btn" style={{ width: "100%", height: "100%" }} onClick={() => { setEditCol(index); openAddColScreen(2) }}>
+                                                            {value.name} <b>from</b> {value.foreignTable}
+                                                        </button>
+                                                    </td>
+                                                )
+                                            } else {
+                                                return (
+                                                    <td key={"a" + index} rowSpan="2" style={border}>
+                                                        <button className="btn" style={{ width: "100%", height: "100%" }} onClick={() => { setEditCol(index); openAddColScreen(1) }}>{value.name}</button>
+                                                    </td>
+                                                )
+                                            }
+                                        })}
+                                    </tr>
+                                    <tr>
+                                        {columns.map((value, index) => {
+                                            if (value.type == "table") {
+                                                return (
+                                                    <React.Fragment key={"e" + index}>
+                                                        {value.columns.map((v, index) => (
+                                                            <td key={"b" + index} style={border}>{project.databases[value.foreignTable].columns[v].name}</td>
+                                                        ))}
+                                                    </React.Fragment>
+                                                )
+                                            } else {
+                                                return;
+                                            }
+                                        })}
+                                    </tr>
+                                    <tr>
+                                        <th style={border}>type</th>
+                                        {columns.map((value, index) => {
+                                            if (value.type == "table") {
+                                                return (
+                                                    <React.Fragment key={"e" + index}>
+                                                        {value.columns.map((v, index) => (
+                                                            <td key={"b" + index} style={border}>{project.databases[value.foreignTable].columns[v].type}</td>
+                                                        ))}
+                                                    </React.Fragment>
+                                                )
+                                            } else {
+                                                return <td key={"c" + index} style={border}>{value.type}</td>
+                                            }
+                                        })}
+                                    </tr>
+                                    <tr>
+                                        <th style={border}>relation key</th>
+                                        {columns.map((value, index) => {
+                                            if (value.type == "table") {
+                                                return <td key={"d" + index} colSpan={value.columns.length} style={border}>{value.foreignTable}.{value.relationKey}</td>
+                                            } else {
+                                                return <td key={"d" + index} style={border}></td>;
+                                            }
+                                        })}
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
-                        {edit && <div style={{...pad10, textAlign: "center"}}>
+                        {edit && <div style={{ ...pad10, textAlign: "center" }}>
                             <h4>このテーブルを削除する</h4>
                             <button className="btn btn-danger" onClick={() => deleteTable(close)}>削除</button>
                         </div>}
@@ -145,18 +149,18 @@ export default function AddDatabas({ close, edit, name }) {
             </div>
             <div className={styles.buttonContainer}>
                 <button className="btn btn-secondary" onClick={[prevPage, close][1 * (pageNum == 0)]}>{["戻る", "閉じる"][1 * (pageNum == 0)]}</button>
-                <button className="btn btn-primary" onClick={[() => {if(tableName=="")alert("必須項目を入力してください");else nextPage()}, () => {confirm(close);}][1 * (pageNum == 1)]}>{["次へ", "決定"][1 * (pageNum == 1)]}</button>
+                <button className="btn btn-primary" onClick={[() => { if (tableName == "") alert("必須項目を入力してください"); else nextPage() }, () => { confirm(close); }][1 * (pageNum == 1)]}>{["次へ", "決定"][1 * (pageNum == 1)]}</button>
             </div>
             <Popup isOpen={createColOpen}>
-                {addColType == 1 && 
-                    <AddNormalColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} 
-                    type={addColType} edit={editCol}
-                    pkey={primaryKey}
+                {addColType == 1 &&
+                    <AddNormalColumns close={() => { setCreateColOpen(false) }} columns={columns} setColumns={setColumns}
+                        type={addColType} edit={editCol}
+                        pkey={primaryKey}
                     />
                 }
                 {addColType == 2 &&
-                    <AddForeignColumns close={() => {setCreateColOpen(false)}} columns={columns} setColumns={setColumns} 
-                    type={addColType} edit={editCol} tableName={tableName}/>
+                    <AddForeignColumns close={() => { setCreateColOpen(false) }} columns={columns} setColumns={setColumns}
+                        type={addColType} edit={editCol} tableName={tableName} />
                 }
             </Popup>
         </div>

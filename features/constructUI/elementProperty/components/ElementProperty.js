@@ -441,7 +441,7 @@ function DeleteDataAction({actions}) {
 function SerachAction({actions}) {
     const [
         databases, selectedDatabase, onChangeDatabases, columns, columnStates, changeColumnStates,
-        screens, confirm
+        screens, confirm, onSelectColumn, selectedColumns, targetWidget, setTargetWidget
     ] = useSearchDataAction(actions);
     const [isOpen, setIsOpen, pageNum, nextPage, prevPage] = usePopup();
     const pad10 = { padding: "3px" }
@@ -468,7 +468,11 @@ function SerachAction({actions}) {
                             {columns.map((value, index) => (
                                 <div key={"columns" + index} style={pad10}>
                                     <label className="form-label">{value}</label>
-                                    <input type="checkbox" value={value}/>
+                                    <input type="checkbox"
+                                        value={value}
+                                        checked={selectedColumns.includes(value)}
+                                        onChange={onSelectColumn}
+                                    />
                                     <IdSuggestionInput 
                                         onChange={(e) => changeColumnStates(e, value)}
                                         value={columnStates[value]}
@@ -485,9 +489,16 @@ function SerachAction({actions}) {
                 }
                 {pageNum == 1 && 
                     <div style={{width: "100%"}}>
+                        <div>
+                                <label>宛先ウィジェット</label>
+                                <IdSuggestionInput 
+                                    onChange={(e) => setTargetWidget(e.target.value)}
+                                    value={targetWidget}
+                                />
+                            </div>
                         <div className="bothSideButton" style={{paddingTop: "10px"}}>
                             <button className="btn btn-secondary" onClick={prevPage}>戻る</button>
-                            <button className="btn btn-primary" onClick={() => {setIsOpen(false);prevPage();}}>決定</button>
+                            <button className="btn btn-primary" onClick={() => {confirm();setIsOpen(false);prevPage();}}>決定</button>
                         </div>
                     </div>
                 }

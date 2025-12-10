@@ -80,9 +80,10 @@ export default function useAddComponent() {
                 },
                 "searchData": {
                     "target": "",
-                    "datas": {},
-                    "success": "",
-                    "fail": ""
+                    "datas": {
+                        selectedColumns: {},
+                        pkey: ""
+                    },
                 },
                 "updateData": {
                     "target": "",
@@ -92,7 +93,8 @@ export default function useAddComponent() {
                 },
                 "deleteData": {
                     "target": "",
-                    "datas": {},
+                    "datas": {
+                    },
                     "success": "",
                     "fail": ""
                 },
