@@ -185,6 +185,9 @@ function constructActionChannel(screens) {
                 if((widget.actions.deleteData?.target ?? "") != "") {
                     res.push(constructDeleteData(widget, screen.title))
                 }
+                if ((widget.action.searchData?.target ?? "") != "") {
+                    res.push(constructSearchChannel(widget, screen.title))
+                }
             }
             if(widget.type == "table") {
                 res.push(constructTableChannel(widget, screen.title));
@@ -440,6 +443,13 @@ function constructDeleteData(widget, scId) {
     return res.join("\n");
 }
 
+function constructSearchChannel(widget, scId) {
+    const wid = widget.data.id.value;
+    const targetTable = widget.action.searchData.target;
+    var searchKey = Object.keys(widget.action.searchData.data.selectedColumns).map((k) => capitalizeFirstLetter(k)).join("And");
+    const channelName = `search${capitalizeFirstLetter(targetTable)}By${searchKey}`
+}
+
 function constructTableChannel(widget, scId) {
     const source = widget.other.source;
     const wid = widget.data.id.value;
@@ -457,6 +467,8 @@ function constructTableChannel(widget, scId) {
 `
     )
 }
+
+
 
 function createRefName(str){
     const splitStr = str.split(".")
