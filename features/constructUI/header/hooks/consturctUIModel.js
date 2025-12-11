@@ -448,6 +448,11 @@ function constructSearchChannel(widget, scId) {
     const targetTable = widget.action.searchData.target;
     var searchKey = Object.keys(widget.action.searchData.data.selectedColumns).map((k) => capitalizeFirstLetter(k)).join("And");
     const channelName = `search${capitalizeFirstLetter(targetTable)}By${searchKey}`
+    const res = [
+        `channel ${channelName}(scId: Str, wid: Str){`,
+        `\tin screenTemplates.{scId="${scId}"}.widgets.{wid="${wid}"}.state(curState, ${message}) = nextState`
+    ]
+
 }
 
 function constructTableChannel(widget, scId) {
