@@ -185,7 +185,7 @@ function constructActionChannel(screens) {
                 if((widget.actions.deleteData?.target ?? "") != "") {
                     res.push(constructDeleteData(widget, screen.title))
                 }
-                if ((widget.action.searchData?.target ?? "") != "") {
+                if ((widget.actions.searchData?.target ?? "") != "") {
                     res.push(constructSearchChannel(widget, screen.title))
                 }
             }
@@ -445,13 +445,35 @@ function constructDeleteData(widget, scId) {
 
 function constructSearchChannel(widget, scId) {
     const wid = widget.data.id.value;
-    const targetTable = widget.action.searchData.target;
-    var searchKey = Object.keys(widget.action.searchData.data.selectedColumns).map((k) => capitalizeFirstLetter(k)).join("And");
-    const channelName = `search${capitalizeFirstLetter(targetTable)}By${searchKey}`
+    console.log(widget.actions.searchData)
+    dataSenderIds.add(wid)
+    const targetDB = widget.actions.searchData.target;
+    const targetTable = extractAllContents(widget.actions.searchData.datas.targetWidget)[0];
+    var searchKey = Object.keys(widget.actions.searchData.datas.selectedColumns).map((k) => capitalizeFirstLetter(k)).join("And");
+    const channelName = `search${capitalizeFirstLetter(targetDB)}By${searchKey}`
+    const args = []
+    for(const key in widget.actions.searchData.datas.selectedColumns) {
+        const inputFieldId = extractAllContents(widget.actions.searchData.datas.selectedColumns[key])[0]
+        args.push(inputFieldId);
+    }
+    const message = `${channelName}(searchKeys, db, scid, wid, ${args.join(", ")})`
     const res = [
         `channel ${channelName}(scId: Str, wid: Str){`,
-        `\tin screenTemplates.{scId="${scId}"}.widgets.{wid="${wid}"}.state(curState, ${message}) = nextState`
+        `\tin screenTemplates.{scId="${scId}"}.widgets.{wid="${wid}"}.state(curState, ${message}) = nextState`,
+        `\tref ${targetDB}(db: Map, ${message})`,
+        `\tref ${scId}(scId:Str, ${message})`,
+	    `\tref ${targetTable}(wid: Str, ${message})`
     ]
+    console.log()
+    for(const key in widget.actions.searchData.datas.selectedColumns) {
+        const inputFieldId = extractAllContents(widget.actions.searchData.datas.selectedColumns[key])[0]
+        dataSenderIds.add(inputFieldId)
+        res.push(`\tref ${inputFieldId}(${inputFieldId}, ${message})`)
+        res.push(`\tref screen.widgets.{${inputFieldId}}.text(searchKeys.${key}, ${message})`)
+    }
+    res.push(`\tout screenTemplates.{scId}.widgets.{wid}.data(cur: Map, ${message}) = search(db, serachKeys) `)
+    res.push("}\n")
+    return res.join("\n")
 
 }
 
