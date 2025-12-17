@@ -456,22 +456,21 @@ function constructSearchChannel(widget, scId) {
         const inputFieldId = extractAllContents(widget.actions.searchData.datas.selectedColumns[key])[0]
         args.push(inputFieldId);
     }
-    const message = `${channelName}(searchKeys, db, scid, wid, ${args.join(", ")})`
+    const message = `${channelName}(searchKeys: Json, db, scid, wid, ${args.join(", ")})`
     const res = [
-        `channel ${channelName}(scId: Str, wid: Str){`,
-        `\tin screenTemplates.{scId="${scId}"}.widgets.{wid="${wid}"}.state(curState, ${message}) = nextState`,
+        `channel ${channelName}(scId: Str, widId: Str){`,
+        `\tin screenTemplates.{scId="${scId}"}.widgets.{widId="${wid}"}.state(curState, ${message}) = nextState`,
         `\tref ${targetDB}(db: Map, ${message})`,
         `\tref ${scId}(scId:Str, ${message})`,
 	    `\tref ${targetTable}(wid: Str, ${message})`
     ]
-    console.log()
     for(const key in widget.actions.searchData.datas.selectedColumns) {
         const inputFieldId = extractAllContents(widget.actions.searchData.datas.selectedColumns[key])[0]
         dataSenderIds.add(inputFieldId)
         res.push(`\tref ${inputFieldId}(${inputFieldId}, ${message})`)
         res.push(`\tref screen.widgets.{${inputFieldId}}.text(searchKeys.${key}, ${message})`)
     }
-    res.push(`\tout screenTemplates.{scId}.widgets.{wid}.data(cur: Map, ${message}) = search(db, serachKeys) `)
+    res.push(`\tout screen.widgets.{wid}.data(cur: Map, ${message}) = search(db, searchKeys) `)
     res.push("}\n")
     return res.join("\n")
 
