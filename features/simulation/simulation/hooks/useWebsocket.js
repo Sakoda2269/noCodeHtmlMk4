@@ -36,6 +36,14 @@ export default function useWebsocket() {
                     prev[message.id].text = message.datas.newText;
                     return {...prev};
                 })
+            } else if(method == "updateTable") {
+                console.log(message.id)
+                console.log(widgets)
+                console.log(widgets[message.id])
+                setWidgets((prev) => {
+                    prev[message.id].data = message.datas.nextTableData;
+                    return {...prev};
+                })
             }
         }
         websocket.addEventListener('message', onMessage)

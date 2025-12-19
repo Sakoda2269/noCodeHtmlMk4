@@ -15,6 +15,10 @@ export default function consturctUIModel(screens, screen) {
 	in screen(curSc: Json, update(curSc, nextSc)) = nextSc
 }
 
+native channel ScreenTemplateUpdate(scId: Str) {
+	in screenTemplates.{scId}(curSc: Json, update(curSc, nextSc)) = nextSc
+}
+
 native channel SetLayout {
 	in screen.layout(curLayout: Bool, setLayout(nextLayout)) = nextLayout
 }
@@ -43,8 +47,8 @@ native channel SetHeight(wid: Str) {
 	in screen.widgets.{wid}.height(curHeight: Int, setHeight(nextHeight)) = nextHeight
 }
     
-native channel OnTableChanged(wid: Str) {
-	in screen.widgets.{wid}.data(curData: Map, tableChanged(nextData)) = nextData
+native channel OnTableChanged(scId: Str, wid: Str) {
+    in screenTemplates.{scId}.widgets.{wid}.data(cur, setTable(next)) = next
 }
 
 native channel MouseEvent(wid: Str) {
@@ -118,6 +122,7 @@ function constructScreen(screen) {
     "widgets": {
         ${widgets.join(",\n\t\t")}
     },
+    "screenId": "${screen.title}",
     "layout": false
 }`
 )
