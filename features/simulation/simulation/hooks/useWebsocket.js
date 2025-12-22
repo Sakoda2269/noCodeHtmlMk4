@@ -37,9 +37,11 @@ export default function useWebsocket() {
                     return {...prev};
                 })
             } else if(method == "updateTable") {
+                console.log("---------------------")
                 console.log(message.id)
                 console.log(widgets)
                 console.log(widgets[message.id])
+                console.log("---------------------")
                 setWidgets((prev) => {
                     prev[message.id].data = message.datas.nextTableData;
                     return {...prev};
