@@ -50,6 +50,10 @@ native channel SetHeight(wid: Str) {
 native channel OnTableChanged(scId: Str, wid: Str) {
     in screenTemplates.{scId}.widgets.{wid}.data(cur, setTable(next)) = next
 }
+    
+native channel OnTableChanged2(wid: Str) {
+    in screen.widgets.{wid}.data(cur, setTable(next)) = next
+}
 
 native channel MouseEvent(wid: Str) {
 	out screen.widgets.{wid}.state(curState: Int, mouseEvent(nextState)) = nextState
@@ -456,7 +460,7 @@ function constructSearchChannel(widget, scId) {
     const targetTable = extractAllContents(widget.actions.searchData.datas.targetWidget)[0];
     var searchKey = Object.keys(widget.actions.searchData.datas.selectedColumns).map((k) => capitalizeFirstLetter(k)).join("And");
     const channelName = `search${capitalizeFirstLetter(targetDB)}By${searchKey}`
-    const args = []
+    const args = ["state"]
     const searchKeys = [];
     for(const key in widget.actions.searchData.datas.selectedColumns) {
         const inputFieldId = extractAllContents(widget.actions.searchData.datas.selectedColumns[key])[0]
@@ -468,7 +472,7 @@ function constructSearchChannel(widget, scId) {
     const message = `${channelName}(db, scId, wid, ${args.join(", ")})`
     const res = [
         `channel ${channelName}(screenId: Str, widId: Str){`,
-        `\tin screenTemplates.{screenId="${scId}"}.widgets.{widId="${wid}"}.state(curState, ${message}) = nextState`,
+        `\tin screenTemplates.{screenId="${scId}"}.widgets.{widId="${wid}"}.state(curState, ${message}) = state`,
         `\tref ${targetDB}(db: Map, ${message})`,
         `\tref ${scId}(scId:Str, ${message})`,
 	    `\tref ${targetTable}(wid: Str, ${message})`
@@ -479,7 +483,7 @@ function constructSearchChannel(widget, scId) {
         res.push(`\tref ${inputFieldId}(${inputFieldId}, ${message})`)
         res.push(`\tref screen.widgets.{${inputFieldId}}.text(${inputFieldId}Data, ${message})`)
     }
-    res.push(`\tout screenTemplates.{scId}.widgets.{wid}.data(cur: Map, ${message}) = search(db, {${searchKeys.join(",")}}) `)
+    res.push(`\tout screen.widgets.{wid}.data(cur: Map, ${message}) = if(state == 0, search(db, {${searchKeys.join(",")}}), cur) `)
     res.push("}\n")
     return res.join("\n")
 
