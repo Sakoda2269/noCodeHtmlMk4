@@ -48,11 +48,11 @@ native channel SetHeight(wid: Str) {
 }
     
 native channel OnTableChanged(scId: Str, wid: Str) {
-    in screenTemplates.{scId}.widgets.{wid}.data(cur, setTable(next)) = next
+    in screenTemplates.{scId}.widgets.{wid}.data(cur:Json, setTable(next)) = next
 }
     
 native channel OnTableChanged2(wid: Str) {
-    in screen.widgets.{wid}.data(cur, setTable(next)) = next
+    in screen.widgets.{wid}.data(cur: Json, setTable(next)) = next
 }
 
 native channel MouseEvent(wid: Str) {
