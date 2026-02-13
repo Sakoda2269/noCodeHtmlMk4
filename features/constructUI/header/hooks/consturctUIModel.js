@@ -147,6 +147,7 @@ function constructWidget(widget) {
         const notPrimaryCols = [];
         const forDataCols = [];
         let primaryKeyname = "";
+        console.log(widget)
         for(const col of widget.other.columns) {
             if(col != widget.other.primaryKeyName) {
                 const tmp = createRefName(col);

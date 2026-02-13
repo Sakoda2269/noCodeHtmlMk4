@@ -9,6 +9,7 @@ export async function GET(request, {params}) {
         const collection = db.collection("projects");
         const {pid} = await params;
         const res = await collection.findOne({ _id: new ObjectId(pid) });
+        console.log(res)
         return new Response(JSON.stringify(res), {
             status: 200,
             headers: {

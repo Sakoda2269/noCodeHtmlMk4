@@ -42,10 +42,13 @@ export default function useWebsocket() {
                 console.log(widgets)
                 console.log(widgets[message.id])
                 console.log("---------------------")
-                setWidgets((prev) => {
-                    prev[message.id].data = message.datas.nextTableData;
-                    return {...prev};
-                })
+                if (widgets[message.id]) {
+                    setWidgets((prev) => {
+                        prev[message.id].data = message.datas.nextTableData;
+                        return {...prev};
+                    })
+                }
+                
             }
         }
         websocket.addEventListener('message', onMessage)

@@ -22,7 +22,7 @@ export default function Project({pid}) {
 
     const [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting,
         selectingContainer, setSelectingContainer, loading, setLoadin, connecting,
-        trieInsert, trieDelete, autoComplete, exists
+        trieInsert, trieDelete, autoComplete, exists, title
     ] = useProject(pid);
     
     const ref = useRef(null);
@@ -64,7 +64,7 @@ export default function Project({pid}) {
             <TrieDeleteContext.Provider value={trieDelete}>
             <TrieFindContext.Provider value={[exists, autoComplete]}>
                 
-            <Header pid={pid} allHeightRef={ref}/>
+            <Header pid={pid} allHeightRef={ref} title={title}/>
             {!connecting && 
             <Sidebar>
 

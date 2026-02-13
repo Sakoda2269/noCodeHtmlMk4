@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 export default function useProject(pid) {
     const [project, setProject] = useState({});
 
+    const [title, setTitle] = useState("");
+
     const [currentScreenId, setCurrentScreenId] = useState(0);
 
     const [selecting, setSelecting] = useState("");
@@ -23,6 +25,7 @@ export default function useProject(pid) {
             const res = await fetch("/api/projects/" + pid);
             const data = await res.json();
             setProject(data.project)
+            setTitle(data.title);
             setConnecting(false);
             for(const screen of data.project.screens) {
                 for(const wid of screen.components) {
@@ -35,6 +38,6 @@ export default function useProject(pid) {
 
     return [project, setProject, currentScreenId, setCurrentScreenId, selecting, setSelecting, selectingContainer, setSelectingContainer
         ,loading, setLoading, connecting,
-        trieInsert, trieDelete, autoComplete, exists
+        trieInsert, trieDelete, autoComplete, exists, title
     ];
 }

@@ -8,9 +8,9 @@ import useSimulation from "../hooks/useSimulation";
 import useSaveProject from "../hooks/useSaveProject";
 import { useRouter } from "next/navigation";
 
-export default function Header({ pid, allHeightRef }) {
+export default function Header({ pid, allHeightRef, title }) {
 
-    const [exportModel] = useExport();
+    const [exportModel, exportJson] = useExport(title);
     const [sendModel] = useSimulation();
     const [saveProject] = useSaveProject(pid);
 
@@ -37,6 +37,11 @@ export default function Header({ pid, allHeightRef }) {
             </div>
             <div className={styles.center}></div>
             <div className={styles.right}>
+                <div style={{ paddingRight: "10px" }}>
+                    <button className="btn btn-secondary" onClick={exportJson}>
+                        <FaFileExport />
+                    </button>
+                </div>
                 <div style={{ paddingRight: "10px" }}>
                     <button className="btn btn-secondary" onClick={exportModel}>
                         <FaFileExport />
