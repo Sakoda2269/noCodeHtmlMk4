@@ -9,7 +9,7 @@ export default function Simulation() {
     
     return (
         <div>
-            {widgets && Object.entries(widgets).map(([key, value]) => (
+            {widgets.widgets && Object.entries(widgets.widgets).map(([key, value]) => (
                 <Widget widget={value} key={"wid"+key} sendMessage={sendMessage}/>
             ))}
         </div>
